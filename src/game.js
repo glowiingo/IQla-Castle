@@ -14,7 +14,7 @@ const config = {
               debug: false,
         }
     },
-    scene: [preload_scene, mainmenu_scene, gameplay_scene]
+    scene: [preload_scene, mainmenu_scene, mouse_click_minigame, book_click_minigame],
     // Specify scenes in the array above
 }
 console.log("game.js with specified config");

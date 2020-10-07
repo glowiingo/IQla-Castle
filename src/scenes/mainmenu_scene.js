@@ -5,7 +5,19 @@ class mainmenu_scene extends Phaser.Scene {
 
     create() {
         console.log("Main Menu");
-        this.add.text(20, 20, "Playing game", {font: "25px Arial", fill: "yellow"});
-        this.scene.start("gameplay_scene", {message: "test_data_from_main"});
+        this.mouse_click_text = this.add.text(20, 20, "Mouse Click Minigame", {font: "25px Arial", fill: "yellow"});
+
+        this.mouse_click_text.setInteractive();
+        this.mouse_click_text.on("pointerdown", () => {
+            this.scene.start("mouse_click_minigame");
+        });
+
+        this.mouse_click_text = this.add.text(20, 60, "Book Click Minigame", {font: "25px Arial", fill: "yellow"});
+
+        this.mouse_click_text.setInteractive();
+        this.mouse_click_text.on("pointerdown", () => {
+            this.scene.start("book_click_minigame");
+        });
+        
     }
 }
