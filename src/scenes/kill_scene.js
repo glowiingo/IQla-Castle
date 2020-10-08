@@ -34,9 +34,13 @@ class kill_scene extends Phaser.Scene {
         this.player3 = this.physics.add.sprite(game.config.width / 3, game.config.height / 3, 'haachama').setScale(1);
         this.player3.setCollideWorldBounds(true);
 
+        this.player4 = this.physics.add.sprite(game.config.width / 6, game.config.height / 6, 'haachama').setScale(1);
+        this.player4.setCollideWorldBounds(true);
+
         let group = this.add.group();
         group.add(this.player2);
         group.add(this.player3);
+        group.add(this.player4);
 
         console.log(group);
         console.log(group.getChildren());
@@ -47,22 +51,27 @@ class kill_scene extends Phaser.Scene {
         }).setInteractive()
         .on('pointerdown', () => this.kill(group.getChildren()));
 
-
-
     }
 
     kill(sprite) {
         for(let i = 0; i < sprite.length; i++) {
-            console.log("kill");
             let a = Math.abs(this.player.x - sprite[i].x);
             let b = Math.abs(this.player.y - sprite[i].y);
             let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-            console.log(c);
+            // console.log(c);
             if (c < 60) {
-                sprite[i].setTexture('deadbody');
+                sprite[i].setActive(false).setVisible(false);
+                console.log("Hidden");
+                console.log(sprite[i].x, sprite[i].y);
+                this.create_deadBody(sprite[i].x, sprite[i].y);
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
+    }
+
+    create_deadBody(x, y) {
+        let dead_image = this.add.image(x, y, 'deadbody');
+        dead_image.setScale(0.5);
     }
 
     move_object_left_right(object, speed) {
