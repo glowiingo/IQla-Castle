@@ -11,10 +11,10 @@ const config = {
         default: 'arcade',
         arcade: {
               enableBody: true,
-              debug: false,
+              debug: true,
         }
     },
-    scene: [preload_scene, mainmenu_scene, gameplay_scene]
+    scene: [preload_scene, mainmenu_scene, trap_gameplay_scene]
     // Specify scenes in the array above
 }
 console.log("game.js with specified config");
