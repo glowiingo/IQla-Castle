@@ -22,39 +22,47 @@ class kill_scene extends Phaser.Scene {
 
     create() {
 
-
         console.log("kill_Scene");
         // add objects into the game
 
-        this.player = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
+        this.player = this.physics.add.sprite(game.config.width / 4, game.config.height / 4, 'haachama').setScale(1);
         this.player.setCollideWorldBounds(true);
 
         this.player2 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
         this.player2.setCollideWorldBounds(true);
 
+        this.player3 = this.physics.add.sprite(game.config.width / 3, game.config.height / 3, 'haachama').setScale(1);
+        this.player3.setCollideWorldBounds(true);
+
+        let group = this.add.group();
+        group.add(this.player2);
+        group.add(this.player3);
+
+        console.log(group);
+        console.log(group.getChildren());
+
+        
         const helloButton = this.add.text(600, 500, 'Kill', {
-                fill: '#0f0'
-            }).setInteractive()
-            .on('pointerdown', () => this.kill(this.player2));
+            fill: '#0f0'
+        }).setInteractive()
+        .on('pointerdown', () => this.kill(group.getChildren()));
+
+
 
     }
-
-
 
     kill(sprite) {
-        // console.log(Math.abs(this.player.x - this.player2.x));
-        let a = Math.abs(this.player.x - this.player2.x);
-        let b = Math.abs(this.player.y - this.player2.y);
-        let c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
-        console.log(c);
-        if(c < 60) {
-            sprite.setTexture('deadbody');
+        for(let i = 0; i < sprite.length; i++) {
+            console.log("kill");
+            let a = Math.abs(this.player.x - sprite[i].x);
+            let b = Math.abs(this.player.y - sprite[i].y);
+            let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+            console.log(c);
+            if (c < 60) {
+                sprite[i].setTexture('deadbody');
+            }
         }
-            
-    }
-
-    display_deadbody(sprite) {
-        
+        // console.log(Math.abs(this.player.x - this.player2.x));
     }
 
     move_object_left_right(object, speed) {
@@ -98,6 +106,5 @@ class kill_scene extends Phaser.Scene {
         // -- game logic mainly in this area
         const cursors = this.input.keyboard.createCursorKeys();
         this.player_movement(cursors);
-
     }
 }
