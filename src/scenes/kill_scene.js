@@ -25,16 +25,16 @@ class kill_scene extends Phaser.Scene {
         console.log("kill_Scene");
         // add objects into the game
 
-        this.player = this.physics.add.sprite(game.config.width / 4, game.config.height / 4, 'haachama').setScale(1);
+        this.player = this.physics.add.sprite(game.config.width / 4, game.config.height / 4, 'haachama').setScale(0.5);
         this.player.setCollideWorldBounds(true);
 
-        this.player2 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
+        this.player2 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(0.5);
         this.player2.setCollideWorldBounds(true);
 
-        this.player3 = this.physics.add.sprite(game.config.width / 3, game.config.height / 3, 'haachama').setScale(1);
+        this.player3 = this.physics.add.sprite(game.config.width / 3, game.config.height / 3, 'haachama').setScale(0.5);
         this.player3.setCollideWorldBounds(true);
 
-        this.player4 = this.physics.add.sprite(game.config.width / 6, game.config.height / 6, 'haachama').setScale(1);
+        this.player4 = this.physics.add.sprite(game.config.width / 6, game.config.height / 6, 'haachama').setScale(0.5);
         this.player4.setCollideWorldBounds(true);
 
         let group = this.add.group();
@@ -72,6 +72,7 @@ class kill_scene extends Phaser.Scene {
     create_deadBody(x, y) {
         let dead_image = this.add.image(x, y, 'deadbody');
         dead_image.setScale(0.5);
+        dead_image.setDepth(-1);
     }
 
     move_object_left_right(object, speed) {
