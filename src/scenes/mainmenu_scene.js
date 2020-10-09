@@ -39,6 +39,5 @@ class mainmenu_scene extends Phaser.Scene {
         this.mouse_click_text.on("pointerdown", () => {
             this.scene.start("trap_gameplay_scene", {message: "test_data_from_main"});
         });
-        
     }
 }
