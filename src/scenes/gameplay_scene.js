@@ -7,6 +7,7 @@ This should be a POC for front end, logic needs to be separated for the map.
 
 
 class gameplay_scene extends Phaser.Scene {
+
   constructor() {
     super("gameplay_scene");
   }
@@ -21,27 +22,37 @@ class gameplay_scene extends Phaser.Scene {
   preload() {
     // load audio and images into memory
     this.load.image('haachama', '../../assets/haachamachama112.png');
-    this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/super-mario.json');
-    this.load.image('tiles1', '../../assets/tilemaps/tiles/super-mario.png')
+    //this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/super-mario.json');
+    //this.load.image('tiles1', '../../assets/tilemaps/tiles/super-mario.png')
+
+    this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
+    this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
   }
 
   create() {
     // add objects into the game
     console.log("gameplay_scene");
 
-    this.cameras.main.setBounds(0, 0, game.config.width, game.config.height / 2);
-    this.physics.world.setBounds(0, 0, game.config.width, game.config.height / 2)
+    //this.cameras.main.setBounds(0, 0, game.config.width, game.config.height / 2);
+    //this.physics.world.setBounds(0, 0, game.config.width, game.config.height / 2)
+
     let map = this.make.tilemap({ key: 'map' });
-    let tileset = map.addTilesetImage('SuperMarioBros-World1-1', 'tiles1')
-    let layer = map.createStaticLayer('World1', tileset, 0, 0);
+    //let tileset = map.addTilesetImage('SuperMarioBros-World1-1', 'tiles1')
+    //let layer = map.createStaticLayer('World1', tileset, 0, 0);
+
+    let tileset = map.addTilesetImage('better_tiles', 'tiles')
+    map.createStaticLayer('Ground', tileset);
+
+    const wallsLayer = map.createStaticLayer('Walls', tileset);
+    wallsLayer.setCollisionByProperty({ collides: true });
+    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(1);
 
 
-    this.player = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
-    this.player.setCollideWorldBounds(true);
+    this.physics.add.collider(this.player, wallsLayer);
+    //this.player.setCollideWorldBounds(true);
     this.player.setScale(0.25)
-
     this.cameras.main.startFollow(this.player, true, 1, 1);
-    this.cameras.main.setZoom(4);
+    //this.cameras.main.setZoom(2);
 
   }
 
@@ -61,19 +72,28 @@ class gameplay_scene extends Phaser.Scene {
   player_movement(cursors) {
     if (cursors.left.isDown) {
       // console.log("Down");
-      this.move_object_left_right(this.player, -10);
+      //this.move_object_left_right(this.player, -10);
+      this.player.setVelocityX(-300);
     }
     if (cursors.right.isDown) {
       // console.log("Right");
-      this.move_object_left_right(this.player, 10);
+      //this.move_object_left_right(this.player, 10);
+      this.player.setVelocityX(300);
     }
     if (cursors.up.isDown) {
       // console.log("Up");
-      this.move_object_up_down(this.player, -10);
+      //this.move_object_up_down(this.player, -10);
+      this.player.setVelocityY(-300);
     }
     if (cursors.down.isDown) {
       // console.log("Down");
-      this.move_object_up_down(this.player, 10);
+      //this.move_object_up_down(this.player, 10);
+      this.player.setVelocityY(300);
+    }
+
+    if (!cursors.down.isDown && !cursors.up.isDown && !cursors.right.isDown && !cursors.left.isDown) {
+      this.player.setVelocityY(0);
+      this.player.setVelocityX(0);
     }
 
     // print x y of player position to send to network team and update
