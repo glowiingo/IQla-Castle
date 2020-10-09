@@ -73,27 +73,41 @@ class gameplay_scene extends Phaser.Scene {
     if (cursors.left.isDown) {
       // console.log("Down");
       //this.move_object_left_right(this.player, -10);
-      this.player.setVelocityX(-300);
-    }
-    if (cursors.right.isDown) {
+      if (cursors.right.isDown) {
+        this.player.setVelocityX(0);
+      } else {
+        this.player.setVelocityX(-300);
+      }
+    } else if (cursors.right.isDown) {
       // console.log("Right");
       //this.move_object_left_right(this.player, 10);
-      this.player.setVelocityX(300);
+      if (cursors.left.isDown) {
+        this.player.setVelocityX(0);
+      } else {
+        this.player.setVelocityX(300);
+      }
+    } else {
+      this.player.setVelocityX(0);
     }
+
     if (cursors.up.isDown) {
       // console.log("Up");
       //this.move_object_up_down(this.player, -10);
-      this.player.setVelocityY(-300);
-    }
-    if (cursors.down.isDown) {
+      if (cursors.down.isDown) {
+        this.player.setVelocityY(0);
+      } else {
+        this.player.setVelocityY(-300);
+      }
+    } else if (cursors.down.isDown) {
       // console.log("Down");
       //this.move_object_up_down(this.player, 10);
-      this.player.setVelocityY(300);
-    }
-
-    if (!cursors.down.isDown && !cursors.up.isDown && !cursors.right.isDown && !cursors.left.isDown) {
+      if (cursors.up.isDown) {
+        this.player.setVelocityY(0);
+      } else {
+        this.player.setVelocityY(300);
+      }
+    } else {
       this.player.setVelocityY(0);
-      this.player.setVelocityX(0);
     }
 
     // print x y of player position to send to network team and update
