@@ -20,15 +20,11 @@ class trap_gameplay_scene extends Phaser.Scene {
 
     create() {
         console.log("gameplay_scene");
-        //this.trap = this.physics.add.staticGroup();
-        //this.trap.create(300, 200, 'haachama').setScale(1).refreshBody();
         this.player1 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
         this.player1.setCollideWorldBounds(true);
         this.player1.setDepth(1);
         
         this.trap = new Trap({scene:this, x:200, y:200});
-        
-        // this.physics.add.overlap(this.zone, this.player1);
     }
        
     update() {
@@ -37,6 +33,12 @@ class trap_gameplay_scene extends Phaser.Scene {
         this.trap.in_trap_radius();
 
         
+    }
+    kill(trap, player) {
+        player.setVisible(false);
+    }
+    playerAlive(trap, player) {
+        return player.alive;
     }
 
     player_movement(cursors) {
