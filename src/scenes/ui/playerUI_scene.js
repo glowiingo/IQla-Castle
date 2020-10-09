@@ -1,4 +1,5 @@
 class playerUI_scene extends Phaser.Scene {
+  
   constructor() {
     super({
       key: 'playerUI_scene',
