@@ -18,6 +18,7 @@ class gameplay_scene extends Phaser.Scene {
     preload() {
         // load audio and images into memory
         this.load.image('haachama', '../../assets/haachamachama112.png');
+        this.load.image('deadbody', 'assets/deadCharacter.png');
     }
     
     create() {
@@ -26,6 +27,28 @@ class gameplay_scene extends Phaser.Scene {
         
         this.player = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
         this.player.setCollideWorldBounds(true);
+    }
+
+    kill(sprite) {
+        for(let i = 0; i < sprite.length; i++) {
+            let a = Math.abs(this.player.x - sprite[i].x);
+            let b = Math.abs(this.player.y - sprite[i].y);
+            let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+            // console.log(c);
+            if (c < 60) {
+                sprite[i].setActive(false).setVisible(false);
+                console.log("Hidden");
+                console.log(sprite[i].x, sprite[i].y);
+                this.create_deadBody(sprite[i].x, sprite[i].y);
+            }
+        }
+        // console.log(Math.abs(this.player.x - this.player2.x));
+    }
+
+    create_deadBody(x, y) {
+        let dead_image = this.add.image(x, y, 'deadbody');
+        dead_image.setScale(0.5);
+        dead_image.setDepth(-1);
     }
 
     move_object_left_right(object, speed) {
