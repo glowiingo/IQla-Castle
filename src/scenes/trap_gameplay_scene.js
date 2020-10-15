@@ -20,16 +20,28 @@ class trap_gameplay_scene extends Phaser.Scene {
 
     create() {
         console.log("gameplay_scene");
-        this.player1 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
-        this.player1.setCollideWorldBounds(true);
-        this.player1.setDepth(1);
+        
+        
+        // this.player1 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
+        // //console.log(this.player1);
+        // this.player1.setCollideWorldBounds(true);
+        // this.player1.setDepth(1);
+
+        this.player1 = new Player({
+            scene:this, 
+            x:game.config.width / 2, 
+            y: game.config.height / 2, 
+            sprite:'haachama'
+        }, 1, "john", 500);
+        
         
         this.trap = new Trap({scene:this, x:200, y:200});
     }
        
     update() {
         const cursors = this.input.keyboard.createCursorKeys();
-        this.player_movement(cursors);
+        this.player1.player_movement(cursors);
+        //this.player_movement(cursors);
         this.trap.in_trap_radius();
 
         
@@ -41,25 +53,20 @@ class trap_gameplay_scene extends Phaser.Scene {
         return player.alive;
     }
 
-    player_movement(cursors) {
-        if(cursors.left.isDown){
-            // console.log("Down");
-            this.player1.setVelocityY(0);
+    player_movement(key) {
+        if(key.left.isDown){
             this.player1.setVelocityX(-500);
-        } else if (cursors.right.isDown) {
-            // console.log("Right");
-            this.player1.setVelocityY(0);
+        } else if (key.right.isDown) {
             this.player1.setVelocityX(500);
-        } else if (cursors.up.isDown) {
-            // console.log("Up");
-            this.player1.setVelocityX(0);
-            this.player1.setVelocityY(-500);
-        } else if (cursors.down.isDown) {
-            // console.log("Down");
-            this.player1.setVelocityX(0);
-            this.player1.setVelocityY(500);
         } else {
             this.player1.setVelocityX(0);
+        }
+        
+        if (key.up.isDown) {
+            this.player1.setVelocityY(-500);
+        } else if (key.down.isDown) {
+            this.player1.setVelocityY(500);
+        } else {
             this.player1.setVelocityY(0);
         }
         
