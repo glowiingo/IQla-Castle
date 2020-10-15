@@ -3,8 +3,6 @@ This class is defined in order for preloading of assets, animations, and sprites
 This should be a POC for front end, logic needs to be separated for the map.
 */
 
-// tilemap source: https://phaser.io/examples/v3/view/camera/follow-zoom-tilemap
-
 
 class gameplay_scene extends Phaser.Scene {
 
@@ -22,8 +20,6 @@ class gameplay_scene extends Phaser.Scene {
   preload() {
     // load audio and images into memory
     this.load.image('haachama', '../../assets/haachamachama112.png');
-    //this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/super-mario.json');
-    //this.load.image('tiles1', '../../assets/tilemaps/tiles/super-mario.png')
 
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
     this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
@@ -33,26 +29,18 @@ class gameplay_scene extends Phaser.Scene {
     // add objects into the game
     console.log("gameplay_scene");
 
-    //this.cameras.main.setBounds(0, 0, game.config.width, game.config.height / 2);
-    //this.physics.world.setBounds(0, 0, game.config.width, game.config.height / 2)
-
     let map = this.make.tilemap({ key: 'map' });
-    //let tileset = map.addTilesetImage('SuperMarioBros-World1-1', 'tiles1')
-    //let layer = map.createStaticLayer('World1', tileset, 0, 0);
 
     let tileset = map.addTilesetImage('better_tiles', 'tiles')
     map.createStaticLayer('Ground', tileset);
 
     const wallsLayer = map.createStaticLayer('Walls', tileset);
     wallsLayer.setCollisionByProperty({ collides: true });
-    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(1);
 
-
+    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
     this.physics.add.collider(this.player, wallsLayer);
-    //this.player.setCollideWorldBounds(true);
-    this.player.setScale(0.25)
+
     this.cameras.main.startFollow(this.player, true, 1, 1);
-    //this.cameras.main.setZoom(2);
 
   }
 
