@@ -33,6 +33,9 @@ class ServerConnection{
         this.socket.on('playerMoved', function (playerInfo) {
             sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
         });
+        this.socket.on('killed', function(playerId){
+            sceneData.otherPlayers[playerId].killed();
+        });
     }
 
     movement(player){
@@ -40,6 +43,10 @@ class ServerConnection{
             this.prevPlayerLocation = {x: player.x, y: player.y};
             this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y, rotation: 0});
         }
+    }
+
+    kill(playerId){
+        this.socket.emit('kill', playerId);
     }
 }
 
