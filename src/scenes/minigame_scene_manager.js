@@ -9,7 +9,7 @@ class minigame_scene_manager extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('exitBtn', '../../assets/exitCage.jpg');
+        this.load.image('exitBtn', '../../assets/exitButt.png');
     }
     
     create(key) {
@@ -22,7 +22,7 @@ class minigame_scene_manager extends Phaser.Scene {
         this.scene.start(key);
         this.childScene = this.scene.get(key);
         this.childScene.cameras.resize(minigameWidth, minigameHeight);
-        this.childScene.cameras.main.x = (baseWidth - minigameWidth) / 2;
+        this.childScene.cameras.main.x = (baseWidth - minigameWidth) / 2; // error here after closing the minigame scene and relaunching 2nd time.
         this.childScene.cameras.main.y = (baseHeight - minigameHeight) / 2;
         this.childScene.cameras.main.setBackgroundColor("#800085");
         
@@ -34,8 +34,9 @@ class minigame_scene_manager extends Phaser.Scene {
         console.log(exitBtn);
 
         exitBtn.setInteractive();
-        exitBtn.on("pointerdown", function() {
-            console.log("hello");
+        exitBtn.on("pointerdown", () => {
+            this.scene.stop(key);
+            this.scene.start('mainmenu_scene');
         });
     }
 

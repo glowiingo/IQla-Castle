@@ -15,9 +15,19 @@ class mouse_click_minigame extends Phaser.Scene {
     preload() {
         // load audio and images into memory
         this.load.image('haachama', '../../assets/haachamachama112.png');
+        this.load.image('exitButt', '../../assets/exitButt.png');
     }
     
     create() {
+        /* ---------- Exit Button ---------- */
+        let exitButt = this.add.image(750, 50, 'exitButt');
+        exitButt.displayWidth = 50;
+        exitButt.displayHeight = 50;
+        exitButt.setInteractive();
+        exitButt.on('pointerdown', () => {
+            this.scene.start("mainmenu_scene");
+        });
+
         let mice = this.physics.add.group({
             key: "haachama", 
             repeat: 2, // one is created automatically so there will be x + 1 in total
