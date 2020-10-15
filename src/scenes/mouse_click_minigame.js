@@ -2,7 +2,6 @@
 This class is defined in order for preloading of assets, animations, and sprites.
 */
 
-
 class mouse_click_minigame extends Phaser.Scene {
     constructor() {
         super("mouse_click_minigame");
@@ -19,10 +18,7 @@ class mouse_click_minigame extends Phaser.Scene {
     }
     
     create() {
-        // add objects into the game
-        console.log("gameplay_scene");
-        
-         let mice = this.physics.add.group({
+        let mice = this.physics.add.group({
             key: "haachama", 
             repeat: 2, // one is created automatically so there will be x + 1 in total
             setXY: {x: 100, y: 100, stepX: 50, stepY: 100}

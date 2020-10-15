@@ -5,6 +5,8 @@ class mainmenu_scene extends Phaser.Scene {
 
     create() {
         console.log("Main Menu");
+        this.scene.launch("minigame_scene_manager", "mouse_click_minigame");
+
         this.mouse_click_text = this.add.text(20, 20, "Gameplay Scene", {font: "25px Arial", fill: "yellow"});
 
         this.mouse_click_text.setInteractive();
