@@ -22,7 +22,8 @@ class gameplay_scene extends Phaser.Scene {
 
   preload() {
     // load audio and images into memory
-    this.load.image('haachama', '../../assets/haachamachama112.png');
+    //this.load.image('haachama', '../../assets/player/Player.png');
+    this.load.spritesheet('haachama', '../../assets/player/PlayerWalkCycle.png', { frameWidth: 128, frameHeight: 128, endFrame: 7 });
 
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
     this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
@@ -31,6 +32,18 @@ class gameplay_scene extends Phaser.Scene {
   create() {
     // add objects into the game
     console.log("gameplay_scene");
+
+    this.isWalking = false;
+
+    let config = {
+      key: 'WalkCycle',
+      frames: this.anims.generateFrameNumbers('haachama', { start: 0, end: 7 }),
+      frameRate: 8,
+      repeat: -1
+  };
+    this.anims.create(config);
+
+    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     let map = this.make.tilemap({ key: 'map' });
 
@@ -68,6 +81,7 @@ class gameplay_scene extends Phaser.Scene {
         this.player.setVelocityX(0);
       } else {
         this.player.setVelocityX(-300);
+        this.player.flipX = false;
       }
     } else if (cursors.right.isDown) {
       // console.log("Right");
@@ -76,6 +90,7 @@ class gameplay_scene extends Phaser.Scene {
         this.player.setVelocityX(0);
       } else {
         this.player.setVelocityX(300);
+        this.player.flipX = true;
       }
     } else {
       this.player.setVelocityX(0);
@@ -101,8 +116,27 @@ class gameplay_scene extends Phaser.Scene {
       this.player.setVelocityY(0);
     }
 
+    if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
+      this.player_walk_anim_start();
+    } else if (Phaser.Input.Keyboard.JustUp(this.spacebar)) {
+      this.player_walk_anim_stop();
+    }
+
     // print x y of player position to send to network team and update
     // console.log(this.player.x, this.player.y);
+  }
+
+  player_walk_anim_start() {
+    console.log(this.isWalking);
+    if (!this.isWalking) { 
+      this.isWalking = true;
+      this.player.play('WalkCycle');
+    }
+  }
+
+  player_walk_anim_stop() {
+    this.isWalking = false;
+    this.player.anims.stop();
   }
 
   update() {
