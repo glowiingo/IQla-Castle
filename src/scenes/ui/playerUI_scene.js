@@ -1,4 +1,5 @@
 class playerUI_scene extends Phaser.Scene {
+
   constructor() {
     super({
       key: 'playerUI_scene',
@@ -53,7 +54,7 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   resize(width, height) {
-    this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
+    //this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
     this.killButton.setPosition(document.body.offsetWidth - 200, document.body.offsetHeight - 200);
   }
 

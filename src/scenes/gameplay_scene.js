@@ -7,7 +7,10 @@ This should be a POC for front end, logic needs to be separated for the map.
 class gameplay_scene extends Phaser.Scene {
 
   constructor() {
-    super("gameplay_scene");
+    super({
+      key: 'gameplay_scene',
+      active: true
+    });
   }
 
   init(data) {
