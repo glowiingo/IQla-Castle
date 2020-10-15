@@ -1,3 +1,7 @@
+/* This class is defined to display or non-didplay the map overlay
+by using keyboard "TAB" 
+@author: Hannah Nguyen
+*/
 class mapOverlay_scene extends Phaser.Scene {
 
   constructor() {
@@ -8,11 +12,13 @@ class mapOverlay_scene extends Phaser.Scene {
   }
 
   preload() {
+    //load the image into the scene
     this.load.image('map', '../../assets/mapOverlay.png');
 
   }
 
   create() {
+    // add object into the game
     this.scene.setVisible(false)
     let showMap = false;
 
@@ -28,11 +34,13 @@ class mapOverlay_scene extends Phaser.Scene {
   }
 
   mapShow() {
+    // display map-overlay
     this.scene.setVisible(true)
     console.log('show');
   }
 
   mapHide() {
+    // non-display map-overlay
     this.scene.setVisible(false)
     console.log('hide');
   }
