@@ -40,7 +40,7 @@ class gameplay_scene extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers('haachama', { start: 0, end: 7 }),
       frameRate: 8,
       repeat: -1
-  };
+    };
     this.anims.create(config);
 
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -116,9 +116,11 @@ class gameplay_scene extends Phaser.Scene {
       this.player.setVelocityY(0);
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
-      this.player_walk_anim_start();
-    } else if (Phaser.Input.Keyboard.JustUp(this.spacebar)) {
+    if (cursors.down.isDown || cursors.up.isDown || cursors.left.isDown || cursors.right.isDown) {
+      if (!this.isWalking) {
+        this.player_walk_anim_start();
+      }
+    } else {
       this.player_walk_anim_stop();
     }
 
@@ -127,8 +129,7 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   player_walk_anim_start() {
-    console.log(this.isWalking);
-    if (!this.isWalking) { 
+    if (!this.isWalking) {
       this.isWalking = true;
       this.player.play('WalkCycle');
     }
