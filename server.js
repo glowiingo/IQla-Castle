@@ -56,11 +56,11 @@ io.on('connection', function (socket) {
 
         // Sockets to be added once functionality is made:
 
-        // // when a player kills, update the victim's player data
-        // socket.on('kill', function (victim) {
-        //
-        // });
-        // socket.broadcast.to(roomName).emit('killed', rooms[roomName].getPlayer(socket.id));
+        // when a player kills, update the victim's player data
+        socket.on('kill', function (victimID) {
+            socket.broadcast.to(roomName).emit('killed', rooms[roomName].getPlayer(socket.id));
+        });
+        // 
         //
         // // when a player initiates a vote event for all other players
         // socket.on('startVote', function () {
