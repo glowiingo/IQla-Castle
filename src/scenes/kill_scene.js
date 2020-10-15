@@ -3,30 +3,54 @@ This class is defined in order for preloading of assets, animations, and sprites
 */
 
 
-class gameplay_scene extends Phaser.Scene {
+class kill_scene extends Phaser.Scene {
     constructor() {
-        super("gameplay_scene");
+        super("kill_scene");
+        console.log("kills");
     }
 
-    init(data) {
+    init() {
         // initialize and prepare data 
         // constants, configurations, etc.
-        this.message = data.message; // scene var called message passed in to scene
-        console.log(this.message); // print?
     }
 
     preload() {
         // load audio and images into memory
-        this.load.image('haachama', '../../assets/haachamachama112.png');
+        this.load.image('haachama', 'assets/haachamachama112.png');
         this.load.image('deadbody', 'assets/deadCharacter.png');
     }
-    
+
     create() {
+
+        console.log("kill_Scene");
         // add objects into the game
-        console.log("gameplay_scene");
-        
-        this.player = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
+
+        this.player = this.physics.add.sprite(game.config.width / 4, game.config.height / 4, 'haachama').setScale(0.5);
         this.player.setCollideWorldBounds(true);
+
+        this.player2 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(0.5);
+        this.player2.setCollideWorldBounds(true);
+
+        this.player3 = this.physics.add.sprite(game.config.width / 3, game.config.height / 3, 'haachama').setScale(0.5);
+        this.player3.setCollideWorldBounds(true);
+
+        this.player4 = this.physics.add.sprite(game.config.width / 6, game.config.height / 6, 'haachama').setScale(0.5);
+        this.player4.setCollideWorldBounds(true);
+
+        let group = this.add.group();
+        group.add(this.player2);
+        group.add(this.player3);
+        group.add(this.player4);
+
+        console.log(group);
+        console.log(group.getChildren());
+
+        
+        const helloButton = this.add.text(600, 500, 'Kill', {
+            fill: '#0f0'
+        }).setInteractive()
+        .on('pointerdown', () => this.kill(group.getChildren()));
+
     }
 
     kill(sprite) {
@@ -65,10 +89,10 @@ class gameplay_scene extends Phaser.Scene {
     }
 
     player_movement(cursors) {
-        if(cursors.left.isDown){
+        if (cursors.left.isDown) {
             // console.log("Down");
             this.move_object_left_right(this.player, -10);
-        } 
+        }
         if (cursors.right.isDown) {
             // console.log("Right");
             this.move_object_left_right(this.player, 10);
@@ -81,16 +105,16 @@ class gameplay_scene extends Phaser.Scene {
             // console.log("Down");
             this.move_object_up_down(this.player, 10);
         }
-        
+
         // print x y of player position to send to network team and update
         // console.log(this.player.x, this.player.y);
     }
 
     update() {
+
         // loop that runs constantly 
         // -- game logic mainly in this area
         const cursors = this.input.keyboard.createCursorKeys();
         this.player_movement(cursors);
-        
     }
 }
