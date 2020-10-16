@@ -17,6 +17,9 @@ class gameplay_scene extends Phaser.Scene {
     // constants, configurations, etc.
     this.message = data.message; // scene var called message passed in to scene
     console.log(this.message); // print?
+
+    this.serverConnection = data.serverConnection;
+    this.otherPlayers = this.physics.add.group();
   }
 
   preload() {
@@ -57,12 +60,10 @@ class gameplay_scene extends Phaser.Scene {
     const wallsLayer = map.createStaticLayer('Walls', tileset);
     wallsLayer.setCollisionByProperty({ collides: true });
 
-    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
-    this.otherplayer = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
 
-    this.physics.add.collider(this.player, wallsLayer);
-
-    this.cameras.main.startFollow(this.player, true, 1, 1);
+    //Start networking & create player once networking is connected
+    this.serverConnection.addGameplayHandlers(this);
+    this.serverConnection.joinRoom();
 
     this.bgmusic = this.sound.add('BGM');
     let musicConfig = {
@@ -168,19 +169,6 @@ class gameplay_scene extends Phaser.Scene {
       this.player_walk_anim_stop();
     }
 
-<<<<<<< HEAD
-    update() {
-        // loop that runs constantly 
-        // -- game logic mainly in this area
-        const cursors = this.input.keyboard.createCursorKeys();
-
-        if(this.player){ //Only do movement if the player has loaded in
-            this.player_movement(cursors);
-            this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y, rotation: 0});
-        }
-        
-        
-=======
     // print x y of player position to send to network team and update
     // console.log(this.player.x, this.player.y);
   }
@@ -189,7 +177,6 @@ class gameplay_scene extends Phaser.Scene {
     if (!this.isWalking) {
       this.isWalking = true;
       this.player.play('WalkCycle');
->>>>>>> develop
     }
   }
 
@@ -205,16 +192,19 @@ class gameplay_scene extends Phaser.Scene {
     this.player_movement(cursors);
 
   }
+
+  //These methods should be moved to the sceneData class when that is implemented.
+    addPlayer(playerInfo) {
+        this.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+        this.physics.add.collider(this.player, wallsLayer);
+        this.player.setCollideWorldBounds(true);
+    }
+
+    addOtherPlayers(playerInfo) {
+        const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+        otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
+        otherPlayer.playerId = playerInfo.playerId;
+        this.otherPlayers.add(otherPlayer);
+    }
 }
 
-function addPlayer(self, playerInfo) {
-    self.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
-    self.player.setCollideWorldBounds(true);
-}
-
-function addOtherPlayers(self, playerInfo) {
-    const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
-    otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
-    otherPlayer.playerId = playerInfo.playerId;
-    self.otherPlayers.add(otherPlayer);
-}

@@ -17,8 +17,8 @@ class ServerConnection{
     //Add's the required event handlers to support gameplay
     addGameplayHandlers(sceneData){
         this.socket.on('currentPlayers', function (players) {
-            sceneData.addPlayer(sceneData, players[sceneData.socket.id]);
-            delete players[sceneData.socket.id];
+            sceneData.addPlayer(sceneData, players[this.socket.id]);
+            delete players[this.socket.id];
             Object.keys(players).forEach(function (id) {
               sceneData.addOtherPlayer(sceneData, players[id]);
             });
@@ -28,13 +28,22 @@ class ServerConnection{
             sceneData.addOtherPlayer(playerInfo);
           });
         this.socket.on('disconnect', function (playerId) {
-            sceneData.otherPlayers[playerId].destroy();
+            this.findPlayer(playerId, sceneData.otherPlayers).destroy();
           });
         this.socket.on('playerMoved', function (playerInfo) {
-            sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
+            this.findPlayer(playerInfo.playerId, sceneData.otherPlayers).setPosition(playerInfo.x, playerInfo.y);
         });
         this.socket.on('killed', function(playerId){
-            sceneData.otherPlayers[playerId].killed();
+            this.findPlayer(playerId, sceneData.otherPlayers).killed();
+        });
+    }
+
+    //Helper function that can be removed when we store other players in a key/value json object
+    findPlayer(playerId, otherPlayers){
+        otherPlayers.getChildren().forEach(function (otherPlayer) {
+            if (playerId === otherPlayer.playerId){
+                return otherPlayer;
+            }
         });
     }
 
