@@ -27,6 +27,7 @@ class gameplay_scene extends Phaser.Scene {
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
     this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
     this.load.image('deadbody', 'assets/deadCharacter.png');
+    this.load.audio('BGM', '../../assets/audio/BGM.mp3');
   }
 
   create() {
@@ -63,6 +64,17 @@ class gameplay_scene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.player, true, 1, 1);
 
+    this.bgmusic = this.sound.add('BGM');
+    let musicConfig = {
+      mute: false,
+      volume: 1,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: true,
+      delay: 0
+    }
+    this.bgmusic.play(musicConfig);
   }
 
   kill(sprite) {
@@ -105,6 +117,7 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   player_movement(cursors) {
+
     if (cursors.left.isDown) {
       // console.log("Down");
       //this.move_object_left_right(this.player, -10);
