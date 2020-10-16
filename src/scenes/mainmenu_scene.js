@@ -1,4 +1,4 @@
-const { ServerConnection } = import("../js/server_connection");
+import { ServerConnection } from "../js/server_connection.js";
 
 class mainmenu_scene extends Phaser.Scene {
   constructor() {

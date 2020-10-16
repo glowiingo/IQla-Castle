@@ -1,4 +1,4 @@
-class ServerConnection{
+export class ServerConnection{
     constructor(){
         this.socket = io();
         this.roomName = null;
@@ -58,5 +58,3 @@ class ServerConnection{
         this.socket.emit('kill', playerId);
     }
 }
-
-module.exports = {ServerConnection};
