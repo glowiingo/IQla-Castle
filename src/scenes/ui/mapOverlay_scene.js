@@ -2,8 +2,7 @@ class mapOverlay_scene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: 'mapOverlay_scene',
-      active: true
+      key: 'mapOverlay_scene'
     });
   }
 
