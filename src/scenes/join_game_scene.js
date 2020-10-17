@@ -84,7 +84,11 @@ class join_game_scene extends Phaser.Scene {
      *       "Name (or room id) cannot be empty."
      */
     okClicked() {
-        if (this.nameInputBox.value != "" && this.roomIdInputBox.value != "") {
+        if (
+            this.nameInputBox.value != "" &&
+            this.roomIdInputBox.value != "" &&
+            /^\d+$/.test(this.roomIdInputBox.value) // Check if roomID value is numeric
+        ) {
             console.log(
                 "ok clicked, Hello " +
                     this.nameInputBox.value +
