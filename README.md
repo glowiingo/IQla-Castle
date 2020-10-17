@@ -1,10 +1,5 @@
-# IQla-BackEndTeam-POC
-This is a repository containing the Proof of Concept for the Back End Team of the IQla Castle Project. 
-
-Back End Team Responsibilities for POC:
-- Setting up the Base Repository Directory Structure for all teams to collaborate on
-- Setting up the Base Structure of the Game to allow for both front-end and back-end developers to code on
-- Develop a basic proof of concept that shows that compatibility is possible with gameplay.
+# Project IQla Castle
+This is a repository containing the IQla Castle Project. 
 
 For this project, we will be following the structure of the generic phaser game directory structures with slight adjustmenets for our needs:
 
@@ -23,7 +18,7 @@ IQla Castle <br>
 
 ## Set up and Running the Proof of Concept
 
-As the phaser framework only works on properly hosted live servers the solution we came up with to immediately test code after adding to the code base was to install a plugin/extension called "Live Server". It allows the user to host their website locally on a port without difficulty and quickly test their web application.
+As the phaser framework only works on properly hosted live servers the solution we came up with to immediately test code after adding to the code base was to install a plugin/extension called "Live Server" on Visual Studio Code. It allows the user to host their website locally on a port without difficulty and quickly test their web application.
 
 Once the plugin is installed, they should be able to click on a "Go Live" button on the bottom right when on the html page for their web application.
 

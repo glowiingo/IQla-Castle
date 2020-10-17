@@ -14,8 +14,9 @@ const config = {
       debug: false,
     }
   },
-  scene: [preload_scene, temp_menu_scene, mainmenu_scene, gameplay_scene, playerUI_scene,
-    mapOverlay_scene, minigame_scene_manager, mouse_click_minigame, book_click_minigame]
+  scene: [preload_scene, temp_menu_scene, mainmenu_scene, gameplay_scene, kill_scene,
+    mapOverlay_scene, minigame_scene_manager, mouse_click_minigame, book_click_minigame, 
+    trap_gameplay_scene, playerUI_scene]
   // Specify scenes in the array above
 }
 console.log("game.js with specified config");
