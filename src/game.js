@@ -1,4 +1,4 @@
-// Written by Gloria
+// Worked on by: Gloria
 
 const config = {
   type: Phaser.AUTO,

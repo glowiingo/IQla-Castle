@@ -1,4 +1,4 @@
-// WORKED ON BY MIKE CHOI
+// Worked on by: Mike Choi
 /*
 This class is defined in order for preloading of assets, animations, and sprites.
 */

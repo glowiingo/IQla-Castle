@@ -1,18 +1,20 @@
 /*
 This class is defined in order for preloading of assets, animations, and sprites.
 This should be a POC for front end, logic needs to be separated for the map.
+
 */
 
-// Written by Gloria
 class gameplay_scene extends Phaser.Scene {
 
+  // Worked on by: Gloria Ngo
   constructor() {
     super({
       key: 'gameplay_scene'
     });
   }
 
-  // Written by Gloria
+  
+  // Worked on by: Gloria Ngo
   init(data) {
     // initialize and prepare data 
     // constants, configurations, etc.
@@ -184,6 +186,8 @@ class gameplay_scene extends Phaser.Scene {
     this.player.anims.stop();
   }
 
+  
+// Worked on by: Gloria Ngo
   update() {
     // loop that runs constantly 
     // -- game logic mainly in this area

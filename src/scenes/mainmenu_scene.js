@@ -1,3 +1,5 @@
+// Worked on by: Gloria Ngo
+
 class mainmenu_scene extends Phaser.Scene {
   constructor() {
     super("mainmenu_scene");
