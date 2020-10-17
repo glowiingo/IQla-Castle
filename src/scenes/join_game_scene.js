@@ -1,6 +1,6 @@
-class create_game_scene extends Phaser.Scene {
+class join_game_scene extends Phaser.Scene {
     constructor() {
-        super("create_game_scene");
+        super("join_game_scene");
     }
 
     init() {
@@ -16,28 +16,32 @@ class create_game_scene extends Phaser.Scene {
     }
 
     create() {
-        // add objects into the game
-
         const screenX = this.cameras.main.width;
         const screenY = this.cameras.main.height;
         const screenCenterX = this.cameras.main.worldView.x + screenX / 2;
         const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
 
         this.add
-            .text(screenCenterX, screenCenterY - 150, "What is your name?", {
+            .text(screenCenterX, screenCenterY - 150, "Join Game", {
                 font: "55px Ariel",
                 fill: "yellow",
             })
             .setOrigin(0.5);
 
-        // ------------------------- NAME INPUT BOX ------------------------- //
-        const inputField = this.add.dom(0, 0).createFromCache("nameForm");
+        // ------------------------- NAME AND ROOM ID INPUT BOX ------------------------- //
+        const nameField = this.add.dom(0, 0).createFromCache("nameForm");
+        const roomIdField = this.add.dom(0, 0).createFromCache("nameForm");
 
-        inputField.x = screenCenterX;
-        inputField.y = screenCenterY;
+        this.nameInputBox = nameField.getChildByName("inputField");
+        this.roomIdInputBox = roomIdField.getChildByName("inputField");
 
-        this.nameInputBox = inputField.getChildByName("inputField");
         this.nameInputBox.placeholder = "Enter Name";
+        this.roomIdInputBox.placeholder = "Enter Room ID";
+
+        nameField.x = screenCenterX;
+        nameField.y = screenCenterY;
+        roomIdField.x = screenCenterX;
+        roomIdField.y = screenCenterY + 100;
 
         // ------------------------- ICONS ------------------------- //
         this.goBackIcon = new ImageButton(
@@ -69,12 +73,24 @@ class create_game_scene extends Phaser.Scene {
     }
 
     /**
+     * TODO: Prevent Error by making the Room Id input field numeric input only, possible way of doing:
+     *       1. Set this.roomIdInputBox.type to number (Might work, but the html file is set to type = text,
+     *          not sure if it will override). If it does not override, maybe we can remove the type in the
+     *          html file and use this.roomIdInputBox.type to set it everytime we create a inputbox.
+     *
+     *       2. Workaround method, add verification in the if statement below, so input thats not numeric will not work.
+     *
      * TODO: Add some type of error notification to user. For example, if user input is "", a text message pop up and says
      *       "Name (or room id) cannot be empty."
      */
     okClicked() {
-        if (this.nameInputBox.value != "") {
-            console.log("ok clicked, Hello " + this.nameInputBox.value);
+        if (this.nameInputBox.value != "" && this.roomIdInputBox.value != "") {
+            console.log(
+                "ok clicked, Hello " +
+                    this.nameInputBox.value +
+                    "\nJoining Room: " +
+                    this.roomIdInputBox.value
+            );
         } else {
             // Do nothing
         }

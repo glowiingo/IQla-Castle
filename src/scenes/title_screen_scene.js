@@ -17,17 +17,17 @@ class title_screen_scene extends Phaser.Scene {
     create() {
         const screenX = this.cameras.main.width;
         const screenY = this.cameras.main.height;
-
         const screenCenterX = this.cameras.main.worldView.x + screenX / 2;
         const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
 
-        const loadingText = this.add
+        this.add
             .text(screenCenterX, screenCenterY - 150, "IQla's Castle", {
                 font: "55px Ariel",
                 fill: "yellow",
             })
             .setOrigin(0.5);
 
+        // ------------------------- Create and Join Game Buttons ------------------------- //
         this.createGameButton = new TextButton(
             this,
             screenCenterX,
@@ -46,9 +46,10 @@ class title_screen_scene extends Phaser.Scene {
             () => this.joinNewGame()
         );
 
+        // ------------------------- ICONS ------------------------- //
         this.settingIcon = new ImageButton(
             this,
-            0 + 10,
+            10,
             screenY - 10,
             0,
             1,
@@ -77,7 +78,7 @@ class title_screen_scene extends Phaser.Scene {
     }
 
     joinNewGame() {
-        console.log("join new game");
+        this.scene.start("join_game_scene");
     }
 
     settingIconClicked() {

@@ -33,6 +33,7 @@ const config = {
         book_click_minigame,
         title_screen_scene,
         create_game_scene,
+        join_game_scene,
     ],
     // Specify scenes in the array above
 };
