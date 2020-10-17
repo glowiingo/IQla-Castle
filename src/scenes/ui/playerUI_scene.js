@@ -1,8 +1,8 @@
 class playerUI_scene extends Phaser.Scene {
+
   constructor() {
     super({
-      key: 'playerUI_scene',
-      active: true
+      key: 'playerUI_scene'
     });
   }
 
@@ -36,9 +36,12 @@ class playerUI_scene extends Phaser.Scene {
 
   kill() {
     this.killButton.setTint(0x2b2a2a);
-    console.log("kill");
     this.time.delayedCall(2000, this.enablePress, [], this)
     this.canKill = false;
+    let gameplay = this.scene.get("gameplay_scene");
+    let group = this.add.group();
+    group.add(gameplay.otherplayer);
+    gameplay.kill(group.getChildren());
   }
 
   enterButtonHoverState() {
@@ -53,7 +56,7 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   resize(width, height) {
-    this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
+    //this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
     this.killButton.setPosition(document.body.offsetWidth - 200, document.body.offsetHeight - 200);
   }
 

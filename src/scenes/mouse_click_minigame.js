@@ -2,7 +2,6 @@
 This class is defined in order for preloading of assets, animations, and sprites.
 */
 
-
 class mouse_click_minigame extends Phaser.Scene {
     constructor() {
         super("mouse_click_minigame");
@@ -16,13 +15,20 @@ class mouse_click_minigame extends Phaser.Scene {
     preload() {
         // load audio and images into memory
         this.load.image('haachama', '../../assets/haachamachama112.png');
+        this.load.image('exitButt', '../../assets/exitButt.png');
     }
     
     create() {
-        // add objects into the game
-        console.log("gameplay_scene");
-        
-         let mice = this.physics.add.group({
+        /* ---------- Exit Button ---------- */
+        let exitButt = this.add.image(750, 50, 'exitButt');
+        exitButt.displayWidth = 50;
+        exitButt.displayHeight = 50;
+        exitButt.setInteractive();
+        exitButt.on('pointerdown', () => {
+            this.scene.start("mainmenu_scene");
+        });
+
+        let mice = this.physics.add.group({
             key: "haachama", 
             repeat: 2, // one is created automatically so there will be x + 1 in total
             setXY: {x: 100, y: 100, stepX: 50, stepY: 100}
