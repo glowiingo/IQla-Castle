@@ -58,7 +58,7 @@ io.on('connection', function (socket) {
 
         // when a player kills, update the victim's player data
         socket.on('kill', function (victimID) {
-            socket.broadcast.to(roomName).emit('killed', rooms[roomName].getPlayer(socket.id));
+            socket.broadcast.to(roomName).emit('killed', victimID);
         });
         // 
         //

@@ -16,7 +16,6 @@ class gameplay_scene extends Phaser.Scene {
     // initialize and prepare data 
     // constants, configurations, etc.
     this.message = data.message; // scene var called message passed in to scene
-    console.log("data",data); // print?
 
     this.serverConnection = data.serverConnection;
     this.otherPlayers = this.physics.add.group();
@@ -89,6 +88,7 @@ class gameplay_scene extends Phaser.Scene {
         console.log("Hidden");
         console.log(sprite[i].x, sprite[i].y);
         this.create_deadBody(sprite[i].x, sprite[i].y);
+        this.serverConnection.kill(sprite[i].playerId);
       }
     }
     // console.log(Math.abs(this.player.x - this.player2.x));
@@ -199,10 +199,11 @@ class gameplay_scene extends Phaser.Scene {
 
   //These methods should be moved to the sceneData class when that is implemented.
     addPlayer(playerInfo) {
+        console.log(playerInfo);
         this.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
-        this.player.setCollideWorldBounds(true);
+        //this.player.setCollideWorldBounds(true);
     }
 
     addOtherPlayer(playerInfo) {

@@ -17,7 +17,7 @@ class ServerConnection{
     //Add's the required event handlers to support gameplay
     addGameplayHandlers(sceneData){
         this.socket.on('currentPlayers', function (players) {
-            sceneData.addPlayer(sceneData, players[sceneData.serverConnection.socket.id]);
+            sceneData.addPlayer(players[sceneData.serverConnection.socket.id]);
             delete players[sceneData.serverConnection.socket.id];
             Object.keys(players).forEach(function (id) {
               sceneData.addOtherPlayer(players[id]);
@@ -38,7 +38,13 @@ class ServerConnection{
             self.findPlayer(playerInfo.playerId, sceneData.otherPlayers).setPosition(playerInfo.x, playerInfo.y);
         });
         this.socket.on('killed', function(playerId){
-            self.findPlayer(playerId, sceneData.otherPlayers).killed();
+            if(sceneData.serverConnection.socket.id === playerId){
+                sceneData.player.setActive(false).setVisible(false);
+                alert("you died");
+            } else {
+                self.findPlayer(playerId, sceneData.otherPlayers).setActive(false).setVisible(false);;
+            }
+            
         });
     }
 
