@@ -16,7 +16,7 @@ class gameplay_scene extends Phaser.Scene {
     // initialize and prepare data 
     // constants, configurations, etc.
     this.message = data.message; // scene var called message passed in to scene
-    console.log(this.message); // print?
+    console.log("data",data); // print?
 
     this.serverConnection = data.serverConnection;
     this.otherPlayers = this.physics.add.group();
@@ -57,8 +57,8 @@ class gameplay_scene extends Phaser.Scene {
     let tileset = map.addTilesetImage('better_tiles', 'tiles')
     map.createStaticLayer('Ground', tileset);
 
-    const wallsLayer = map.createStaticLayer('Walls', tileset);
-    wallsLayer.setCollisionByProperty({ collides: true });
+    this.wallsLayer = map.createStaticLayer('Walls', tileset);
+    this.wallsLayer.setCollisionByProperty({ collides: true });
 
 
     //Start networking & create player once networking is connected
@@ -189,21 +189,27 @@ class gameplay_scene extends Phaser.Scene {
     // loop that runs constantly 
     // -- game logic mainly in this area
     const cursors = this.input.keyboard.createCursorKeys();
-    this.player_movement(cursors);
+    if(this.player){
+      this.player_movement(cursors);
+      this.serverConnection.movement(this.player);
+    }
+    
 
   }
 
   //These methods should be moved to the sceneData class when that is implemented.
     addPlayer(playerInfo) {
-        this.player = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
-        this.physics.add.collider(this.player, wallsLayer);
+        this.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+        this.physics.add.collider(this.player, this.wallsLayer);
+        this.cameras.main.startFollow(this.player, true, 1, 1);
         this.player.setCollideWorldBounds(true);
     }
 
-    addOtherPlayers(playerInfo) {
-        const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+    addOtherPlayer(playerInfo) {
+        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
         otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
         otherPlayer.playerId = playerInfo.playerId;
+       
         this.otherPlayers.add(otherPlayer);
     }
 }

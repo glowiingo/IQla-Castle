@@ -1,4 +1,4 @@
-export class ServerConnection{
+class ServerConnection{
     constructor(){
         this.socket = io();
         this.roomName = null;
@@ -17,40 +17,47 @@ export class ServerConnection{
     //Add's the required event handlers to support gameplay
     addGameplayHandlers(sceneData){
         this.socket.on('currentPlayers', function (players) {
-            sceneData.addPlayer(sceneData, players[this.socket.id]);
-            delete players[this.socket.id];
+            sceneData.addPlayer(sceneData, players[sceneData.serverConnection.socket.id]);
+            delete players[sceneData.serverConnection.socket.id];
             Object.keys(players).forEach(function (id) {
-              sceneData.addOtherPlayer(sceneData, players[id]);
+              sceneData.addOtherPlayer(players[id]);
             });
           });
         this.socket.on('newPlayer', function (playerInfo) {
             console.log("added other player")
             sceneData.addOtherPlayer(playerInfo);
           });
+
+          //Allows us to pass the findPlayer function into the anonymous functions below
+          let self = this;
         this.socket.on('disconnect', function (playerId) {
-            this.findPlayer(playerId, sceneData.otherPlayers).destroy();
+            self.findPlayer(playerId, sceneData.otherPlayers).destroy();
           });
         this.socket.on('playerMoved', function (playerInfo) {
-            this.findPlayer(playerInfo.playerId, sceneData.otherPlayers).setPosition(playerInfo.x, playerInfo.y);
+            console.log()
+            self.findPlayer(playerInfo.playerId, sceneData.otherPlayers).setPosition(playerInfo.x, playerInfo.y);
         });
         this.socket.on('killed', function(playerId){
-            this.findPlayer(playerId, sceneData.otherPlayers).killed();
+            self.findPlayer(playerId, sceneData.otherPlayers).killed();
         });
     }
 
     //Helper function that can be removed when we store other players in a key/value json object
     findPlayer(playerId, otherPlayers){
+        let op = undefined;
         otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerId === otherPlayer.playerId){
-                return otherPlayer;
+                op = otherPlayer;
             }
         });
+        return op;
     }
 
     movement(player){
+        this.socket.emit('playerMovement', { x: player.x, y: player.y, rotation: 0});
         if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
             this.prevPlayerLocation = {x: player.x, y: player.y};
-            this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y, rotation: 0});
+            
         }
     }
 

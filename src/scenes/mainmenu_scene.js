@@ -1,5 +1,3 @@
-import { ServerConnection } from "../js/server_connection.js";
-
 class mainmenu_scene extends Phaser.Scene {
   constructor() {
     super("mainmenu_scene");
@@ -16,7 +14,8 @@ class mainmenu_scene extends Phaser.Scene {
 
     this.gameplay_text.setInteractive();
     this.gameplay_text.on("pointerdown", () => {
-      this.serverConnection.setRoom(prompt("Room name?"));
+      let r = prompt("Room name?");
+      this.serverConnection.setRoom(r);
       this.scene.start("gameplay_scene", {serverConnection: this.serverConnection});
     });
 

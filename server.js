@@ -13,6 +13,7 @@ app.get('/', function (req, res) {
 });
 app.use("/js", express.static(__dirname + '/js'));
 app.use("/src/scenes", express.static(__dirname + '/src/scenes'));
+app.use("/src/scenes/ui", express.static(__dirname + '/src/scenes/ui'));
 app.use("/src", express.static(__dirname + '/src'));
 app.use("/assets", express.static(__dirname + '/assets'));
 
@@ -29,7 +30,6 @@ io.on('connection', function (socket) {
 
         // send the rooms object to the new player
         socket.emit('currentPlayers', rooms[roomName].players);
-        console.log("Creating Player");
         // update all other players of the new player
         socket.broadcast.to(roomName).emit('newPlayer', rooms[roomName].getPlayer(socket.id));
 

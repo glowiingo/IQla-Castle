@@ -20,13 +20,16 @@ class temp_menu_scene extends Phaser.Scene {
     //     this.scene.start("YOUR_SCENE_NAME_HERE"); // Replace text.
     // });
     console.log("Temp Main Menu");
+    this.serverConnection = new ServerConnection();
     this.mouse_click_text = this.add.text(20, 20, "Gameplay Scene", {
       font: "25px Arial",
       fill: "yellow"
     });
     this.mouse_click_text.setInteractive();
     this.mouse_click_text.on("pointerdown", () => {
-      this.scene.start("gameplay_scene");
+      let r = prompt("Room name?");
+      this.serverConnection.setRoom(r);
+      this.scene.start("gameplay_scene", {serverConnection: this.serverConnection});
     });
     this.mouse_click_text = this.add.text(20, 60, "Back End POC Menu", {
       font: "25px Arial",
