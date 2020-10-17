@@ -1,3 +1,5 @@
+// Worked on by: Lewis
+
 class ImageButton extends Phaser.GameObjects.Image {
     constructor(scene, x, y, originX, originY, img, callback) {
         super(scene, x, y, img);
