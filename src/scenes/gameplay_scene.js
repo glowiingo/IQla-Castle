@@ -3,7 +3,7 @@ This class is defined in order for preloading of assets, animations, and sprites
 This should be a POC for front end, logic needs to be separated for the map.
 */
 
-
+// Written by Gloria
 class gameplay_scene extends Phaser.Scene {
 
   constructor() {
@@ -12,6 +12,7 @@ class gameplay_scene extends Phaser.Scene {
     });
   }
 
+  // Written by Gloria
   init(data) {
     // initialize and prepare data 
     // constants, configurations, etc.
@@ -117,7 +118,6 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   player_movement(cursors) {
-
     if (cursors.left.isDown) {
       // console.log("Down");
       //this.move_object_left_right(this.player, -10);

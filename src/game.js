@@ -1,3 +1,5 @@
+// Written by Gloria
+
 const config = {
   type: Phaser.AUTO,
   scale: {

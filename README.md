@@ -25,3 +25,5 @@ Once the plugin is installed, they should be able to click on a "Go Live" button
 ## Proof of Concept
 
 For our proof of concept, our goal was to show that it was possible to implement the basic main functionality. That is, to use a single phaser scene with a moving player using the arrow keys, using the proper directory formatting that phaser games use as a standard.
+
+Written by: Gloria Ngo
