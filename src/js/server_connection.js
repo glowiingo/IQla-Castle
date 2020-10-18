@@ -1,3 +1,4 @@
+// Worked on by: Evano
 class ServerConnection{
     constructor(){
         this.socket = io();

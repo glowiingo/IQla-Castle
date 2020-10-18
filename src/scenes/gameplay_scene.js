@@ -17,6 +17,7 @@ class gameplay_scene extends Phaser.Scene {
     // constants, configurations, etc.
     this.message = data.message; // scene var called message passed in to scene
 
+    // Worked on by: Evano
     this.serverConnection = data.serverConnection;
     this.otherPlayers = this.physics.add.group();
   }
@@ -70,7 +71,7 @@ class gameplay_scene extends Phaser.Scene {
     this.wallsLayer = map.createStaticLayer('Walls', tileset);
     this.wallsLayer.setCollisionByProperty({ collides: true });
 
-
+    // Worked on by: Evano
     //Start networking & create player once networking is connected
     this.serverConnection.addGameplayHandlers(this);
     this.serverConnection.joinRoom();
@@ -190,6 +191,7 @@ class gameplay_scene extends Phaser.Scene {
 
   }
 
+  // Worked on by: Evano
   //These methods should be moved to the sceneData class when that is implemented.
     addPlayer(playerInfo) {
         console.log(playerInfo);

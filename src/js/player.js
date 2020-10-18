@@ -1,3 +1,4 @@
+// Worked on by: Evano
 class Player{
     constructor(room, socket){
         this.rotation =  0;
