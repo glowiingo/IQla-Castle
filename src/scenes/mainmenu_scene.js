@@ -11,7 +11,7 @@ class mainmenu_scene extends Phaser.Scene {
     this.serverConnection = new ServerConnection();
 
     this.gameplay_text = this.add.text(20, 20, "Gameplay Scene", { font: "25px Arial", fill: "yellow" });
-
+    
     this.gameplay_text.setInteractive();
     this.gameplay_text.on("pointerdown", () => {
       let r = prompt("Room name?");
@@ -25,12 +25,26 @@ class mainmenu_scene extends Phaser.Scene {
     this.mouse_click_minigame_text.on("pointerdown", () => {
       this.scene.start("mouse_click_minigame");
     });
-
+    
     this.book_click_minigame_text = this.add.text(20, 100, "Book Click Minigame", { font: "25px Arial", fill: "yellow" });
 
     this.book_click_minigame_text.setInteractive();
     this.book_click_minigame_text.on("pointerdown", () => {
       this.scene.start("book_click_minigame");
+    });
+
+    this.mouse_click_text = this.add.text(20, 140, "Kill Scene", {font: "25px Arial", fill: "yellow"});
+
+    this.mouse_click_text.setInteractive();
+    this.mouse_click_text.on("pointerdown", () => {
+        this.scene.start("kill_scene", {message: "test_data_from_main"});
+    });
+
+    this.mouse_click_text = this.add.text(20, 180, "Trap Scene", {font: "25px Arial", fill: "yellow"});
+
+    this.mouse_click_text.setInteractive();
+    this.mouse_click_text.on("pointerdown", () => {
+        this.scene.start("trap_gameplay_scene", {message: "test_data_from_main"});
     });
   }
 }

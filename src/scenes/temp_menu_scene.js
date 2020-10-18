@@ -1,7 +1,7 @@
 class temp_menu_scene extends Phaser.Scene {
-  constructor() {
-    super("temp_menu_scene");
-  }
+    constructor() {
+        super("temp_menu_scene");
+    }
 
   create() {
     /**
@@ -36,20 +36,20 @@ class temp_menu_scene extends Phaser.Scene {
       fill: "yellow"
     });
 
-    this.mouse_click_text.setInteractive();
-    this.mouse_click_text.on("pointerdown", () => {
-      // back_end_menu_scene
-      this.scene.start("mainmenu_scene")
-    });
+        this.mouse_click_text.setInteractive();
+        this.mouse_click_text.on("pointerdown", () => {
+            // back_end_menu_scene
+            this.scene.start("mainmenu_scene");
+        });
 
-    this.mouse_click_text = this.add.text(20, 100, "Front End POC Menu", {
-      font: "25px Arial",
-      fill: "yellow"
-    });
+        this.mouse_click_text = this.add.text(20, 100, "Front End POC Menu", {
+            font: "25px Arial",
+            fill: "yellow",
+        });
 
-    this.mouse_click_text.setInteractive();
-    this.mouse_click_text.on("pointerdown", () => {
-      // front_end_scene
-    });
-  }
+        this.mouse_click_text.setInteractive();
+        this.mouse_click_text.on("pointerdown", () => {
+            this.scene.start("title_screen_scene");
+        });
+    }
 }
