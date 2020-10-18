@@ -1,5 +1,6 @@
 /*
 This class is defined in order for preloading of assets, animations, and sprites.
+// Worked on by: Gloria Ngo
 */
 
 

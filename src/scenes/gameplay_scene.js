@@ -1,17 +1,20 @@
 /*
 This class is defined in order for preloading of assets, animations, and sprites.
 This should be a POC for front end, logic needs to be separated for the map.
-*/
 
+*/
 
 class gameplay_scene extends Phaser.Scene {
 
+  // Worked on by: Gloria Ngo
   constructor() {
     super({
       key: 'gameplay_scene'
     });
   }
 
+  
+  // Worked on by: Gloria Ngo
   init(data) {
     // initialize and prepare data 
     // constants, configurations, etc.
@@ -21,7 +24,7 @@ class gameplay_scene extends Phaser.Scene {
 
   preload() {
     // load audio and images into memory
-    //this.load.image('haachama', '../../assets/player/Player.png');
+    // this.load.image('haachama', '../../assets/player/Player.png');
     this.load.spritesheet('haachama', '../../assets/player/PlayerWalkCycle.png', { frameWidth: 128, frameHeight: 128, endFrame: 7 });
 
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
@@ -37,6 +40,7 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.launch("playerUI_scene");
     this.scene.launch("mapOverlay_scene");
 
+    // Worked on by: Anna
     this.isWalking = false;
 
     let config = {
@@ -46,23 +50,6 @@ class gameplay_scene extends Phaser.Scene {
       repeat: -1
     };
     this.anims.create(config);
-
-    this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-    let map = this.make.tilemap({ key: 'map' });
-
-    let tileset = map.addTilesetImage('better_tiles', 'tiles')
-    map.createStaticLayer('Ground', tileset);
-
-    const wallsLayer = map.createStaticLayer('Walls', tileset);
-    wallsLayer.setCollisionByProperty({ collides: true });
-
-    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
-    this.otherplayer = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
-
-    this.physics.add.collider(this.player, wallsLayer);
-
-    this.cameras.main.startFollow(this.player, true, 1, 1);
 
     this.bgmusic = this.sound.add('BGM');
     let musicConfig = {
@@ -75,6 +62,21 @@ class gameplay_scene extends Phaser.Scene {
       delay: 0
     }
     this.bgmusic.play(musicConfig);
+
+    // Worked on by: Flemming, William
+    let map = this.make.tilemap({ key: 'map' });
+    let tileset = map.addTilesetImage('better_tiles', 'tiles')
+    map.createStaticLayer('Ground', tileset);
+
+    const wallsLayer = map.createStaticLayer('Walls', tileset);
+    wallsLayer.setCollisionByProperty({ collides: true });
+
+    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
+    this.otherplayer = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
+
+    this.physics.add.collider(this.player, wallsLayer);
+
+    this.cameras.main.startFollow(this.player, true, 1, 1);
   }
 
   kill(sprite) {
@@ -116,11 +118,9 @@ class gameplay_scene extends Phaser.Scene {
     object.x = config.width / 2;
   }
 
+  // Worked on by: William, Brian, Anna, Flemming
   player_movement(cursors) {
-
     if (cursors.left.isDown) {
-      // console.log("Down");
-      //this.move_object_left_right(this.player, -10);
       if (cursors.right.isDown) {
         this.player.setVelocityX(0);
       } else {
@@ -128,8 +128,6 @@ class gameplay_scene extends Phaser.Scene {
         this.player.flipX = false;
       }
     } else if (cursors.right.isDown) {
-      // console.log("Right");
-      //this.move_object_left_right(this.player, 10);
       if (cursors.left.isDown) {
         this.player.setVelocityX(0);
       } else {
@@ -141,16 +139,12 @@ class gameplay_scene extends Phaser.Scene {
     }
 
     if (cursors.up.isDown) {
-      // console.log("Up");
-      //this.move_object_up_down(this.player, -10);
       if (cursors.down.isDown) {
         this.player.setVelocityY(0);
       } else {
         this.player.setVelocityY(-300);
       }
     } else if (cursors.down.isDown) {
-      // console.log("Down");
-      //this.move_object_up_down(this.player, 10);
       if (cursors.up.isDown) {
         this.player.setVelocityY(0);
       } else {
@@ -172,6 +166,7 @@ class gameplay_scene extends Phaser.Scene {
     // console.log(this.player.x, this.player.y);
   }
 
+  // Worked on by: Anna
   player_walk_anim_start() {
     if (!this.isWalking) {
       this.isWalking = true;
@@ -179,11 +174,14 @@ class gameplay_scene extends Phaser.Scene {
     }
   }
 
+  // Worked on by: Anna
   player_walk_anim_stop() {
     this.isWalking = false;
     this.player.anims.stop();
   }
 
+  
+// Worked on by: Gloria Ngo
   update() {
     // loop that runs constantly 
     // -- game logic mainly in this area
