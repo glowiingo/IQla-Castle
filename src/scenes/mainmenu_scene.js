@@ -8,13 +8,14 @@ class mainmenu_scene extends Phaser.Scene {
         this.add.text(20, 20, "Playing game", {font: "25px Arial", fill: "yellow"});
         this.mouse_click_text = this.add.text(20, 20, "Gameplay Scene", {font: "25px Arial", fill: "yellow"});
         // Use this line to launch minigame in "overlay". Replace this.scene.start(SCENE_NAME) in "pointerdown" events:
-        // this.scene.launch("minigame_scene_manager", "mouse_click_minigame");
+         
 
         this.gameplay_text = this.add.text(20, 20, "Gameplay Scene", {font: "25px Arial", fill: "yellow"});
 
         this.gameplay_text.setInteractive();
         this.gameplay_text.on("pointerdown", () => {
-            this.scene.start("gameplay_scene");
+            //this.scene.start("gameplay_scene");
+            this.scene.launch("minigame_scene_manager", "mouse_click_minigame");
         });
 
         this.mouse_click_minigame_text = this.add.text(20, 60, "Mouse Click Minigame", {font: "25px Arial", fill: "yellow"});
