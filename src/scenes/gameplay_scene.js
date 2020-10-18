@@ -19,7 +19,10 @@ class gameplay_scene extends Phaser.Scene {
     // initialize and prepare data 
     // constants, configurations, etc.
     this.message = data.message; // scene var called message passed in to scene
-    console.log(this.message); // print?
+
+    // Worked on by: Evano
+    this.serverConnection = data.serverConnection;
+    this.otherPlayers = this.physics.add.group();
   }
 
   preload() {
@@ -68,15 +71,13 @@ class gameplay_scene extends Phaser.Scene {
     let tileset = map.addTilesetImage('better_tiles', 'tiles')
     map.createStaticLayer('Ground', tileset);
 
-    const wallsLayer = map.createStaticLayer('Walls', tileset);
-    wallsLayer.setCollisionByProperty({ collides: true });
+    this.wallsLayer = map.createStaticLayer('Walls', tileset);
+    this.wallsLayer.setCollisionByProperty({ collides: true });
 
-    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
-    this.otherplayer = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
-
-    this.physics.add.collider(this.player, wallsLayer);
-
-    this.cameras.main.startFollow(this.player, true, 1, 1);
+    // Worked on by: Evano
+    //Start networking & create player once networking is connected
+    this.serverConnection.addGameplayHandlers(this);
+    this.serverConnection.joinRoom();
   }
 
   kill(sprite) {
@@ -90,6 +91,7 @@ class gameplay_scene extends Phaser.Scene {
         console.log("Hidden");
         console.log(sprite[i].x, sprite[i].y);
         this.create_deadBody(sprite[i].x, sprite[i].y);
+        this.serverConnection.kill(sprite[i].playerId);
       }
     }
     // console.log(Math.abs(this.player.x - this.player2.x));
@@ -186,7 +188,30 @@ class gameplay_scene extends Phaser.Scene {
     // loop that runs constantly 
     // -- game logic mainly in this area
     const cursors = this.input.keyboard.createCursorKeys();
-    this.player_movement(cursors);
+    if(this.player){
+      this.player_movement(cursors);
+      this.serverConnection.movement(this.player);
+    }
+    
 
   }
+
+  // Worked on by: Evano
+  //These methods should be moved to the sceneData class when that is implemented.
+    addPlayer(playerInfo) {
+        console.log(playerInfo);
+        this.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+        this.physics.add.collider(this.player, this.wallsLayer);
+        this.cameras.main.startFollow(this.player, true, 1, 1);
+        //this.player.setCollideWorldBounds(true);
+    }
+
+    addOtherPlayer(playerInfo) {
+        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+        otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
+        otherPlayer.playerId = playerInfo.playerId;
+       
+        this.otherPlayers.add(otherPlayer);
+    }
 }
+
