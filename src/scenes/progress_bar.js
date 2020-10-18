@@ -1,3 +1,5 @@
+//worked on by: Kshitiz Bisht
+
 class ProgressBar {
 
     constructor(scene, x, y) {
