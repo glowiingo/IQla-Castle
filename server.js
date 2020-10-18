@@ -55,6 +55,7 @@ io.on('connection', function (socket) {
             socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
         });
 
+        // Kian Darakhshan section
         // Sockets to be added once functionality is made:
 
         // when a player kills, update the victim's player data
