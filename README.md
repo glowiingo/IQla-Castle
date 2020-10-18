@@ -20,7 +20,8 @@ IQla Castle <br>
 
 As the phaser framework only works on properly hosted live servers and we now have set up the networking to host the server, the user needs to:
 
-1. Call `npm install` in the directory of the project
+1. Call `npm install` in the directory of the project and `npm install socket.io` in the directory of the project.
+To ensure the socket.io module is installed, please do `npm socket.io -v`.
 
 2. Run the server on local host by typing in `node server.js` in the main directory of the project.
 
