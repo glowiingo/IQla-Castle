@@ -1,3 +1,5 @@
+// Worked on by: William, Alexis
+
 class playerUI_scene extends Phaser.Scene {
 
   constructor() {
@@ -39,9 +41,7 @@ class playerUI_scene extends Phaser.Scene {
     this.time.delayedCall(2000, this.enablePress, [], this)
     this.canKill = false;
     let gameplay = this.scene.get("gameplay_scene");
-    let group = this.add.group();
-    group.add(gameplay.otherplayer);
-    gameplay.kill(group.getChildren());
+    gameplay.kill(gameplay.otherPlayers.getChildren());
   }
 
   enterButtonHoverState() {
