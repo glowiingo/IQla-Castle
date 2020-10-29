@@ -1,7 +1,7 @@
 //Worked on by Kiwon, John, Nav, Evano
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(config, id, username, speed, iqla=false) {
+    constructor(config, id, username, speed, iqla=false, playerName) {
         super(config.scene, config.x, config.y, config.sprite);
 
         this.scene.physics.add.existing(this).setScale(1);
@@ -16,9 +16,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.speed = speed;
         this.alive = true;
         this.iqla = false;
+        this.playerName = playerName;
     }
 
-    player_movement(key) {
+    player_movement() {
+        let key = this.scene.input.keyboard.addKeys(
+            {up:Phaser.Input.Keyboard.KeyCodes.W,
+            down:Phaser.Input.Keyboard.KeyCodes.S,
+            left:Phaser.Input.Keyboard.KeyCodes.A,
+            right:Phaser.Input.Keyboard.KeyCodes.D});
+            
         //console.log(this);
         if(key.left.isDown){
             this.setVelocityX(-this.speed);
@@ -35,6 +42,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.setVelocityY(0);
         }
+    }
+
+    getPlayerName() {
+        return this.playerName;
     }
 
     create_deadBody(x, y) {
