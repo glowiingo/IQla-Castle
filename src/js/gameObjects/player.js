@@ -51,6 +51,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // console.log(c);
             if (c < 60) {
                 sprite[i].setActive(false).setVisible(false);
+                sprite[i].alive = false;
+                //sprite[i].setTexture("ghost");
                 console.log("Hidden");
                 console.log(sprite[i].x, sprite[i].y);
                 this.create_deadBody(sprite[i].x, sprite[i].y);
