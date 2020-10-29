@@ -14,6 +14,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.id = id;
         this.username = username;
         this.speed = speed;
+        this.alive = true;
+        this.iqla = false;
     }
 
     player_movement(key) {
@@ -39,5 +41,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         let dead_image = this.add.image(x, y, 'deadbody');
         dead_image.setScale(0.5);
         dead_image.setDepth(-1);
+    }
+
+    kill(sprite) {
+        for(let i = 0; i < sprite.length; i++) {
+            let a = Math.abs(this.player.x - sprite[i].x);
+            let b = Math.abs(this.player.y - sprite[i].y);
+            let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+            // console.log(c);
+            if (c < 60) {
+                sprite[i].setActive(false).setVisible(false);
+                console.log("Hidden");
+                console.log(sprite[i].x, sprite[i].y);
+                this.create_deadBody(sprite[i].x, sprite[i].y);
+            }
+        }
+        // console.log(Math.abs(this.player.x - this.player2.x));
     }
 }
