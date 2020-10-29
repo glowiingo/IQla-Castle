@@ -1,3 +1,5 @@
+//Worked on Kiwon
+
 class Trap extends Phaser.GameObjects.Sprite {
     constructor (config) {
         super(config.scene, config.x, config.y, 'trap');

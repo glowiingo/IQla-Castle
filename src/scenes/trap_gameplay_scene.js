@@ -1,3 +1,5 @@
+//Worked on by: Kiwon and John
+
 /*
 This class is defined in order for preloading of assets, animations, and sprites.
 */

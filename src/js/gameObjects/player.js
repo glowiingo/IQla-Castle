@@ -1,3 +1,5 @@
+//Worked on by Kiwon, John, Nav, Evano
+
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(config, id, username, speed, iqla=false) {
         super(config.scene, config.x, config.y, config.sprite);

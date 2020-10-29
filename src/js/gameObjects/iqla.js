@@ -1,3 +1,5 @@
+//Worked on by Kiwon, John, Nav, Evano
+
 class Iqla extends Player {
     constructor(config, id, username, speed) {
         super(config, id, username, speed);
