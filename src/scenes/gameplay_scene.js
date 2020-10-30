@@ -88,7 +88,6 @@ class gameplay_scene extends Phaser.Scene {
       this.player_movement(cursors);
       this.sceneData.serverConnection.movement(this.player);
     }
-    
 
   }
 
