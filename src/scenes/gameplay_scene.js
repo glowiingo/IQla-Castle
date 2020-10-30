@@ -80,125 +80,13 @@ class gameplay_scene extends Phaser.Scene {
     this.sceneData.serverConnection.addGameplayHandlers(this.sceneData);
     this.sceneData.serverConnection.joinRoom();
   }
-
-<<<<<<< HEAD
-  kill(sprite) {
-    for (let i = 0; i < sprite.length; i++) {
-      let a = Math.abs(this.player.x - sprite[i].x);
-      let b = Math.abs(this.player.y - sprite[i].y);
-      let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-      // console.log(c);
-      if (c < 60) {
-        sprite[i].setActive(false).setVisible(false);
-        console.log("Hidden");
-        console.log(sprite[i].x, sprite[i].y);
-        this.create_deadBody(sprite[i].x, sprite[i].y);
-        this.sceneData.serverConnection.kill(sprite[i].playerId);
-      }
-    }
-    // console.log(Math.abs(this.player.x - this.player2.x));
-  }
-
-  create_deadBody(x, y) {
-    let dead_image = this.add.image(x, y, 'deadbody');
-    dead_image.setScale(0.25);
-    dead_image.setDepth(30);
-  }
-
-  move_object_left_right(object, speed) {
-    object.x += speed;
-  }
-
-  move_object_left_right(object, speed) {
-    object.x += speed;
-  }
-
-  move_object_up_down(object, speed) {
-    object.y += speed;
-  }
-
-  reset_object_bot_mid(object) {
-    object.y = config.height;
-    object.x = config.width / 2;
-  }
-
-  // Worked on by: William, Brian, Anna, Flemming
-  player_movement(cursors) {
-    if (cursors.left.isDown) {
-      if (cursors.right.isDown) {
-        this.player.setVelocityX(0);
-      } else {
-        this.player.setVelocityX(-300);
-        this.player.flipX = false;
-      }
-    } else if (cursors.right.isDown) {
-      if (cursors.left.isDown) {
-        this.player.setVelocityX(0);
-      } else {
-        this.player.setVelocityX(300);
-        this.player.flipX = true;
-      }
-    } else {
-      this.player.setVelocityX(0);
-    }
-
-    if (cursors.up.isDown) {
-      if (cursors.down.isDown) {
-        this.player.setVelocityY(0);
-      } else {
-        this.player.setVelocityY(-300);
-      }
-    } else if (cursors.down.isDown) {
-      if (cursors.up.isDown) {
-        this.player.setVelocityY(0);
-      } else {
-        this.player.setVelocityY(300);
-      }
-    } else {
-      this.player.setVelocityY(0);
-    }
-
-    if (cursors.down.isDown || cursors.up.isDown || cursors.left.isDown || cursors.right.isDown) {
-      if (!this.isWalking) {
-        this.player_walk_anim_start();
-      }
-    } else {
-      this.player_walk_anim_stop();
-    }
-
-    // print x y of player position to send to network team and update
-    // console.log(this.player.x, this.player.y);
-  }
-
-  // Worked on by: Anna
-  player_walk_anim_start() {
-    if (!this.isWalking) {
-      this.isWalking = true;
-      this.player.play('WalkCycle');
-    }
-  }
-
-  // Worked on by: Anna
-  player_walk_anim_stop() {
-    this.isWalking = false;
-    this.player.anims.stop();
-  }
-
-  
-=======
->>>>>>> trap
 // Worked on by: Gloria Ngo
   update() {
     // loop that runs constantly 
     // -- game logic mainly in this area
     if(this.player){
-<<<<<<< HEAD
       this.player_movement(cursors);
       this.sceneData.serverConnection.movement(this.player);
-=======
-      this.player.player_movement();
-      this.serverConnection.movement(this.player);
->>>>>>> trap
     }
     
 
@@ -206,9 +94,6 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
     addPlayer(playerInfo) {
-<<<<<<< HEAD
-        this.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
-=======
       console.log(this);
         console.log(playerInfo);
         this.player = new Player({
@@ -221,7 +106,6 @@ class gameplay_scene extends Phaser.Scene {
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
         
->>>>>>> trap
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
         return this.player;
