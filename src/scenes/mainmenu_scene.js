@@ -34,7 +34,7 @@ class mainmenu_scene extends Phaser.Scene {
 
     this.book_click_minigame_text.setInteractive();
     this.book_click_minigame_text.on("pointerdown", () => {
-      this.scene.start("book_click_minigame");
+      this.scene.launch("book_click_minigame");
     });
 
     this.mouse_click_text = this.add.text(20, 140, "Kill Scene", {font: "25px Arial", fill: "yellow"});
