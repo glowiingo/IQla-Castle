@@ -20,7 +20,7 @@ const config = {
     default: 'arcade',
     arcade: {
       enableBody: true,
-      debug: false,
+      debug: true,
     }
   },
   scene: [preload_scene, temp_menu_scene, mainmenu_scene, gameplay_scene, kill_scene,

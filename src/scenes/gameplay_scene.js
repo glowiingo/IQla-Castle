@@ -81,6 +81,7 @@ class gameplay_scene extends Phaser.Scene {
     this.sceneData.serverConnection.joinRoom();
   }
 
+<<<<<<< HEAD
   kill(sprite) {
     for (let i = 0; i < sprite.length; i++) {
       let a = Math.abs(this.player.x - sprite[i].x);
@@ -184,14 +185,20 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   
+=======
+>>>>>>> trap
 // Worked on by: Gloria Ngo
   update() {
     // loop that runs constantly 
     // -- game logic mainly in this area
-    const cursors = this.input.keyboard.createCursorKeys();
     if(this.player){
+<<<<<<< HEAD
       this.player_movement(cursors);
       this.sceneData.serverConnection.movement(this.player);
+=======
+      this.player.player_movement();
+      this.serverConnection.movement(this.player);
+>>>>>>> trap
     }
     
 
@@ -199,14 +206,35 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
     addPlayer(playerInfo) {
+<<<<<<< HEAD
         this.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+=======
+      console.log(this);
+        console.log(playerInfo);
+        this.player = new Player({
+          scene:this, 
+          x: playerInfo.x, 
+          y: playerInfo.y, 
+          sprite:'haachama'
+      }, 1, "john", 300);
+      
+        this.add.existing(this.player).setScale(1);
+        this.physics.add.existing(this.player);
+        
+>>>>>>> trap
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
         return this.player;
     }
 
     addOtherPlayer(playerInfo) {
-        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
+        const otherPlayer = new Player({
+          scene:this, 
+          x: playerInfo.x, 
+          y: playerInfo.y, 
+          sprite:'haachama'
+      }, 1, "john", 300);
+      
         otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
         otherPlayer.playerId = playerInfo.playerId;
        
