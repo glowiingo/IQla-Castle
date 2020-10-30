@@ -21,7 +21,8 @@ class gameplay_scene extends Phaser.Scene {
     this.message = data.message; // scene var called message passed in to scene
 
     // Worked on by: Evano
-    this.serverConnection = data.serverConnection;
+    console.log(this.registry.values.sceneData);
+    this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
   }
 
@@ -76,8 +77,8 @@ class gameplay_scene extends Phaser.Scene {
 
     // Worked on by: Evano
     //Start networking & create player once networking is connected
-    this.serverConnection.addGameplayHandlers(this);
-    this.serverConnection.joinRoom();
+    this.sceneData.serverConnection.addGameplayHandlers(this.sceneData);
+    this.sceneData.serverConnection.joinRoom();
   }
 
   kill(sprite) {
@@ -91,7 +92,7 @@ class gameplay_scene extends Phaser.Scene {
         console.log("Hidden");
         console.log(sprite[i].x, sprite[i].y);
         this.create_deadBody(sprite[i].x, sprite[i].y);
-        this.serverConnection.kill(sprite[i].playerId);
+        this.sceneData.serverConnection.kill(sprite[i].playerId);
       }
     }
     // console.log(Math.abs(this.player.x - this.player2.x));
@@ -190,20 +191,18 @@ class gameplay_scene extends Phaser.Scene {
     const cursors = this.input.keyboard.createCursorKeys();
     if(this.player){
       this.player_movement(cursors);
-      this.serverConnection.movement(this.player);
+      this.sceneData.serverConnection.movement(this.player);
     }
     
 
   }
 
   // Worked on by: Evano
-  //These methods should be moved to the sceneData class when that is implemented.
     addPlayer(playerInfo) {
-        console.log(playerInfo);
         this.player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'haachama').setScale(1);
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
-        //this.player.setCollideWorldBounds(true);
+        return this.player;
     }
 
     addOtherPlayer(playerInfo) {
@@ -212,6 +211,7 @@ class gameplay_scene extends Phaser.Scene {
         otherPlayer.playerId = playerInfo.playerId;
        
         this.otherPlayers.add(otherPlayer);
+        return otherPlayer;
     }
 }
 

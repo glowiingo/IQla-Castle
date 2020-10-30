@@ -55,6 +55,12 @@ io.on('connection', function (socket) {
             socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
         });
 
+        socket.on('alertGameStart', function () {
+            let roles = rooms[roomName].getAssignments();
+            socket.to(roomName).emit('gameStart', roles);
+        });
+        
+
         // Worked on by: Kian Darakhshan
         // Sockets to be added once functionality is made:
 
