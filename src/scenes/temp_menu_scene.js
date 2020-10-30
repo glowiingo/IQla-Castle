@@ -42,6 +42,7 @@ class temp_menu_scene extends Phaser.Scene {
         this.mouse_click_text.on("pointerdown", () => {
             // back_end_menu_scene
             this.scene.start("mainmenu_scene");
+            //this.scene.start("voting_scene");
         });
 
         this.mouse_click_text = this.add.text(20, 100, "Front End POC Menu", {
