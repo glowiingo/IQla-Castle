@@ -12,18 +12,27 @@ class mouse_click_minigame extends Phaser.Scene {
   preload() {
     // Load audio and images into memory.
     this.load.image('haachama', '../../assets/haachamachama112.png');
+    this.load.image('background', '../../assets/shrek.jpg');
     this.load.image('exitButt', '../../assets/exitButt.png');
   }
   
   create() {
     // ---------- Exit Button: by Alexis C. M. ---------- //
-    let exitButt = this.add.image(750, 50, 'exitButt');
-    exitButt.displayWidth = 50;
-    exitButt.displayHeight = 50;
-    exitButt.setInteractive();
-    exitButt.on('pointerdown', () => {
-      this.scene.start('mainmenu_scene');
-    });
+    // let exitButt = this.add.image(750, 50, 'exitButt');
+    // exitButt.displayWidth = 50;
+    // exitButt.displayHeight = 50;
+    // exitButt.setInteractive();
+    // exitButt.on('pointerdown', () => {
+    //   this.scene.start('mainmenu_scene');
+    // });
+    
+
+    minigame_scene_manager.setBorder(this, new Image(0,0,'background'));
+
+
+    // background.displayWidth = 800;
+    // background.displayHeight = 600;
+
 
     let mice = this.physics.add.group({
       key: 'haachama', 

@@ -18,32 +18,45 @@ class minigame_scene_manager extends Phaser.Scene {
     preload() {
         this.load.image('exitBtn', '../../assets/exitButt.png');
     }
-    
-    create(key) {
+
+    static setBorder(_this, background){
         const SCALE_SIZE = 0.8;
-        let baseWidth = this.cameras.default.width;
-        let baseHeight = this.cameras.default.height;
+        let baseWidth = _this.cameras.default.width;
+        let baseHeight = _this.cameras.default.height;
         let minigameWidth = baseWidth * SCALE_SIZE;
         let minigameHeight = baseHeight * SCALE_SIZE;
+        let exitButt;
 
-        this.scene.launch(key);
-        console.log(this.childScene);
-        this.childScene.cameras.resize(minigameWidth, minigameHeight);
-        this.childScene.cameras.main.x = (baseWidth - minigameWidth) / 2;
-        this.childScene.cameras.main.y = (baseHeight - minigameHeight) / 2;
-        this.childScene.cameras.main.setBackgroundColor('#5d8a54');
+        _this.cameras.resize(minigameWidth, minigameHeight);
+        _this.cameras.main.x = (baseWidth - minigameWidth) / 2;
+        _this.cameras.main.y = (baseHeight - minigameHeight) / 2;
+        _this.cameras.main.setBackgroundColor('#5d8a54');
+
+        _this.add.rectangle(minigameWidth / 2, minigameHeight / 2, minigameWidth, minigameHeight, 0x123456, 1);
+
+        let background = background.texture.source[0].image;
+        console.log(background);
         
-        let exitBtn = this.childScene.add.image(0, 0, 'exitBtn');
-        exitBtn.setScale(0.1);
-        exitBtn.x = minigameWidth - exitBtn.width / 2 * 0.1;
-        exitBtn.y = exitBtn.height / 2 * 0.1;
-        console.log(exitBtn);
-
-        exitBtn.setInteractive();
-        exitBtn.on('pointerdown', () => {
-            this.scene.stop(key);
-            this.scene.stop('minigame_scene_manager');
+        exitButt = _this.add.image(615, 25, 'exitButt');
+        exitButt.displayWidth = 40;
+        exitButt.displayHeight = 40;
+        exitButt.setInteractive();
+        exitButt.on('pointerdown', () => {
+            _this.scene.stop();
         });
+
+        _this.input.on('pointerdown', () => {
+            let xPos = _this.game.input.mousePointer.x;
+            let yPos = _this.game.input.mousePointer.y;
+            let xBorder = baseWidth / 2 - minigameWidth / 2;
+            let yBorder = baseHeight / 2 - minigameHeight / 2;
+            if(xPos < xBorder || xPos > xBorder + minigameWidth || yPos < yBorder || yPos > yBorder + minigameHeight){
+                _this.scene.stop();
+            }
+        });
+    }
+    
+    create() {
     }
 
     update() {
