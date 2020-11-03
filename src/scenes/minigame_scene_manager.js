@@ -2,63 +2,60 @@
  * Created by Charles Huang.
  * Worked on by Charles Huang & Alexis C. Mendiola.
  */
+const SCALE_SIZE = 0.75; // scale minigame relative to game size
+const BACKGROUND_SCALE_SIZE = 0.85; // background behind minigame to imitate border
+
 class minigame_scene_manager extends Phaser.Scene {
     constructor() {
         super("minigame_scene_manager");
     }
 
-    init(key) {
+    init() {
         // initialize and prepare data 
         // constants, configurations, etc.
-        console.log(`in preload: ${key}`);
-        this.childScene = this.scene.get(key); // ERROR: this.childScene is undefined after running 2nd time.
-        console.log(this.childScene);
+        this.minigameWidth = this.cameras.default.width * SCALE_SIZE;
+        this.minigameHeight = this.cameras.default.height * SCALE_SIZE;
+        this.backgroundWidth = this.cameras.default.width * BACKGROUND_SCALE_SIZE;
+        this.backgroundHeight = this.cameras.default.height * BACKGROUND_SCALE_SIZE;
+        this.buttPadding = 8; // da padding for yo' butt
     }
 
     preload() {
-        this.load.image('exitBtn', '../../assets/exitButt.png');
+        this.load.image('exitButt', '../../assets/exitButt.png');
     }
-
-    static setBorder(_this, background){
-        const SCALE_SIZE = 0.8;
-        let baseWidth = _this.cameras.default.width;
-        let baseHeight = _this.cameras.default.height;
-        let minigameWidth = baseWidth * SCALE_SIZE;
-        let minigameHeight = baseHeight * SCALE_SIZE;
-        let exitButt;
-
-        _this.cameras.resize(minigameWidth, minigameHeight);
-        _this.cameras.main.x = (baseWidth - minigameWidth) / 2;
-        _this.cameras.main.y = (baseHeight - minigameHeight) / 2;
-        _this.cameras.main.setBackgroundColor('#5d8a54');
-
-        _this.add.rectangle(minigameWidth / 2, minigameHeight / 2, minigameWidth, minigameHeight, 0x123456, 1);
-
-        let background = background.texture.source[0].image;
-        console.log(background);
+    
+    create(key) {
+        this.scene.launch(key, {width: this.minigameWidth, height: this.minigameHeight});
+        this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x123456);
         
-        exitButt = _this.add.image(615, 25, 'exitButt');
-        exitButt.displayWidth = 40;
-        exitButt.displayHeight = 40;
+        let exitButt = this.add.image(0, 0, 'exitButt');
+        exitButt.displayWidth = 25;
+        exitButt.displayHeight = 25;
+        exitButt.setX((game.config.width - this.backgroundWidth) / 2 + this.backgroundWidth - exitButt.displayWidth / 2 - this.buttPadding);
+        exitButt.setY((game.config.height - this.backgroundHeight) / 2 + exitButt.displayHeight / 2 + this.buttPadding);
         exitButt.setInteractive();
         exitButt.on('pointerdown', () => {
-            _this.scene.stop();
+            this.end(key);
         });
 
-        _this.input.on('pointerdown', () => {
-            let xPos = _this.game.input.mousePointer.x;
-            let yPos = _this.game.input.mousePointer.y;
-            let xBorder = baseWidth / 2 - minigameWidth / 2;
-            let yBorder = baseHeight / 2 - minigameHeight / 2;
-            if(xPos < xBorder || xPos > xBorder + minigameWidth || yPos < yBorder || yPos > yBorder + minigameHeight){
-                _this.scene.stop();
+        this.input.on('pointerdown', () => {
+            let xPos = this.game.input.mousePointer.x;
+            let yPos = this.game.input.mousePointer.y;
+            let xBorder = this.game.config.width / 2 - this.backgroundWidth / 2;
+            let yBorder = this.game.config.height / 2 - this.backgroundHeight / 2;
+            if(xPos < xBorder || xPos > xBorder + this.backgroundWidth || yPos < yBorder || yPos > yBorder + this.backgroundHeight){
+                this.end(key);
             }
         });
     }
-    
-    create() {
-    }
 
     update() {
+    }
+
+    // stops minigame and wakes up mainmenu
+    end(key){
+        this.scene.wake('mainmenu_scene');
+        this.scene.stop(key);
+        this.scene.stop();
     }
 }

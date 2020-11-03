@@ -27,6 +27,7 @@ class mainmenu_scene extends Phaser.Scene {
 
     this.mouse_click_minigame_text.setInteractive();
     this.mouse_click_minigame_text.on("pointerdown", () => {
+      this.scene.pause();
       this.scene.launch("minigame_scene_manager", "mouse_click_minigame");
     });
     
