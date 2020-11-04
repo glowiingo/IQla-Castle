@@ -42,6 +42,7 @@ class gameplay_scene extends Phaser.Scene {
 
     this.scene.launch("playerUI_scene");
     this.scene.launch("mapOverlay_scene");
+    this.scene.launch("voting_scene");
 
     // Worked on by: Anna
     this.isWalking = false;
@@ -78,6 +79,10 @@ class gameplay_scene extends Phaser.Scene {
     //Start networking & create player once networking is connected
     this.serverConnection.addGameplayHandlers(this);
     this.serverConnection.joinRoom();
+  }
+
+  vote(votedFor) {
+    this.serverConnection.vote(votedFor);
   }
 
   kill(sprite) {

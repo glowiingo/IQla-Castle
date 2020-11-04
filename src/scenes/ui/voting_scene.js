@@ -4,7 +4,9 @@ This class is defined in order for preloading of assets, animations, and sprites
 
 class voting_scene extends Phaser.Scene {
   constructor() {
-    super('voting_scene');
+    super({
+      key: 'voting_scene'
+    });
   }
 
   init() {
@@ -17,10 +19,19 @@ class voting_scene extends Phaser.Scene {
   }
 
   create() {
+    // temp voting activation
+    let showVote = false;
+    this.scene.setVisible(false)
+    this.keyPress = this.input.keyboard.addKey('V');
+    this.keyPress.on('down', () => {
+      showVote = !showVote;
+      showVote ? this.scene.setVisible(true) : this.scene.setVisible(false);
+    });
+
     const screenX = this.cameras.main.width;
     const screenY = this.cameras.main.height;
     //=================================================================================
-    this.players = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // This array should be the players
+    this.players = [1,2,3,4,5,6,7,8]; // This array should be the players
     //=================================================================================
     this.playerPortraits = [];
     this.voted = false;
@@ -54,6 +65,7 @@ class voting_scene extends Phaser.Scene {
         if (this.playerPortraits[i].mouseStatus == mouseStatus.selected) {
           this.voted = true;
           this.add.text(screenX/12, 50,'You voted for ' + this.players[i], {font: '55px Ariel', fill: 'yellow'});
+          this.scene.get("gameplay_scene").vote(String(this.players[i]));
         }
       }
     });

@@ -68,6 +68,10 @@ class ServerConnection{
         }
     }
 
+    vote(votedFor) {
+      this.socket.emit('vote', votedFor);
+    }
+
     kill(playerId){
         this.socket.emit('kill', playerId);
     }
