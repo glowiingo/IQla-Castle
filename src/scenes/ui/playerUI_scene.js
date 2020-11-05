@@ -1,9 +1,10 @@
+// Worked on by: William, Alexis
+
 class playerUI_scene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: 'playerUI_scene',
-      active: true
+      key: 'playerUI_scene'
     });
   }
 
@@ -37,9 +38,10 @@ class playerUI_scene extends Phaser.Scene {
 
   kill() {
     this.killButton.setTint(0x2b2a2a);
-    console.log("kill");
     this.time.delayedCall(2000, this.enablePress, [], this)
     this.canKill = false;
+    let gameplay = this.scene.get("gameplay_scene");
+    gameplay.kill(gameplay.otherPlayers.getChildren());
   }
 
   enterButtonHoverState() {

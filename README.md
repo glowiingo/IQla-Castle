@@ -1,10 +1,5 @@
-# IQla-BackEndTeam-POC
-This is a repository containing the Proof of Concept for the Back End Team of the IQla Castle Project. 
-
-Back End Team Responsibilities for POC:
-- Setting up the Base Repository Directory Structure for all teams to collaborate on
-- Setting up the Base Structure of the Game to allow for both front-end and back-end developers to code on
-- Develop a basic proof of concept that shows that compatibility is possible with gameplay.
+# Project IQla Castle
+This is a repository containing the IQla Castle Project. 
 
 For this project, we will be following the structure of the generic phaser game directory structures with slight adjustmenets for our needs:
 
@@ -23,10 +18,19 @@ IQla Castle <br>
 
 ## Set up and Running the Proof of Concept
 
-As the phaser framework only works on properly hosted live servers the solution we came up with to immediately test code after adding to the code base was to install a plugin/extension called "Live Server". It allows the user to host their website locally on a port without difficulty and quickly test their web application.
+As the phaser framework only works on properly hosted live servers and we now have set up the networking to host the server, the user needs to:
 
-Once the plugin is installed, they should be able to click on a "Go Live" button on the bottom right when on the html page for their web application.
+1. Call `npm install` in the directory of the project and `npm install socket.io` in the directory of the project.
+To ensure the socket.io module is installed, please do `npm socket.io -v`.
+
+2. Run the server on local host by typing in `node server.js` in the main directory of the project.
+
+3. Open up the server port on the browser - Example: `http://localhost:8080/`
+
+The main menu should appear, and the gameplay scene should work with multiple players if the host has set up port forwarding.
 
 ## Proof of Concept
 
 For our proof of concept, our goal was to show that it was possible to implement the basic main functionality. That is, to use a single phaser scene with a moving player using the arrow keys, using the proper directory formatting that phaser games use as a standard.
+
+Worked on by: Gloria Ngo

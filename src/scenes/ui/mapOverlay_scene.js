@@ -1,13 +1,17 @@
+<<<<<<< HEAD
 /* This class is defined to display or non-didplay the map overlay
 by using keyboard "TAB" 
 @author: Hannah Nguyen
 */
+=======
+// Worked on by: Hannah
+
+>>>>>>> develop
 class mapOverlay_scene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: 'mapOverlay_scene',
-      active: true
+      key: 'mapOverlay_scene'
     });
   }
 
