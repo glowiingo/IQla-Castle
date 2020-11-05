@@ -102,7 +102,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 console.log("Hidden");
                 console.log(sprite[i].x, sprite[i].y);
                 this.create_deadBody(sprite[i].x, sprite[i].y);
-                sprite[i].col.destroy();
+                sprite[i].config.col.destroy();
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
