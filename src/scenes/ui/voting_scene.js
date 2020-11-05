@@ -25,7 +25,15 @@ class voting_scene extends Phaser.Scene {
     this.keyPress = this.input.keyboard.addKey('V');
     this.keyPress.on('down', () => {
       showVote = !showVote;
-      showVote ? this.scene.setVisible(true) : this.scene.setVisible(false);
+      if (showVote) {
+        this.scene.setVisible(true);
+      } else {
+        this.scene.setVisible(false);
+
+        // reset the voting scene when closed
+        this.scene.restart();
+      }
+      
     });
 
     const screenX = this.cameras.main.width;
@@ -65,6 +73,8 @@ class voting_scene extends Phaser.Scene {
         if (this.playerPortraits[i].mouseStatus == mouseStatus.selected) {
           this.voted = true;
           this.add.text(screenX/12, 50,'You voted for ' + this.players[i], {font: '55px Ariel', fill: 'yellow'});
+          
+          // change who was voted for from string to id
           this.scene.get("gameplay_scene").vote(String(this.players[i]));
         }
       }
@@ -77,6 +87,8 @@ const mouseStatus = {
   selected: 2,
   none: 0,
 };
+
+
 
 class Portrait {
   constructor(x, y, sprite, game) {
