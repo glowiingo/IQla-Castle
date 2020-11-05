@@ -5,6 +5,8 @@ This class is defined in order for preloading of assets, animations, and sprites
 */
 
 class trap_gameplay_scene extends Phaser.Scene {
+    
+
     constructor() {
         super("trap_gameplay_scene");
     }
@@ -12,6 +14,7 @@ class trap_gameplay_scene extends Phaser.Scene {
     init() {
         // initialize and prepare data 
         // constants, configurations, etc.
+        this.players = this.physics.add.group();
     }
 
     preload() {
@@ -35,9 +38,12 @@ class trap_gameplay_scene extends Phaser.Scene {
             y: game.config.height / 2, 
             sprite:'haachama'
         }, 1, "john", 500);
+
+        this.add.existing(this.player1).setScale(1);
+        this.physics.add.existing(this.player1);
+        this.players.add(this.player1);
         
-        
-        this.trap = new Trap({scene:this, x:200, y:200});
+        this.trap = new Trap({scene:this, x:200, y:200}, this.players);
     }
        
     update() {
