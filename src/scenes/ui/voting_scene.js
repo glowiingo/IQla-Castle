@@ -1,6 +1,4 @@
-/*
-This class is defined in order for preloading of assets, animations, and sprites.
-*/
+// Worked on by: William (Front End)
 
 class voting_scene extends Phaser.Scene {
   constructor() {
