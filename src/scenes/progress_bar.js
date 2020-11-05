@@ -36,5 +36,4 @@ class ProgressBar {
         var d = Math.floor(this.p * this.value);
         this.bar.fillRect(this.x + 2, this.y + 2, d, 16);
     }
-
 }
