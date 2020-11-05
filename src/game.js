@@ -25,7 +25,8 @@ const config = {
   },
   scene: [preload_scene, temp_menu_scene, mainmenu_scene, gameplay_scene, kill_scene,
     mapOverlay_scene, minigame_scene_manager, mouse_click_minigame, book_click_minigame,
-    trap_gameplay_scene, playerUI_scene, title_screen_scene, create_game_scene, join_game_scene]
+    trap_gameplay_scene, playerUI_scene, title_screen_scene, create_game_scene, join_game_scene,
+    voting_scene]
   // Specify scenes in the array above
 }
 console.log("game.js with specified config");

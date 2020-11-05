@@ -43,6 +43,7 @@ class gameplay_scene extends Phaser.Scene {
 
     this.scene.launch("playerUI_scene");
     this.scene.launch("mapOverlay_scene");
+    this.scene.launch("voting_scene");
 
     // Worked on by: Anna
     this.isWalking = false;
@@ -89,6 +90,10 @@ class gameplay_scene extends Phaser.Scene {
       this.sceneData.serverConnection.movement(this.player);
     }
 
+  }
+
+  vote(votedFor) {
+    this.sceneData.serverConnection.vote(votedFor);
   }
 
   // Worked on by: Evano

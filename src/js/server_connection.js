@@ -35,8 +35,10 @@ class ServerConnection{
         this.socket.on('gameStart', function (roleData) {
             sceneData.startGame(roleData);
         });
+        this.socket.on('voted', function (voteId) {
+            console.log(voteId, " was voted for");
+        });
         this.socket.on('killed', function(playerId){
-            console.log("I am killed", playerId, sceneData.serverConnection.socket.id);
             if(sceneData.serverConnection.socket.id === playerId){
                 sceneData.player.setActive(false).setVisible(false);
                 sceneData.player.alive = false;
@@ -58,6 +60,10 @@ class ServerConnection{
 
     kill(playerId){
         this.socket.emit('kill', playerId);
+    }
+
+    vote(playerId){
+        this.socket.emit('vote', playerId);
     }
 
     alertGameStart(){

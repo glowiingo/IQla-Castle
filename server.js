@@ -86,10 +86,11 @@ io.on('connection', function (socket) {
         // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
         //
         // // when a player sends their vote
-        // socket.on('vote', function () {
-        //
-        // });
-        // socket.broadcast.to(roomName).emit('voted', rooms[roomName].getPlayer(socket.id));
+        socket.on('vote', function (votedFor) {
+          console.log(String(rooms[roomName].getPlayer(socket.id)) + " voted for " + votedFor)
+          socket.broadcast.to(roomName).emit('voted', votedFor);
+        });
+        
         //
         // // when a player places a trap
         // socket.on('trapPlace', function () {
