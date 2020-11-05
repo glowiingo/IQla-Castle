@@ -12,17 +12,16 @@ class Trap extends Phaser.GameObjects.Sprite {
 
         
     }
+    //checking if another object is touching the trap and emitting the state of contact.
     in_trap_radius() {
         let touching = this.trapZone.body.touching;
-        let wasTouching = this.trapZone.body.wasTouching;
-        let inZone = this.trapZone.body.embedded;
         
         if (touching.none) {
-            this.scene.player1.clearTint();
+            this.scene.player.clearTint();
             this.trapZone.emit('leavezone');
         }
         else if (!touching.none) {
-            this.scene.player1.setTint(0x00ffff);
+            this.scene.player.setTint(0x00ffff);
             this.trapZone.emit('enterzone');
         }
         // else if(inZone) {
@@ -34,23 +33,25 @@ class Trap extends Phaser.GameObjects.Sprite {
         this.trapZone.body.debugBodyColor = this.trapZone.body.touching.none ? 0x00ffff : 0xffff00;
     }
 
-
+    //putting down the actual trap in the scene
     setTrap() {
         if (!this.trapSet) {
-            this.scene.add.existing(this).setScale(1);
+            this.scene.add.existing(this).setScale(0.5);
 
-            this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayWidth);
+            this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayHeight);
             this.trapZone.setCircleDropZone(100);
             this.scene.physics.world.enable(this.trapZone, 0); // (0) DYNAMIC (1) STATIC
             this.trapZone.body.setAllowGravity(false);
             this.trapZone.body.moves = false;
 
             this.trapSet = true;
-
-            this.scene.physics.add.overlap(this.trapZone, this.playerGroup, this.activateTrap, null, this);
+            setTimeout(() => {
+                this.scene.physics.add.overlap(this.trapZone, this.playerGroup, this.activateTrap, null, this)
+            }, 5000);
         }
         
     }
+    //when the trap is stepped on
     activateTrap() {
         if (!this.trapTriggered) {
             console.log("triggered");
@@ -60,7 +61,7 @@ class Trap extends Phaser.GameObjects.Sprite {
             this.blastZone.body.setAllowGravity(false);
             this.blastZone.body.moves = false;
             this.trapTriggered = true;
-            this.scene.physics.add.overlap(this.blastZone, this.playerGroup, this.scene.kill, this/*, this.scene.playerAlive*/);
+            this.scene.physics.add.overlap(this.blastZone, this.playerGroup, /*this.scene.kill, this, this.scene.playerAlive*/);
             //this.destroy();
         }
     }

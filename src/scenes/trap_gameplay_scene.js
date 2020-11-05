@@ -50,7 +50,7 @@ class trap_gameplay_scene extends Phaser.Scene {
         const cursors = this.input.keyboard.createCursorKeys();
         this.player1.player_movement(cursors);
         //this.player_movement(cursors);
-        //this.trap.in_trap_radius();
+        this.trap.in_trap_radius();
 
         
     }

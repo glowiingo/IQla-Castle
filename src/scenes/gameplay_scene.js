@@ -29,6 +29,7 @@ class gameplay_scene extends Phaser.Scene {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
     this.load.spritesheet('haachama', '../../assets/player/PlayerWalkCycle.png', { frameWidth: 128, frameHeight: 128, endFrame: 7 });
+    this.load.image('trap', '../../assets/medzombie.png');
 
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
     this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
@@ -87,6 +88,10 @@ class gameplay_scene extends Phaser.Scene {
     if(this.player){
       this.player.player_movement();
       this.serverConnection.movement(this.player);
+
+      if(this.player.trap) {
+        this.player.trap.in_trap_radius();
+      }
     }
     
 
