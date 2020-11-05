@@ -22,13 +22,13 @@ class playerUI_scene extends Phaser.Scene {
     // instantiate a progress bar in the top left corner of game screen, similar to the kill button
     // note: add ProgressBar.increase(1) into each mini-game
     // this.progressBar = this.add.sprite(0, 0, "progress");
-    this.bBar = this.add.sprite(0, 0, 'BackBar');
-    this.tBar = this.add.sprite(0, 0, 'TaskBar');
-    this.tBar.scaleX=0.5;
-    this.txt = this.add.text((50), 5, this.tBar.scaleX*100+'%');
+    this.bBar = this.add.sprite(0, 0, 'BackBar').setOrigin(0, 0);
+    this.tBar = this.add.sprite(0, 0, 'TaskBar').setOrigin(0, 0);
+    this.tBar.scaleX=1;
+    this.txt = this.add.text((50), 5, this.tBar.scaleX * 100 + '%');
     this.txt.setColor('#000000');
-    txt.setFontSize(150);
-    this.test = 1;
+    this.txt.setFontSize(10);
+    
 
     this.killButton = this.add.sprite(game.config.width - 100, game.config.height - 100, 'kill');
     this.killButton.setInteractive();
@@ -53,7 +53,7 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   kill() {
-  	this.setBar(-0.1);
+  	this.setBar(0.1);
     this.killButton.setTint(0x2b2a2a);
     this.time.delayedCall(2000, this.enablePress, [], this)
     this.canKill = false;
@@ -78,10 +78,12 @@ class playerUI_scene extends Phaser.Scene {
 
   }
 
+  //Sets the progress bar size by adding a positive or negative amount as *perc*
   setBar(perc) {
-  	if(this.tBar.scaleX == 0 && perc < 0) return;
-  	if(this.tBar.scaleX == 1 && perc > 0) return;
-  	this.tBar.scaleX = parseInt(this.txt.text)/100+perc;
-  	this.txt.text = Math.round(this.tBar.scaleX*100)+'%';
+  	//if(this.tBar.scaleX == 0 && perc < 0) return;
+  	//if(this.tBar.scaleX == 1 && perc > 0) return;
+  	// this.tBar.scaleX = parseInt(this.txt.text)/100+perc;
+  	// this.txt.text = Math.round(this.tBar.scaleX*100)+'%';
+  	this.tBar.setCrop(0, 0, 150, 50);
   }
 }
