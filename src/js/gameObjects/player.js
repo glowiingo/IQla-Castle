@@ -3,7 +3,6 @@
 const player = require("../player");
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-
     constructor(config, id, playerName, speed, iqla=false) {
         super(config.scene, config.x, config.y, config.sprite);
 
@@ -114,22 +113,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // Sets the role for the player based on a random number generator 
     // We should note that other player factors may need to be passed into this function
     // Logic may need to be defined on the server? or server needs to pass all player ids in array
-    setRole(players_array) {
-        let count_iqla = 0;
-        let max_iqla = 0;
-        let players_set = 0;
-        if (players_array.length >= 7) {
-            max_iqla = 2;
-        } else if (players_array > 3){
-            max_iqla = 1;
-        }
-        let rand_num = Math.floor(Math.random() * 10) + 1;
-        if (count_iqla < max_iqla) {
-            if (rand_num == 1) {
-                this.iqla = true;
-            }
-        }
-        players_set++;
+    setRole(player_id_object) {
+        console.log("Object: " + player_id_object);
+        let own_id = this.id;
+        console.log(player_id_object[own_id]);
     }
 
     // Worked on by Gloria
