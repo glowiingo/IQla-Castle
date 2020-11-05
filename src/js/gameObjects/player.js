@@ -115,8 +115,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // Logic may need to be defined on the server? or server needs to pass all player ids in array
     setRole(player_id_object) {
         console.log("Object: " + player_id_object);
-        let own_id = this.id;
-        console.log(player_id_object[own_id]);
+        console.log("Accessing Object: " + player_id_object[this.id]);
+        let iqla_status = player_id_object[this.id];
+        // check for nulls
+        if (iqla_status) {
+            // set iqla
+            if (iqla_status == "vampire") {
+                this.iqla = true;
+            }
+        }
     }
 
     // Worked on by Gloria
