@@ -28,10 +28,11 @@ class SceneData{
     }
 
     startGame(roleData){
+        console.log(roleData);
         this.player.setRole(roleData);
         this.player.sendToStartPos();
         this.serverConnection.movement(this.player);
-        //this.gamePlayScene.scene.manager.getScene("start_game_scene").close();
+        this.gamePlayScene.scene.manager.getScene("playerUI_scene").startGame();
     }
 
     alertGameStart(){

@@ -56,15 +56,18 @@ io.on('connection', function (socket) {
         });
 
         socket.on('alertGameStart', function () {
+            console.log("Alert game start");
             let roles = rooms[roomName].getRoleAssignments();
-            socket.to(roomName).emit('gameStart', roles);
+            console.log("Roles: ", roles);
+            io.in(roomName).emit('gameStart', roles);
         });
 
         //Temp
-        if(Object.keys(rooms[roomName].players).length > 1){
-            let roles = rooms[roomName].getRoleAssignments();
-            setTimeout(()=>{socket.broadcast.to(roomName).emit('gameStart', roles);}, 5000);
-        }
+        // if(Object.keys(rooms[roomName].players).length > 1){
+        //     let roles = rooms[roomName].getRoleAssignments();
+        //     console.log("Roles: ", roles);
+        //     setTimeout(()=>{socket.broadcast.to(roomName).emit('gameStart', roles);}, 5000);
+        // }
         
 
         // Worked on by: Kian Darakhshan

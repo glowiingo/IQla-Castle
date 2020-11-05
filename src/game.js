@@ -1,13 +1,13 @@
 // Worked on by: Gloria
 
 const config = {
-  type: Phaser.AUTO,
+    type: Phaser.AUTO,
 
-  // Following parent and dom setting is to allow adding dom element
-  parent: "container",
-  dom: {
-    createContainer: true,
-  },
+    // Following parent and dom setting is to allow adding dom element
+    parent: 'container',
+    dom: {
+        createContainer: true,
+    },
 
   scale: {
     mode: Phaser.Scale.FIT,

@@ -36,8 +36,10 @@ class ServerConnection{
             sceneData.startGame(roleData);
         });
         this.socket.on('killed', function(playerId){
+            console.log("I am killed", playerId, sceneData.serverConnection.socket.id);
             if(sceneData.serverConnection.socket.id === playerId){
                 sceneData.player.setActive(false).setVisible(false);
+                sceneData.player.alive = false;
                 alert("you died");
             } else {
                 sceneData.otherPlayers[playerId].setActive(false).setVisible(false);;
@@ -60,5 +62,6 @@ class ServerConnection{
 
     alertGameStart(){
         this.socket.emit('alertGameStart', {});
+        console.log("sent alert from client");
     }
 }

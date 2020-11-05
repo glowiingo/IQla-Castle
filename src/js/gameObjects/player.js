@@ -85,16 +85,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //worked on by Mike
     create_deadBody(x, y) {
-        let dead_image = this.add.image(x, y, 'deadbody');
+        let dead_image = this.scene.add.image(x, y, 'deadbody');
         dead_image.setScale(0.5);
-        dead_image.setDepth(-1);
+        dead_image.setDepth(30);
     }
 
     //worked on by Mike
     kill(sprite) {
         for(let i = 0; i < sprite.length; i++) {
-            let a = Math.abs(this.player.x - sprite[i].x);
-            let b = Math.abs(this.player.y - sprite[i].y);
+            let a = Math.abs(this.x - sprite[i].x);
+            let b = Math.abs(this.y - sprite[i].y);
             let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
             // console.log(c);
             if (c < 60) {
@@ -104,9 +104,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 console.log("Hidden");
                 console.log(sprite[i].x, sprite[i].y);
                 this.create_deadBody(sprite[i].x, sprite[i].y);
+                console.log("I killed someone", sprite[i].id);
+                this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
             }
         }
-        // console.log(Math.abs(this.player.x - this.player2.x));
+        // console.log(Math.abs(this.x - this.player2.x));
     }
 
     // Worked on by Gloria

@@ -99,11 +99,10 @@ class gameplay_scene extends Phaser.Scene {
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
-      }, 1, "john", 300);
+      }, playerInfo.playerId, "john", 300);
       
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
-        this.player.id = playerInfo.playerId;
         
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
@@ -116,10 +115,9 @@ class gameplay_scene extends Phaser.Scene {
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
-      }, 1, "john", 300);
+      }, playerInfo.playerId, "john", 300);
       
         //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
-        otherPlayer.playerId = playerInfo.playerId;
        
         this.add.existing(otherPlayer).setScale(1);
         this.otherPlayers.add(otherPlayer);
