@@ -33,9 +33,9 @@ class Room{
         let vampireRate = 0.25;
         let players = Object.keys(this.players);
         do{
-            let choice = Math.floor(Math.random() * players.length());
+            let choice = Math.floor(Math.random() * players.length);
             roles[players[choice]] = "vampire";
-            choice.splice(choice, 1);
+            players.splice(choice, 1);
         }
         while(players.length / Object.keys(this.players).length <= vampireRate);
         return roles;

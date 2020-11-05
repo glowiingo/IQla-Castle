@@ -56,9 +56,15 @@ io.on('connection', function (socket) {
         });
 
         socket.on('alertGameStart', function () {
-            let roles = rooms[roomName].getAssignments();
+            let roles = rooms[roomName].getRoleAssignments();
             socket.to(roomName).emit('gameStart', roles);
         });
+
+        //Temp
+        if(Object.keys(rooms[roomName].players).length > 1){
+            let roles = rooms[roomName].getRoleAssignments();
+            setTimeout(()=>{socket.broadcast.to(roomName).emit('gameStart', roles);}, 5000);
+        }
         
 
         // Worked on by: Kian Darakhshan

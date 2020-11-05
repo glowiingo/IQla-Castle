@@ -85,7 +85,7 @@ class gameplay_scene extends Phaser.Scene {
     // loop that runs constantly 
     // -- game logic mainly in this area
     if(this.player){
-      this.player_movement(cursors);
+      this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
     }
 
@@ -93,7 +93,6 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
     addPlayer(playerInfo) {
-      console.log(this);
         console.log(playerInfo);
         this.player = new Player({
           scene:this, 
@@ -104,6 +103,7 @@ class gameplay_scene extends Phaser.Scene {
       
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
+        this.player.id = playerInfo.playerId;
         
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
@@ -118,9 +118,10 @@ class gameplay_scene extends Phaser.Scene {
           sprite:'haachama'
       }, 1, "john", 300);
       
-        otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
+        //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
         otherPlayer.playerId = playerInfo.playerId;
        
+        this.add.existing(otherPlayer).setScale(1);
         this.otherPlayers.add(otherPlayer);
         return otherPlayer;
     }

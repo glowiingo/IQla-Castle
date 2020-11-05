@@ -1,6 +1,6 @@
 //Worked on by Kiwon, John, Nav, Evano
 
-const player = require("../player");
+//const player = require("../player");
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(config, id, playerName, speed, iqla=false) {
@@ -122,14 +122,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             // set iqla
             if (iqla_status == "vampire") {
                 this.iqla = true;
+                
             }
+            console.log("Is iqla", this.iqla);
         }
     }
 
     // Worked on by Gloria
     // Sets player x and y to spawn point
     sendToStartPos() {
-        this.player.x = this.spawnX;
-        this.player.y = this.spawnY;
+        this.x = this.spawnX;
+        this.y = this.spawnY;
     }
 }

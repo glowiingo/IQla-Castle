@@ -32,6 +32,9 @@ class ServerConnection{
         this.socket.on('playerMoved', function (playerInfo) {
             sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
         });
+        this.socket.on('gameStart', function (roleData) {
+            sceneData.startGame(roleData);
+        });
         this.socket.on('killed', function(playerId){
             if(sceneData.serverConnection.socket.id === playerId){
                 sceneData.player.setActive(false).setVisible(false);

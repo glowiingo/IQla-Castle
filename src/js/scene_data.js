@@ -13,7 +13,7 @@ class SceneData{
     }
 
     addOtherPlayers(players) {
-        Object.keys(players).forEach(function (id) {
+        Object.keys(players).forEach((id) =>{
             this.addOtherPlayer(players[id]);
           });
     }
@@ -28,9 +28,10 @@ class SceneData{
     }
 
     startGame(roleData){
-        this.player.setRole(roleData[this.player.playerId]);
+        this.player.setRole(roleData);
         this.player.sendToStartPos();
-        this.gamePlayScene.scene.manager.getScene("start_game_scene").close();
+        this.serverConnection.movement(this.player);
+        //this.gamePlayScene.scene.manager.getScene("start_game_scene").close();
     }
 
     alertGameStart(){
