@@ -17,19 +17,19 @@ class Trap extends Phaser.GameObjects.Sprite {
         let wasTouching = this.trapZone.body.wasTouching;
         let inZone = this.trapZone.body.embedded;
         
-        if (touching.none && !wasTouching.none) {
+        if (touching.none) {
             this.scene.player1.clearTint();
             this.trapZone.emit('leavezone');
         }
-        else if (!touching.none && wasTouching.none) {
+        else if (!touching.none) {
             this.scene.player1.setTint(0x00ffff);
             this.trapZone.emit('enterzone');
         }
-        else if(inZone) {
-            this.scene.player1.setTint(0x00ffff);
-            this.trapZone.emit('inzone');
-            console.log("inzone");
-        }
+        // else if(inZone) {
+        //     this.scene.player1.setTint(0x00ffff);
+        //     this.trapZone.emit('inzone');
+        //     console.log("inzone");
+        // }
     
         this.trapZone.body.debugBodyColor = this.trapZone.body.touching.none ? 0x00ffff : 0xffff00;
     }
@@ -40,8 +40,10 @@ class Trap extends Phaser.GameObjects.Sprite {
             this.scene.add.existing(this).setScale(1);
 
             this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayWidth);
-            this.trapZone.setCircleDropZone(this.displayWidth/2);
-            this.scene.physics.world.enable(this.trapZone, 1); // (0) DYNAMIC (1) STATIC
+            this.trapZone.setCircleDropZone(100);
+            this.scene.physics.world.enable(this.trapZone, 0); // (0) DYNAMIC (1) STATIC
+            this.trapZone.body.setAllowGravity(false);
+            this.trapZone.body.moves = false;
 
             this.trapSet = true;
 
@@ -50,19 +52,16 @@ class Trap extends Phaser.GameObjects.Sprite {
         
     }
     activateTrap() {
-        if (this.trapTriggered) {
+        if (!this.trapTriggered) {
             console.log("triggered");
             this.blastZone = this.scene.add.zone(this.x, this.y).setSize(this.displayHeight, this.displayHeight);
-            this.blastZone.setCircleDropZone(this.displayHeight/2);
+            this.blastZone.setCircleDropZone(100);
             this.scene.physics.world.enable(this.blastZone, 0); // (0) DYNAMIC (1) STATIC
             this.blastZone.body.setAllowGravity(false);
             this.blastZone.body.moves = false;
             this.trapTriggered = true;
-            this.scene.physics.add.overlap(this.blastZone, this.playerGroup, this.scene.kill/*, this.scene.playerAlive*/);
+            this.scene.physics.add.overlap(this.blastZone, this.playerGroup, this.scene.kill, this/*, this.scene.playerAlive*/);
+            //this.destroy();
         }
-    }
-
-    checkKillZone() {
-
     }
 }

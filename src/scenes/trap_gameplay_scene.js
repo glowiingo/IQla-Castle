@@ -43,14 +43,14 @@ class trap_gameplay_scene extends Phaser.Scene {
         this.physics.add.existing(this.player1);
         this.players.add(this.player1);
         
-        this.trap = new Trap({scene:this, x:200, y:200}, this.players);
+        //this.trap = new Trap({scene:this, x:200, y:200}, this.players);
     }
        
     update() {
         const cursors = this.input.keyboard.createCursorKeys();
         this.player1.player_movement(cursors);
         //this.player_movement(cursors);
-        this.trap.in_trap_radius();
+        //this.trap.in_trap_radius();
 
         
     }
@@ -68,26 +68,5 @@ class trap_gameplay_scene extends Phaser.Scene {
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
-    }
-
-    player_movement(key) {
-        if(key.left.isDown){
-            this.player1.setVelocityX(-500);
-        } else if (key.right.isDown) {
-            this.player1.setVelocityX(500);
-        } else {
-            this.player1.setVelocityX(0);
-        }
-        
-        if (key.up.isDown) {
-            this.player1.setVelocityY(-500);
-        } else if (key.down.isDown) {
-            this.player1.setVelocityY(500);
-        } else {
-            this.player1.setVelocityY(0);
-        }
-        
-        // print x y of player position to send to network team and update
-        // console.log(this.player.x, this.player.y)
     }
 }

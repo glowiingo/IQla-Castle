@@ -3,7 +3,7 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(config, id, playerName, speed, iqla=false) {
         super(config.scene, config.x, config.y, config.sprite);
-        
+        this.config = config;
         // console.log(this);
         // this.scene.add.existing(this).setScale(1);
         // this.scene.physics.add.existing(this);
@@ -17,7 +17,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.alive = true;
         this.iqla = false;
         this.player_name = playerName;
-        
+        this.trap_placed = false;
     }
 
     //worked on by Kiwon
@@ -26,8 +26,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             {up:Phaser.Input.Keyboard.KeyCodes.W,
             down:Phaser.Input.Keyboard.KeyCodes.S,
             left:Phaser.Input.Keyboard.KeyCodes.A,
-            right:Phaser.Input.Keyboard.KeyCodes.D});
-
+            right:Phaser.Input.Keyboard.KeyCodes.D,
+            place_trap:Phaser.Input.Keyboard.KeyCodes.E}
+            );
+        if (!this.trap_placed && key.place_trap.isDown) {
+            console.log("placed");
+            new Trap({scene:this.scene, x:this.x, y:this.y}, this.players);
+            this.trap_placed = true;
+        }
+        
         //console.log(this);
         if(key.left.isDown){
             this.setVelocityX(-this.speed);
@@ -57,6 +64,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
           }
         // print x y of player position to send to network team and update
         // console.log(this.x, this.y);
+        
     }
 
     // Worked on by: Anna
@@ -71,10 +79,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     player_walk_anim_stop() {
         this.scene.isWalking = false;
         this.anims.stop();
-    }
-
-    getPlayerName() {
-        return this.playerName;
     }
 
     //worked on by Mike
