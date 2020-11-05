@@ -90,10 +90,9 @@ io.on('connection', function (socket) {
         // socket.broadcast.to(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
         //
         //
-        // socket.on('taskComplete', function () {
-        //
-        // });
-        // socket.broadcast.to(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
+        socket.on('taskComplete', function () {
+            socket.broadcast.to(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
+        });
 
         //// to be added: gameOver, gameStart, roleAssignment
 

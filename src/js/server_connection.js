@@ -64,11 +64,15 @@ class ServerConnection{
         this.socket.emit('playerMovement', { x: player.x, y: player.y, rotation: 0});
         if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
             this.prevPlayerLocation = {x: player.x, y: player.y};
-            
         }
     }
 
     kill(playerId){
         this.socket.emit('kill', playerId);
     }
+
+    // Worked on by: Kian
+    // taskCompleted() {
+    //     this.socket.emit('taskComplete')
+    // }
 }
