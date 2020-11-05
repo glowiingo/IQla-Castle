@@ -107,7 +107,7 @@ class gameplay_scene extends Phaser.Scene {
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
         
-        this.physics.add.collider(this.player, this.wallsLayer);
+        this.col = this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
         //this.player.setCollideWorldBounds(true);
     }
