@@ -1,5 +1,7 @@
+const IMAGE_SCALE = 0.45;
+const BG_COLOUR = '0x5d8a54';
 const BOOKSHELF_KEY = 'bookshelf';
-const EXIT_BUTTON_KEY = 'exitButt';
+const BG_IMG_KEY = 'bookClickBg';
 const PAPER_NOTE_KEY = 'paperNote';
 const BOOK0_KEY = 'Haachama';
 const BOOK1_KEY = 'Big Brain Peanut';
@@ -10,18 +12,19 @@ const BOOK4_KEY = 'Nicholas Cage';
 class book_click_minigame extends Phaser.Scene {
   constructor() {
     super('book_click_minigame');
-
-    // Worked on by: Alexis
     this.sceneKey = 'book_click_minigame';
+    this.background; // The background image to be used for relative positioning.
+    // Objects used for storing the background image's x,y coordinates:
+    this.bottomRightCoords = {};
+    this.bottomCentreCoords = {};
+    this.centreCoords = {};
   }
 
   init() {}
 
   preload() {
     // Worked on by: Alexis
-
-    this.load.image(EXIT_BUTTON_KEY, '../../assets/exitButt.png');
-
+    this.load.image(BG_IMG_KEY, '../assets/transparentBg.png');
     this.load.image(BOOKSHELF_KEY, '../assets/bookshelf.png');
     this.load.image(PAPER_NOTE_KEY, '../assets/paperNote.png');
 
@@ -37,57 +40,46 @@ class book_click_minigame extends Phaser.Scene {
     this.load.audio('yes', '../../assets/yes.mp3');
   }
 
-  create() {
-    const SCALE_SIZE = 0.8;
-    const BG_COLOUR = '#5d8a54';
+  create(data) {
 
-    // ---------- Scale Scene size to 80% for 'overlay' ---------- //
-    // Worked on by: Charles
-    console.log('Started book click minigame');
-    let baseWidth = this.cameras.default.width;
-    let baseHeight = this.cameras.default.height;
-    let minigameWidth = baseWidth * SCALE_SIZE;
-    let minigameHeight = baseHeight * SCALE_SIZE;
+    // ---------- Background Image ---------- //
+    this.background = this.add.image(
+      this.cameras.default.width / 2, 
+      this.cameras.default.height / 2, 
+      BG_IMG_KEY
+    );
+    this.background.setTint(BG_COLOUR);
+    this.background.displayWidth = data.width;
+    this.background.displayHeight = data.height;
 
-    let childScene = this.scene.get(this.sceneKey);
-    childScene.cameras.resize(minigameWidth, minigameHeight);
-    childScene.cameras.main.x = (baseWidth - minigameWidth) / 2;
-    childScene.cameras.main.y = (baseHeight - minigameHeight) / 2;
-    childScene.cameras.main.setBackgroundColor(BG_COLOUR);
-
-    // ---------- Exit Button ---------- //
-    // Worked on by: Alexis
-    let exitButt = this.add.image(615, 25, EXIT_BUTTON_KEY);
-    exitButt.displayWidth = 40;
-    exitButt.displayHeight = 40;
-    exitButt.setInteractive();
-    exitButt.on('pointerdown', () => {
-        this.scene.stop(this.sceneKey);
-    });
-
+    // Get x,y coordinates for each corner of the background image.
+    this.background.getBottomRight(this.bottomRightCoords);
+    this.background.getCenter(this.centreCoords);
+    this.background.getBottomCenter(this.bottomCentreCoords);
     this.addBackgroundImages();
     this.addBooks();
   }
 
+  /**
+   * Position the bookshelf and note paper images that are in the scene's background.
+   * @param {JSON} data - contains the width and height information for the background.
+   */
   addBackgroundImages() {
     // Worked on by: Alexis
-
     // ---------- Bookshelf ---------- //
-    const bookshelfWidth = 400;
-    const bookshelfHeight = 405;
-    const centerX = this.cameras.main.width / 2;
-    const bottomY = this.cameras.main.height - (bookshelfHeight / 2);
-
-    const bookshelfImg = this.add.image(centerX, bottomY, BOOKSHELF_KEY);
+    const bookshelfWidth = this.scene.scene.textures.get(BOOKSHELF_KEY).getSourceImage().width * IMAGE_SCALE;
+    const bookshelfHeight = this.scene.scene.textures.get(BOOKSHELF_KEY).getSourceImage().height * IMAGE_SCALE;
+    const bookshelfImg = this.add.image(this.centreCoords.x, this.bottomCentreCoords.y, BOOKSHELF_KEY);
+    bookshelfImg.setScale(IMAGE_SCALE);
+    bookshelfImg.setOrigin(0.5, 1);
     bookshelfImg.displayWidth = bookshelfWidth;
     bookshelfImg.displayHeight = bookshelfHeight;
 
     // ---------- Paper Note ---------- //
-    const paperNoteWidth = 250;
-    const paperNoteHeight = 110;
-    const bottomRightX = this.cameras.main.width;
-    const bottomRightY = this.cameras.main.height;
-    const paperNoteImg = this.add.image(bottomRightX, bottomRightY, PAPER_NOTE_KEY);
+    const paperNoteWidth = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().width * IMAGE_SCALE;
+    const paperNoteHeight = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().height * IMAGE_SCALE;
+    const paperNoteImg = this.add.image(this.bottomRightCoords.x, this.bottomRightCoords.y, PAPER_NOTE_KEY);
+    paperNoteImg.setScale(IMAGE_SCALE);
     paperNoteImg.setOrigin(1, 1);
     paperNoteImg.displayWidth = paperNoteWidth;
     paperNoteImg.displayHeight = paperNoteHeight;
@@ -106,8 +98,10 @@ class book_click_minigame extends Phaser.Scene {
     yes.setVolume(0.4);
 
     // Worked on by: Alexis
-    yes.on('complete', sound => {
-      this.minigameWon();
+    yes.on('complete', () => {
+      // When the yes audio plays, the win condition has been satisfied.
+      // After the yes audio has finished playing, call the 'won' function.
+      minigame_scene_manager.minigameWon(this.sceneKey);
     });
 
     // ---------- Book Images ---------- //
@@ -172,7 +166,7 @@ class book_click_minigame extends Phaser.Scene {
             no.stop();
             yes.play();
           }
-      } else {
+        } else {
           if (numArr.length != 0) {
             no.play();
           }
@@ -197,15 +191,5 @@ class book_click_minigame extends Phaser.Scene {
       });
       yPosition += yDistance;
     });
-  }
-
-  minigameWon() {
-    // Worked on by: Alexis
-
-    // TODO:
-    // Logic for updating taskbar after minigame completion.
-
-    console.log('Minigame won; book_click_minigame stopped.');
-    this.scene.stop(this.sceneKey);
   }
 }
