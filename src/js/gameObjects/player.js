@@ -1,8 +1,12 @@
 //Worked on by Kiwon, John, Nav, Evano
 
+const player = require("../player");
+
 class Player extends Phaser.Physics.Arcade.Sprite {
+
     constructor(config, id, playerName, speed, iqla=false) {
         super(config.scene, config.x, config.y, config.sprite);
+
         
         // console.log(this);
         // this.scene.add.existing(this).setScale(1);
@@ -17,7 +21,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.alive = true;
         this.iqla = false;
         this.player_name = playerName;
-        
+
+        // we should set these to global variables
+        this.spawnX = 1408;
+        this.spawnY = 512;
     }
 
     //worked on by Kiwon
@@ -101,5 +108,34 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
+    }
+
+    // Worked on by Gloria
+    // Sets the role for the player based on a random number generator 
+    // We should note that other player factors may need to be passed into this function
+    // Logic may need to be defined on the server? or server needs to pass all player ids in array
+    setRole(players_array) {
+        let count_iqla = 0;
+        let max_iqla = 0;
+        let players_set = 0;
+        if (players_array.length >= 7) {
+            max_iqla = 2;
+        } else if (players_array > 3){
+            max_iqla = 1;
+        }
+        let rand_num = Math.floor(Math.random() * 10) + 1;
+        if (count_iqla < max_iqla) {
+            if (rand_num == 1) {
+                this.iqla = true;
+            }
+        }
+        players_set++;
+    }
+
+    // Worked on by Gloria
+    // Sets player x and y to spawn point
+    sendToStartPos() {
+        this.player.x = this.spawnX;
+        this.player.y = this.spawnY;
     }
 }
