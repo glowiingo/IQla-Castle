@@ -36,9 +36,9 @@ class Trap extends Phaser.GameObjects.Sprite {
     //putting down the actual trap in the scene
     setTrap() {
         if (!this.trapSet) {
-            this.scene.add.existing(this).setScale(0.5);
+            this.scene.add.existing(this).setScale(1);
 
-            this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayHeight);
+            this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayWidth);
             this.trapZone.setCircleDropZone(100);
             this.scene.physics.world.enable(this.trapZone, 0); // (0) DYNAMIC (1) STATIC
             this.trapZone.body.setAllowGravity(false);
