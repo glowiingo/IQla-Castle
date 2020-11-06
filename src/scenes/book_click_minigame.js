@@ -18,6 +18,8 @@ class book_click_minigame extends Phaser.Scene {
     this.bottomRightCoords = {};
     this.bottomCentreCoords = {};
     this.centreCoords = {};
+
+    this.paperNoteTopLeftCoords = {};
   }
 
   init() {}
@@ -41,7 +43,7 @@ class book_click_minigame extends Phaser.Scene {
   }
 
   create(data) {
-
+    // Worked on by: Alexis
     // ---------- Background Image ---------- //
     this.background = this.add.image(
       this.cameras.default.width / 2, 
@@ -56,6 +58,7 @@ class book_click_minigame extends Phaser.Scene {
     this.background.getBottomRight(this.bottomRightCoords);
     this.background.getCenter(this.centreCoords);
     this.background.getBottomCenter(this.bottomCentreCoords);
+
     this.addBackgroundImages();
     this.addBooks();
   }
@@ -83,8 +86,10 @@ class book_click_minigame extends Phaser.Scene {
     paperNoteImg.setOrigin(1, 1);
     paperNoteImg.displayWidth = paperNoteWidth;
     paperNoteImg.displayHeight = paperNoteHeight;
+    paperNoteImg.getTopLeft(this.paperNoteTopLeftCoords); // Store coordinates of top left position for later use.
   }
 
+  /** Add the book interactables to the scene and position them on the background images. */
   addBooks() {
     // Worked on bn: Alexis
     const bookWidth = 50;
@@ -107,18 +112,17 @@ class book_click_minigame extends Phaser.Scene {
     // ---------- Book Images ---------- //
     const booksNeeded = 2;
     let numArr = [];
-
-    // Worked on by: Alexis
-    const topShelfY = 205;
-    const bottomShelfY = this.cameras.main.height - (bookHeight / 2);
+    const topShelfY = this.centreCoords.y - 62;
 
     let books = this.physics.add.group();
-    let book0 = this.add.image(175, topShelfY, BOOK0_KEY);
-    let book1 = this.add.image(230, topShelfY, BOOK1_KEY);
-    let book2 = this.add.image(400, topShelfY + (bookWidth), BOOK2_KEY);
+    let book0 = this.add.image(245, topShelfY, BOOK0_KEY);
+    let book1 = this.add.image(300, topShelfY, BOOK1_KEY);
+    let book2 = this.add.image(this.centreCoords.x + bookWidth, topShelfY + (bookWidth), BOOK2_KEY);
     book2.setRotation(-1.5708); // Rotate -90 degrees
-    let book3 = this.add.image(175, bottomShelfY, BOOK3_KEY);
-    let book4 = this.add.image(255, bottomShelfY, BOOK4_KEY);
+    let book3 = this.add.image(215, this.bottomCentreCoords.y, BOOK3_KEY);
+    book3.setOrigin(0, 1);
+    let book4 = this.add.image(328, this.bottomCentreCoords.y, BOOK4_KEY);
+    book4.setOrigin(0, 1);
     book4.setRotation(-0.436332); // Rotate -25 degrees
 
     // Worked on by: Charles
@@ -181,12 +185,15 @@ class book_click_minigame extends Phaser.Scene {
       }
     }
 
-    let xPosition = this.cameras.main.width - 230;
-    let yPosition = this.cameras.main.height - 90;
+    // Worked on by: Alexis
+    // ---------- Text Positions  ---------- //
+    let padding = 20;
+    let xPosition = this.paperNoteTopLeftCoords.x + padding;
+    let yPosition = this.paperNoteTopLeftCoords.y + padding;
     const yDistance = 40;
     numArr.forEach((num) => {
       this.add.text(xPosition, yPosition, books.children.entries[num].getData('title'), {
-        font: '25px Arial',
+        font: '20px Arial',
         fill: 'black'
       });
       yPosition += yDistance;
