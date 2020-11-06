@@ -42,16 +42,15 @@ class trap_gameplay_scene extends Phaser.Scene {
             sprite:'haachama'
         }, 1, "john", 500);
 
-<<<<<<< Updated upstream
         this.add.existing(this.player1).setScale(1);
         this.physics.add.existing(this.player1);
         this.players.add(this.player1);
         
         //this.trap = new Trap({scene:this, x:200, y:200}, this.players);
-=======
        
         this.trap = new Trap({scene:this, x:200, y:200});
 
+        //test conflict wall
         this.wall = this.add.sprite(600, 200, 'kiwon');
         this.wall.displayWidth = (100);
         this.wall.displayHeight = (100);
@@ -60,8 +59,7 @@ class trap_gameplay_scene extends Phaser.Scene {
         this.wall.immovable = true;
         // this.physics.world.removeCollider(collider);
         // this.physics.world.colliders.destroy();
-        this.player1.enable = false;
->>>>>>> Stashed changes
+        // this.player1.enable = false;
     }
        
     update() {
