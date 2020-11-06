@@ -47,7 +47,7 @@ class mouse_click_minigame extends Phaser.Scene {
       mouse.setInteractive();
       mouse.on('pointerdown', function() {
         mice.splice(mice.indexOf(mouse), 1);
-        //tween.stop();
+        tween.stop();
         mouse.setVisible(false);
         
         if (mice.length === 0){

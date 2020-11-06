@@ -5,6 +5,10 @@ class mainmenu_scene extends Phaser.Scene {
     super('mainmenu_scene');
   }
 
+  preload() {
+    // Load audio and images into memory.
+  }
+
   create() {
     console.log('Main Menu');
     // Use this line to launch minigame in 'overlay'. Replace this.scene.start(SCENE_NAME) in 'pointerdown' events:
@@ -39,14 +43,22 @@ class mainmenu_scene extends Phaser.Scene {
       this.scene.launch('minigame_scene_manager', 'book_click_minigame');
     });
 
-    this.mouse_click_text = this.add.text(20, 140, 'Kill Scene', {font: '25px Arial', fill: 'yellow'});
+    this.trap_making_minigame_text = this.add.text(20, 140, 'Trap Making Minigame', { font: '25px Arial', fill: 'yellow' });
+
+    this.trap_making_minigame_text.setInteractive();
+    this.trap_making_minigame_text.on('pointerdown', () => {
+      this.scene.pause();
+      this.scene.launch('minigame_scene_manager', 'trap_making_minigame');
+    });
+
+    this.mouse_click_text = this.add.text(20, 180, 'Kill Scene', {font: '25px Arial', fill: 'yellow'});
     
     this.mouse_click_text.setInteractive();
     this.mouse_click_text.on('pointerdown', () => {
         this.scene.start('kill_scene', {message: 'test_data_from_main'});
     });
 
-    this.trap_scene = this.add.text(20, 180, 'Trap Scene', {font: '25px Arial', fill: 'yellow'});
+    this.trap_scene = this.add.text(20, 220, 'Trap Scene', {font: '25px Arial', fill: 'yellow'});
 
     this.trap_scene.setInteractive();
     this.trap_scene.on('pointerdown', () => {
