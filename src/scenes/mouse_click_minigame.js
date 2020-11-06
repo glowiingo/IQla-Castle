@@ -17,18 +17,20 @@ class mouse_click_minigame extends Phaser.Scene {
   preload() {
     // Load audio and images into memory.
     this.load.image('haachama', '../../assets/haachamachama112.png');
-    this.load.image('background', '../../assets/shrek.jpg');
+    this.load.image('mouse_click_background', '../../assets/shrek.jpg');
     this.load.image('pp', '../../assets/pp.png');
   }
   
   create(data) {
-    let background = this.add.image(
-      this.cameras.default.width / 2, 
-      this.cameras.default.height / 2, 
-      'background'
-    );
-    background.displayWidth = data.width;
-    background.displayHeight = data.height;
+    // let background = this.add.image(
+    //   this.cameras.default.width / 2, 
+    //   this.cameras.default.height / 2, 
+    //   'mouse_click_background'
+    // );
+    // background.displayWidth = data.width;
+    // background.displayHeight = data.height;
+    minigame_scene_manager.setBackground('mouse_click_minigame', 'mouse_click_background');
+    
 
     // setScale does not affect image width/height so separate variables are created
     let mouseWidth = this.scene.scene.textures.get('pp').getSourceImage().width * MOUSE_SCALE;

@@ -77,4 +77,15 @@ class minigame_scene_manager extends Phaser.Scene {
     console.log('Minigame completed.');
     minigame_scene_manager.end(key);
   }
+
+  static setBackground(scene_key, background_key){
+    let background = game.scene.getScene(scene_key).add.image(
+      game.config.width / 2, 
+      game.config.height / 2, 
+        background_key
+    );
+    background.displayWidth = 600;
+    background.displayHeight = 450;
+    return background;
+  }
 }
