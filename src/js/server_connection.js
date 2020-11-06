@@ -20,55 +20,60 @@ class ServerConnection{
         this.socket.on('currentPlayers', function (players) {
             sceneData.addPlayer(players[sceneData.serverConnection.socket.id]);
             delete players[sceneData.serverConnection.socket.id];
-            Object.keys(players).forEach(function (id) {
-              sceneData.addOtherPlayer(players[id]);
-            });
+            sceneData.addOtherPlayers(players);
           });
         this.socket.on('newPlayer', function (playerInfo) {
             console.log("added other player")
             sceneData.addOtherPlayer(playerInfo);
           });
-
-          //Allows us to pass the findPlayer function into the anonymous functions below
-          let self = this;
         this.socket.on('disconnect', function (playerId) {
-            self.findPlayer(playerId, sceneData.otherPlayers).destroy();
+            sceneData.removePlayer(playerId);
           });
         this.socket.on('playerMoved', function (playerInfo) {
-            console.log()
-            self.findPlayer(playerInfo.playerId, sceneData.otherPlayers).setPosition(playerInfo.x, playerInfo.y);
+            sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
+        });
+        this.socket.on('gameStart', function (roleData) {
+            sceneData.startGame(roleData);
+        });
+        this.socket.on('voted', function (voteId) {
+            console.log(voteId, " was voted for");
+        });
+        this.socket.on('taskCompleted', function (voteId) {
+            sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").setBar(Math.floor(504 * 0.1));
         });
         this.socket.on('killed', function(playerId){
             if(sceneData.serverConnection.socket.id === playerId){
                 sceneData.player.setActive(false).setVisible(false);
+                sceneData.player.alive = false;
                 alert("you died");
             } else {
-                self.findPlayer(playerId, sceneData.otherPlayers).setActive(false).setVisible(false);;
+                sceneData.otherPlayers[playerId].setActive(false).setVisible(false);;
             }
             
         });
-    }
-
-    //Helper function that can be removed when we store other players in a key/value json object
-    findPlayer(playerId, otherPlayers){
-        let op = undefined;
-        otherPlayers.getChildren().forEach(function (otherPlayer) {
-            if (playerId === otherPlayer.playerId){
-                op = otherPlayer;
-            }
-        });
-        return op;
     }
 
     movement(player){
         this.socket.emit('playerMovement', { x: player.x, y: player.y, rotation: 0});
         if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
             this.prevPlayerLocation = {x: player.x, y: player.y};
-            
         }
     }
 
     kill(playerId){
         this.socket.emit('kill', playerId);
+    }
+
+    vote(playerId){
+        this.socket.emit('vote', playerId);
+    }
+
+    alertGameStart(){
+        this.socket.emit('alertGameStart', {});
+        console.log("sent alert from client");
+    }
+    //Worked on by: Kian
+    taskCompleted() {
+        this.socket.emit('taskComplete')
     }
 }
