@@ -29,7 +29,8 @@ class showPositionPlayer_scene extends Phaser.Scene {
         showDot = !showDot;
         showDot ? this.dotShow() : this.dotHide();
       });
-  
+
+
     }
   
     dotShow() {
@@ -44,14 +45,15 @@ class showPositionPlayer_scene extends Phaser.Scene {
       console.log('hide');
     }
     
+    // reused Gloria's code
     move_object_left_right(object, speed) {
       object.x += speed;
     }
-  
+    //reused Gloria's code
     move_object_up_down(object, speed) {
       object.y += speed;
     }
-  
+    //reused Gloria's code
     dot_movement(cursors) {
       if (cursors.left.isDown) {
         if (cursors.right.isDown) {
@@ -84,9 +86,14 @@ class showPositionPlayer_scene extends Phaser.Scene {
         this.dot.setVelocityY(0);
       }
      }
-
+     //reused Kiwon's code
     update() {
-      const cursors = this.input.keyboard.createCursorKeys();
+      const cursors = this.input.keyboard.addKeys(
+            {up:Phaser.Input.Keyboard.KeyCodes.W,
+            down:Phaser.Input.Keyboard.KeyCodes.S,
+            left:Phaser.Input.Keyboard.KeyCodes.A,
+            right:Phaser.Input.Keyboard.KeyCodes.D});
+
       this.dot_movement(cursors);
     }
   
