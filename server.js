@@ -55,6 +55,21 @@ io.on('connection', function (socket) {
             socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
         });
 
+        socket.on('alertGameStart', function () {
+            console.log("Alert game start");
+            let roles = rooms[roomName].getRoleAssignments();
+            console.log("Roles: ", roles);
+            io.in(roomName).emit('gameStart', roles);
+        });
+
+        //Temp
+        // if(Object.keys(rooms[roomName].players).length > 1){
+        //     let roles = rooms[roomName].getRoleAssignments();
+        //     console.log("Roles: ", roles);
+        //     setTimeout(()=>{socket.broadcast.to(roomName).emit('gameStart', roles);}, 5000);
+        // }
+        
+
         // Worked on by: Kian Darakhshan
         // Sockets to be added once functionality is made:
 
@@ -71,10 +86,11 @@ io.on('connection', function (socket) {
         // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
         //
         // // when a player sends their vote
-        // socket.on('vote', function () {
-        //
-        // });
-        // socket.broadcast.to(roomName).emit('voted', rooms[roomName].getPlayer(socket.id));
+        socket.on('vote', function (votedFor) {
+          console.log(String(rooms[roomName].getPlayer(socket.id)) + " voted for " + votedFor)
+          socket.broadcast.to(roomName).emit('voted', votedFor);
+        });
+        
         //
         // // when a player places a trap
         // socket.on('trapPlace', function () {
@@ -90,10 +106,9 @@ io.on('connection', function (socket) {
         // socket.broadcast.to(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
         //
         //
-        // socket.on('taskComplete', function () {
-        //
-        // });
-        // socket.broadcast.to(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
+        socket.on('taskComplete', function () {
+            io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
+        });
 
         //// to be added: gameOver, gameStart, roleAssignment
 

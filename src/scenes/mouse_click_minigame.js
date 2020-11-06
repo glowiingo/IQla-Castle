@@ -51,7 +51,7 @@ class mouse_click_minigame extends Phaser.Scene {
         mouse.setVisible(false);
         
         if (mice.length === 0){
-          minigame_scene_manager.end('mouse_click_minigame')
+          minigame_scene_manager.minigameWon('mouse_click_minigame');
         }
       });
       

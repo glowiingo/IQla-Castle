@@ -69,12 +69,12 @@ class minigame_scene_manager extends Phaser.Scene {
     game.scene.stop(key);
   }
 
-  static minigameWon(scene) {
+  static minigameWon(key) {
     // Worked on by: Alexis
 
     // TODO:
     // Logic for notifying server to update taskbar after minigame completion.
     console.log('Minigame completed.');
-    minigame_scene_manager.end(scene);
+    minigame_scene_manager.end(key);
   }
 }

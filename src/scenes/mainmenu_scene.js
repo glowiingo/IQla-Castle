@@ -11,7 +11,7 @@ class mainmenu_scene extends Phaser.Scene {
     // this.scene.launch('minigame_scene_manager', 'mouse_click_minigame');
 
     // Worked on by: Evano
-    this.serverConnection = new ServerConnection();
+    this.scenData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
 
     this.gameplay_text = this.add.text(20, 20, 'Gameplay Scene', { font: '25px Arial', fill: 'yellow' });
     
