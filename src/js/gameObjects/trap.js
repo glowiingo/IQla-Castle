@@ -45,6 +45,8 @@ class Trap extends Phaser.GameObjects.Sprite {
             this.trapZone.body.moves = false;
 
             this.trapSet = true;
+
+            //Biggest problem in converting to serside is here as overlap doesn't work if velocity is zero
             setTimeout(() => {
                 this.scene.physics.add.overlap(this.trapZone, this.playerGroup, this.activateTrap, null, this)
             }, 5000);

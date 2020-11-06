@@ -18,6 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.iqla = false;
         this.player_name = playerName;
         this.trap_placed = false;
+        this.have_trap = false;
     }
 
     //worked on by Kiwon

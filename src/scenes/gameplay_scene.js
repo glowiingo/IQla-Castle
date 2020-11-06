@@ -88,10 +88,6 @@ class gameplay_scene extends Phaser.Scene {
     if(this.player){
       this.player.player_movement();
       this.serverConnection.movement(this.player);
-
-      if(this.player.trap) {
-        this.player.trap.in_trap_radius();
-      }
     }
     
 
