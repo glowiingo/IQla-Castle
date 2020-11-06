@@ -38,6 +38,9 @@ class ServerConnection{
         this.socket.on('voted', function (voteId) {
             console.log(voteId, " was voted for");
         });
+        this.socket.on('taskCompleted', function (voteId) {
+            sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").setBar(Math.floor(504 * 0.1));
+        });
         this.socket.on('killed', function(playerId){
             if(sceneData.serverConnection.socket.id === playerId){
                 sceneData.player.setActive(false).setVisible(false);
@@ -54,7 +57,6 @@ class ServerConnection{
         this.socket.emit('playerMovement', { x: player.x, y: player.y, rotation: 0});
         if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
             this.prevPlayerLocation = {x: player.x, y: player.y};
-            
         }
     }
 
@@ -69,5 +71,9 @@ class ServerConnection{
     alertGameStart(){
         this.socket.emit('alertGameStart', {});
         console.log("sent alert from client");
+    }
+    //Worked on by: Kian
+    taskCompleted() {
+        this.socket.emit('taskComplete')
     }
 }
