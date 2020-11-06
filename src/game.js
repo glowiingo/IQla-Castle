@@ -20,7 +20,7 @@ const config = {
     default: "arcade",
     arcade: {
       enableBody: true,
-      debug: true,
+      debug: false,
     },
   },
   scene: [
@@ -38,11 +38,8 @@ const config = {
     title_screen_scene,
     create_game_scene,
     join_game_scene,
-    voting_scene,
-    showPositionPlayer_scene,
     timer_scene,
   ],
-
   // Specify scenes in the array above
 };
 console.log("game.js with specified config");

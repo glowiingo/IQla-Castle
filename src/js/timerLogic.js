@@ -17,5 +17,12 @@ class timerButton extends Phaser.GameObjects.Sprite {
 
   startTimer() {
     console.log("hit kill button");
+    this.obj.setTint(0x2b2a2a);
+    this.obj.time.delayedCall(2000, this.enablePress, [], this);
+    this.obj.canKill = false;
+    let gameplay = this.obj.scene.get("gameplay_scene");
+    let group = this.obj.add.group();
+    group.add(gameplay.otherplayer);
+    gameplay.kill(group.getChildren());
   }
 }
