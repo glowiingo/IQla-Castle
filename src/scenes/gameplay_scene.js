@@ -3,17 +3,15 @@ This class is defined in order for preloading of assets, animations, and sprites
 This should be a POC for front end, logic needs to be separated for the map.
 */
 
-
 class gameplay_scene extends Phaser.Scene {
-
   constructor() {
     super({
-      key: 'gameplay_scene'
+      key: "gameplay_scene",
     });
   }
 
   init(data) {
-    // initialize and prepare data 
+    // initialize and prepare data
     // constants, configurations, etc.
     this.message = data.message; // scene var called message passed in to scene
     console.log(this.message); // print?
@@ -22,12 +20,19 @@ class gameplay_scene extends Phaser.Scene {
   preload() {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
-    this.load.spritesheet('haachama', '../../assets/player/PlayerWalkCycle.png', { frameWidth: 128, frameHeight: 128, endFrame: 7 });
+    this.load.spritesheet(
+      "haachama",
+      "../../assets/player/PlayerWalkCycle.png",
+      { frameWidth: 128, frameHeight: 128, endFrame: 7 }
+    );
 
-    this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
-    this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
-    this.load.image('deadbody', 'assets/deadCharacter.png');
-    this.load.audio('BGM', '../../assets/audio/BGM.mp3');
+    this.load.tilemapTiledJSON(
+      "map",
+      "../../assets/tilemaps/maps/protypeMap.json"
+    );
+    this.load.image("tiles", "../../assets/tilemaps/tiles/drawtiles.png");
+    this.load.image("deadbody", "assets/deadCharacter.png");
+    this.load.audio("BGM", "../../assets/audio/BGM.mp3");
   }
 
   create() {
@@ -35,20 +40,21 @@ class gameplay_scene extends Phaser.Scene {
     console.log("gameplay_scene");
 
     this.scene.launch("playerUI_scene");
+    this.scene.launch("timer_scene");
     this.scene.launch("mapOverlay_scene");
 
     // Worked on by: Anna
     this.isWalking = false;
 
     let config = {
-      key: 'WalkCycle',
-      frames: this.anims.generateFrameNumbers('haachama', { start: 0, end: 7 }),
+      key: "WalkCycle",
+      frames: this.anims.generateFrameNumbers("haachama", { start: 0, end: 7 }),
       frameRate: 8,
-      repeat: -1
+      repeat: -1,
     };
     this.anims.create(config);
 
-    this.bgmusic = this.sound.add('BGM');
+    this.bgmusic = this.sound.add("BGM");
     let musicConfig = {
       mute: false,
       volume: 0.5,
@@ -56,20 +62,22 @@ class gameplay_scene extends Phaser.Scene {
       detune: 0,
       seek: 0,
       loop: true,
-      delay: 0
-    }
+      delay: 0,
+    };
     this.bgmusic.play(musicConfig);
 
     // Worked on by: Flemming, William
-    let map = this.make.tilemap({ key: 'map' });
-    let tileset = map.addTilesetImage('better_tiles', 'tiles')
-    map.createStaticLayer('Ground', tileset);
+    let map = this.make.tilemap({ key: "map" });
+    let tileset = map.addTilesetImage("better_tiles", "tiles");
+    map.createStaticLayer("Ground", tileset);
 
-    const wallsLayer = map.createStaticLayer('Walls', tileset);
+    const wallsLayer = map.createStaticLayer("Walls", tileset);
     wallsLayer.setCollisionByProperty({ collides: true });
 
-    this.player = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
-    this.otherplayer = this.physics.add.sprite(1408, 512, 'haachama').setScale(0.5);
+    this.player = this.physics.add.sprite(1408, 512, "haachama").setScale(0.5);
+    this.otherplayer = this.physics.add
+      .sprite(1408, 512, "haachama")
+      .setScale(0.5);
 
     this.physics.add.collider(this.player, wallsLayer);
 
@@ -93,7 +101,7 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   create_deadBody(x, y) {
-    let dead_image = this.add.image(x, y, 'deadbody');
+    let dead_image = this.add.image(x, y, "deadbody");
     dead_image.setScale(0.25);
     dead_image.setDepth(30);
   }
@@ -151,7 +159,12 @@ class gameplay_scene extends Phaser.Scene {
       this.player.setVelocityY(0);
     }
 
-    if (cursors.down.isDown || cursors.up.isDown || cursors.left.isDown || cursors.right.isDown) {
+    if (
+      cursors.down.isDown ||
+      cursors.up.isDown ||
+      cursors.left.isDown ||
+      cursors.right.isDown
+    ) {
       if (!this.isWalking) {
         this.player_walk_anim_start();
       }
@@ -167,7 +180,7 @@ class gameplay_scene extends Phaser.Scene {
   player_walk_anim_start() {
     if (!this.isWalking) {
       this.isWalking = true;
-      this.player.play('WalkCycle');
+      this.player.play("WalkCycle");
     }
   }
 
@@ -178,10 +191,9 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   update() {
-    // loop that runs constantly 
+    // loop that runs constantly
     // -- game logic mainly in this area
     const cursors = this.input.keyboard.createCursorKeys();
     this.player_movement(cursors);
-
   }
 }
