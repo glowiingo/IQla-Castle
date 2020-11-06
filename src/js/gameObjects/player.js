@@ -26,7 +26,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.spawnY = 512;
     }
 
-    //worked on by Kiwon
+    //worked on by Kiwon and John
     player_movement() {
         let key = this.scene.input.keyboard.addKeys(
             {up:Phaser.Input.Keyboard.KeyCodes.W,
