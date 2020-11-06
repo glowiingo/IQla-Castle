@@ -11,7 +11,7 @@ class mainmenu_scene extends Phaser.Scene {
     // this.scene.launch("minigame_scene_manager", "mouse_click_minigame");
 
     // Worked on by: Evano
-    this.serverConnection = new ServerConnection();
+    this.scenData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
 
     this.gameplay_text = this.add.text(20, 20, "Gameplay Scene", { font: "25px Arial", fill: "yellow" });
     
@@ -19,8 +19,8 @@ class mainmenu_scene extends Phaser.Scene {
     this.gameplay_text.on("pointerdown", () => {
       // Worked on by: Evano
       let r = prompt("Room name?");
-      this.serverConnection.setRoom(r);
-      this.scene.start("gameplay_scene", {serverConnection: this.serverConnection});
+      this.scenData.serverConnection.setRoom(r);
+      this.scene.start("gameplay_scene");
     });
 
     this.mouse_click_minigame_text = this.add.text(20, 60, "Mouse Click Minigame", { font: "25px Arial", fill: "yellow" });

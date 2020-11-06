@@ -21,7 +21,8 @@ class gameplay_scene extends Phaser.Scene {
     this.message = data.message; // scene var called message passed in to scene
 
     // Worked on by: Evano
-    this.serverConnection = data.serverConnection;
+    console.log(this.registry.values.sceneData);
+    this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
   }
 
@@ -43,6 +44,7 @@ class gameplay_scene extends Phaser.Scene {
 
     this.scene.launch("playerUI_scene");
     this.scene.launch("mapOverlay_scene");
+    this.scene.launch("voting_scene");
 
     // Worked on by: Anna
     this.isWalking = false;
@@ -77,24 +79,25 @@ class gameplay_scene extends Phaser.Scene {
 
     // Worked on by: Evano
     //Start networking & create player once networking is connected
-    this.serverConnection.addGameplayHandlers(this);
-    this.serverConnection.joinRoom();
+    this.sceneData.serverConnection.addGameplayHandlers(this.sceneData);
+    this.sceneData.serverConnection.joinRoom();
   }
-
 // Worked on by: Gloria Ngo
   update() {
     // loop that runs constantly 
     // -- game logic mainly in this area
     if(this.player){
       this.player.player_movement();
-      this.serverConnection.movement(this.player);
+      this.sceneData.serverConnection.movement(this.player);
     }
-    
 
   }
 
+  vote(votedFor) {
+    this.sceneData.serverConnection.vote(votedFor);
+  }
+
   // Worked on by: Evano
-  //These methods should be moved to the sceneData class when that is implemented.
     addPlayer(playerInfo) {
       console.log(this);
         console.log(playerInfo);
@@ -103,14 +106,14 @@ class gameplay_scene extends Phaser.Scene {
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
-      }, 1, "john", 300);
+      }, playerInfo.playerId, "john", 300);
       
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
         
-        this.col = this.physics.add.collider(this.player, this.wallsLayer);
+        this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
-        //this.player.setCollideWorldBounds(true);
+        return this.player;
     }
 
     addOtherPlayer(playerInfo) {
@@ -119,12 +122,13 @@ class gameplay_scene extends Phaser.Scene {
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
-      }, 1, "john", 300);
+      }, playerInfo.playerId, "john", 300);
       
-        otherPlayer.setTint(0xff0000); //Sets tint of other players to red for testing purposes
-        otherPlayer.playerId = playerInfo.playerId;
+        //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
        
+        this.add.existing(otherPlayer).setScale(1);
         this.otherPlayers.add(otherPlayer);
+        return otherPlayer;
     }
 }
 
