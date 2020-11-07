@@ -30,7 +30,6 @@ class mouse_click_minigame extends Phaser.Scene {
     // background.displayWidth = data.width;
     // background.displayHeight = data.height;
     minigame_scene_manager.setBackground('mouse_click_minigame', 'mouse_click_background');
-    
 
     // setScale does not affect image width/height so separate variables are created
     let mouseWidth = this.scene.scene.textures.get('pp').getSourceImage().width * MOUSE_SCALE;
