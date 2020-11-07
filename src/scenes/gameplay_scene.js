@@ -105,9 +105,14 @@ class gameplay_scene extends Phaser.Scene {
           y: playerInfo.y, 
           sprite:'haachama'
       }, playerInfo.playerId, "john", 300);
-      
+
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
+
+        this.player.body.offset.y = 64;
+        this.player.body.offset.x = 32;
+        this.player.body.height = 64;
+        this.player.body.width = 64;
         
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
