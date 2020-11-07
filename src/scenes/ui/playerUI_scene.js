@@ -29,7 +29,7 @@ class playerUI_scene extends Phaser.Scene {
         this.startBtn.setScale(0.25);
 
         this.isStartGame = false;
-        // instantiate a progress bar in the top left corner of game screen, similar to the kill button
+        // instantiate a progress bar in the top right corner of game screen, similar to the kill button
         // note: add ProgressBar.increase(1) into each mini-game
         // this.progressBar = this.add.sprite(0, 0, "progress");
         this.bBar = this.add
@@ -47,7 +47,9 @@ class playerUI_scene extends Phaser.Scene {
         this.setBar(0);
 
         this.startBtn
-            .on('pointerdown', () => this.startGame())
+            .on('pointerdown', () =>
+                this.registry.values.sceneData.alertGameStart()
+            )
             .on('pointerover', () => this.enterButtonHoverState(this.startBtn))
             .on('pointerout', () => this.exitButtonHoverState(this.startBtn));
         window.addEventListener('resize', () => {
@@ -63,9 +65,7 @@ class playerUI_scene extends Phaser.Scene {
 
         this.btnOriginScale = 0.35;
         this.btnHoverScale = 0.4;
-
         this.mapOverlayDisplayed = false;
-        this.isKiller = false;
 
         // What is this for??
         this.timedEvent;
@@ -76,13 +76,14 @@ class playerUI_scene extends Phaser.Scene {
         });
     }
 
-    startGame() {
-        this.registry.values.sceneData.alertGameStart();
-
-        console.log('Game started');
+    /**
+     * called by scene_data after server returned start game data
+     */
+    startGame(role) {
         this.startBtn.destroy();
+        this.isIqla = role;
 
-        if (this.isKiller) {
+        if (this.isIqla) {
             this.canKill = true;
             this.renderKillerUI();
         } else {
@@ -250,13 +251,13 @@ class playerUI_scene extends Phaser.Scene {
     }
 
     enterButtonHoverState(btn) {
-        if (this.isKiller && this.canKill) {
+        if (this.isIqla && this.canKill) {
             btn.setScale(this.btnHoverScale);
         } else {
             btn.setScale(this.btnHoverScale);
         }
 
-        // Do nothing if isKiller but !canKill
+        // Do nothing if isIqla but !canKill
     }
 
     exitButtonHoverState(btn) {
