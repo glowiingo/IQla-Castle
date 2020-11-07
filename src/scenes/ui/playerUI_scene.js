@@ -1,4 +1,6 @@
 // Worked on by: William, Alexis
+// Worked on by: Bisht, Brian, Kian
+// Worked on by: Lewis
 
 class playerUI_scene extends Phaser.Scene {
     constructor() {
@@ -12,10 +14,47 @@ class playerUI_scene extends Phaser.Scene {
         this.load.image('useBtn', '../../assets/useButton.png');
         this.load.image('killBtn', '../../assets/killButton.png');
         this.load.image('mapBtn', '../../assets/mapButton.png');
+        this.load.image('TaskBar', '../../assets/TaskBar.png');
+        this.load.image('BackBar', '../../assets/BackBar.png');
+        this.load.image('startGame', '../../assets/StartGame.png');
     }
 
     create() {
-        const taskStringArr = [
+        this.startBtn = this.add.sprite(
+            game.config.width - 100,
+            game.config.height - 100,
+            'startGame'
+        );
+        this.startBtn.setInteractive();
+        this.startBtn.setScale(0.25);
+
+        this.isStartGame = false;
+        // instantiate a progress bar in the top left corner of game screen, similar to the kill button
+        // note: add ProgressBar.increase(1) into each mini-game
+        // this.progressBar = this.add.sprite(0, 0, "progress");
+        this.bBar = this.add
+            .sprite(game.config.width - 504, 0, 'BackBar')
+            .setOrigin(0, 0);
+        this.tBar = this.add
+            .sprite(game.config.width - 504, 0, 'TaskBar')
+            .setOrigin(0, 0);
+        this.fill = 0;
+        //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
+        //this.txt.setColor('#000000');
+        //this.txt.setFontSize(40);
+        //this.tBar.flipX = true;
+        //The bar ranges from 0-504 set bar adds an amount to it
+        this.setBar(0);
+
+        this.startBtn
+            .on('pointerdown', () => this.startGame())
+            .on('pointerover', () => this.enterButtonHoverState(this.startBtn))
+            .on('pointerout', () => this.exitButtonHoverState(this.startBtn));
+        window.addEventListener('resize', () => {
+            this.resize();
+        });
+
+        this.taskStringArr = [
             'Clean the bathroom',
             'Stand in the storage room for 10 seconds',
             'Do the dishes in the kitchen',
@@ -26,10 +65,22 @@ class playerUI_scene extends Phaser.Scene {
         this.btnHoverScale = 0.4;
 
         this.mapOverlayDisplayed = false;
-        this.isKiller = true;
+        this.isKiller = false;
 
         // What is this for??
         this.timedEvent;
+
+        // When window is resized, fix things
+        window.addEventListener('resize', () => {
+            this.resize();
+        });
+    }
+
+    startGame() {
+        this.registry.values.sceneData.alertGameStart();
+
+        console.log('Game started');
+        this.startBtn.destroy();
 
         if (this.isKiller) {
             this.canKill = true;
@@ -38,23 +89,18 @@ class playerUI_scene extends Phaser.Scene {
             this.renderDetectiveUI();
         }
 
-        this.renderTaskList(taskStringArr);
+        this.renderTaskList(this.taskStringArr);
 
         // Domo for how to show task complete.
         this.taskList[1].setColor('#8D8D8D');
         this.taskList[3].setColor('#8D8D8D');
-
-        // When window is resized, fix things
-        window.addEventListener('resize', () => {
-            this.resize();
-        });
     }
 
     renderTaskList(arr) {
-        const taskListBoxX = this.cameras.main.width - 180;
+        const taskListBoxX = 0;
         const taskListBoxY = 30;
         const taskListBoxWidth = 180;
-        const taskListBoxHeight = 250;
+        const taskListBoxHeight = 300;
 
         this.taskListBox = this.add
             .rectangle(
@@ -178,9 +224,8 @@ class playerUI_scene extends Phaser.Scene {
         this.time.delayedCall(2000, this.enablePress, [], this);
         this.canKill = false;
         let gameplay = this.scene.get('gameplay_scene');
-        let group = this.add.group();
-        group.add(gameplay.otherplayer);
-        gameplay.kill(group.getChildren());
+        gameplay.player.kill(gameplay.otherPlayers.getChildren());
+        this.registry.values.sceneData.serverConnection.taskCompleted();
     }
 
     use() {
@@ -220,9 +265,23 @@ class playerUI_scene extends Phaser.Scene {
 
     resize() {
         //this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
-        this.rptButton.setPosition(this.rptButtonX, this.rptButtonY);
-        this.useButton.setPosition(this.useButtonX, this.useButtonY);
-        this.killButton.setPosition(this.killButtonX, this.killButtonY);
-        this.mapButton.setPosition(this.mapButtonX, this.mapButtonY);
+
+        this.startBtn.setPosition(
+            this.cameras.main.width - 100,
+            this.cameras.main.height - 100
+        );
+
+        if (this.isStartGame) {
+            this.rptButton.setPosition(this.rptButtonX, this.rptButtonY);
+            this.useButton.setPosition(this.useButtonX, this.useButtonY);
+            this.killButton.setPosition(this.killButtonX, this.killButtonY);
+            this.mapButton.setPosition(this.mapButtonX, this.mapButtonY);
+        }
+    }
+
+    //Sets the progress bar size by adding a positive or negative amount as *perc*
+    setBar(perc) {
+        this.fill += perc;
+        this.tBar.setCrop(0, 0, this.fill, 84);
     }
 }
