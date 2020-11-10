@@ -21,6 +21,6 @@ class timer_scene extends Phaser.Scene {
       },
       20
     );
-    killBtn.setObj(this);
+    // killBtn.setObj(this);
   }
 }
