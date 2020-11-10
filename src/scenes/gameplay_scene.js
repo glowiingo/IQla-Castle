@@ -91,6 +91,7 @@ class gameplay_scene extends Phaser.Scene {
     if(this.player){
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
+      this.scene.get('showPositionPlayer_scene').move(this.player.x, this.player.y);
     }
 
   }

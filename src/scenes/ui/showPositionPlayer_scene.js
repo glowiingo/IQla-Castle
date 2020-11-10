@@ -19,7 +19,6 @@ class showPositionPlayer_scene extends Phaser.Scene {
     let showDot = false;
 
     this.dot = this.physics.add.sprite(330, 230, 'dot').setScale(0.05);
-    this.dot.body.collideWorldBounds = true;
 
     this.tabPress = this.input.keyboard.addKey('TAB');
     this.tabPress.on('down', () => {
@@ -45,50 +44,11 @@ class showPositionPlayer_scene extends Phaser.Scene {
     this.scene.setVisible(false);
   }
 
-  // reused Gloria's code
-  move_object_left_right(object, speed) {
-    object.x += speed;
-  }
-  //reused Gloria's code
-  move_object_up_down(object, speed) {
-    object.y += speed;
-  }
-
-   //reused Gloria's code
-   dot_movement(cursors) {
-    if (cursors.left.isDown) {
-      if (cursors.right.isDown) {
-        this.dot.setVelocityX(0);
-      } else {
-        this.dot.setVelocityX(-25);
-      }
-    } else if (cursors.right.isDown) {
-        if (cursors.left.isDown) {
-          this.dot.setVelocityX(0);
-      } else {
-        this.dot.setVelocityX(25);
-      }
-      } else {
-        this.dot.setVelocityX(0);
+  move(x, y) {
+    if (this.dot) {
+      this.dot.x = (x/10) + 145;
+      this.dot.y = (y/10) + 145;
     }
-    if (cursors.up.isDown) {
-      if (cursors.down.isDown) {
-        this.dot.setVelocityY(0);
-      } else {
-        this.dot.setVelocityY(-25);
-      }
-    } else if (cursors.down.isDown) {
-      if (cursors.up.isDown) {
-        this.dot.setVelocityY(0);
-      } else {
-        this.dot.setVelocityY(25);
-      }
-    } else {
-      this.dot.setVelocityY(0);
-    }
-   }
-
-  update() {
-    this.dot_movement(this.key);
+    
   }
 }
