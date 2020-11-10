@@ -43,6 +43,7 @@ class gameplay_scene extends Phaser.Scene {
 
     this.scene.launch("playerUI_scene");
     this.scene.launch("mapOverlay_scene");
+    this.scene.launch("showPositionPlayer_scene");
     this.scene.launch("voting_scene");
 
     // Worked on by: Anna
@@ -100,7 +101,7 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
     addPlayer(playerInfo) {
-        console.log(playerInfo);
+        console.log("PLAYERINFO:", playerInfo);
         this.player = new Player({
           scene:this, 
           x: playerInfo.x, 

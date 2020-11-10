@@ -32,13 +32,11 @@ class mapOverlay_scene extends Phaser.Scene {
 
   mapShow() {
     // display map-overlay
-    this.scene.setVisible(true)
-    console.log('show');
+    this.scene.setVisible(true);
   }
 
   mapHide() {
     // non-display map-overlay
-    this.scene.setVisible(false)
-    console.log('hide');
+    this.scene.setVisible(false);
   }
 }  

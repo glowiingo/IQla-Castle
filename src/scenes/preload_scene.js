@@ -14,6 +14,6 @@ class preload_scene extends Phaser.Scene {
     create() {
         this.add.text(20, 20, 'Loading Game...');
         console.log('Load Scene');
-        this.scene.start('temp_menu_scene'); // Switch back
+        this.scene.start('title_screen_scene'); // Switch back
     }
 }

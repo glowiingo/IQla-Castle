@@ -238,15 +238,17 @@ class playerUI_scene extends Phaser.Scene {
     }
 
     showMap() {
-        console.log('map');
         const mapOverlay = this.scene.get('mapOverlay_scene');
+        const dotOverlay = this.scene.get('showPositionPlayer_scene')
 
         if (this.mapOverlayDisplayed) {
             this.mapOverlayDisplayed = false;
             mapOverlay.mapHide();
+            dotOverlay.dotHide();
         } else {
             this.mapOverlayDisplayed = true;
             mapOverlay.mapShow();
+            dotOverlay.dotShow();
         }
     }
 

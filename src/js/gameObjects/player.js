@@ -23,31 +23,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // we should set these to global variables
         this.spawnX = 1408;
         this.spawnY = 512;
+
+        this.key = this.scene.input.keyboard.addKeys({
+          up: Phaser.Input.Keyboard.KeyCodes.W,
+          down: Phaser.Input.Keyboard.KeyCodes.S,
+          left: Phaser.Input.Keyboard.KeyCodes.A,
+          right: Phaser.Input.Keyboard.KeyCodes.D,
+        });
     }
 
     //worked on by Kiwon
     player_movement() {
-        let key = this.scene.input.keyboard.addKeys({
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
-        });
+        
 
         //console.log(this);
-        if (key.left.isDown) {
+        if (this.key.left.isDown) {
             this.setVelocityX(-this.speed);
             this.flipX = false;
-        } else if (key.right.isDown) {
+        } else if (this.key.right.isDown) {
             this.setVelocityX(this.speed);
             this.flipX = true;
         } else {
             this.setVelocityX(0);
         }
 
-        if (key.up.isDown) {
+        if (this.key.up.isDown) {
             this.setVelocityY(-this.speed);
-        } else if (key.down.isDown) {
+        } else if (this.key.down.isDown) {
             this.setVelocityY(this.speed);
         } else {
             this.setVelocityY(0);
@@ -55,10 +57,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Worked on by: William, Brian, Anna, Flemming
         if (
-            key.down.isDown ||
-            key.up.isDown ||
-            key.left.isDown ||
-            key.right.isDown
+          this.key.down.isDown ||
+          this.key.up.isDown ||
+          this.key.left.isDown ||
+          this.key.right.isDown
         ) {
             if (!this.scene.isWalking) {
                 this.player_walk_anim_start();
