@@ -47,7 +47,7 @@ class gameplay_scene extends Phaser.Scene {
     console.log("gameplay_scene");
 
     this.scene.launch("playerUI_scene");
-    this.scene.launch("timer_scene");
+    // this.scene.launch("timer_scene");
     this.scene.launch("mapOverlay_scene");
     this.scene.launch("showPositionPlayer_scene");
     this.scene.launch("voting_scene");
