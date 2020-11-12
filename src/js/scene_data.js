@@ -1,6 +1,6 @@
 // Worked on by: Evano
-class SceneData{
-    constructor(gamePlayScene){
+class SceneData {
+    constructor(gamePlayScene) {
         gamePlayScene.registry.values.sceneData = this;
         this.gamePlayScene = gamePlayScene;
         this.player = null;
@@ -13,29 +13,33 @@ class SceneData{
     }
 
     addOtherPlayers(players) {
-        Object.keys(players).forEach((id) =>{
+        Object.keys(players).forEach((id) => {
             this.addOtherPlayer(players[id]);
-          });
+        });
     }
 
     addOtherPlayer(playerInfo) {
-        this.otherPlayers[playerInfo.playerId] = this.gamePlayScene.addOtherPlayer(playerInfo);
+        this.otherPlayers[
+            playerInfo.playerId
+        ] = this.gamePlayScene.addOtherPlayer(playerInfo);
     }
 
-    removePlayer(playerId){
+    removePlayer(playerId) {
         this.otherPlayers[playerId].destroy();
         delete this.otherPlayers[playerId];
     }
 
-    startGame(roleData){
+    startGame(roleData) {
         console.log(roleData);
         this.player.setRole(roleData);
         this.player.sendToStartPos();
         this.serverConnection.movement(this.player);
-        this.gamePlayScene.scene.manager.getScene("playerUI_scene").startGame();
+        this.gamePlayScene.scene.manager
+            .getScene('playerUI_scene')
+            .startGame(this.player.iqla);
     }
 
-    alertGameStart(){
+    alertGameStart() {
         this.serverConnection.alertGameStart();
     }
 }
