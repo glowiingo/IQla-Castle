@@ -21,13 +21,13 @@ app.use("/assets", express.static(__dirname + '/assets'));
 io.on('connection', function (socket) {
 
     console.log('a user connected');
-    socket.on('joinRoom', (roomName) => {
-        console.log('a user joined room', roomName);
+    socket.on('joinRoom', (roomName, playerName) => {
+        console.log(playerName, 'joined room', roomName);
         socket.join(roomName);
         if (!rooms.hasOwnProperty(roomName)) {
             rooms[roomName] = new Room(roomName);
         }
-        rooms[roomName].addPlayer(new Player(roomName, socket));
+        rooms[roomName].addPlayer(new Player(roomName, socket, playerName));
 
         // send the rooms object to the new player
         socket.emit('currentPlayers', rooms[roomName].players);

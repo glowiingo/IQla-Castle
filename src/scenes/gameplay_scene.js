@@ -24,6 +24,7 @@ class gameplay_scene extends Phaser.Scene {
     console.log(this.registry.values.sceneData);
     this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
+    this.otherPlayerTags = []
   }
 
   preload() {
@@ -92,6 +93,19 @@ class gameplay_scene extends Phaser.Scene {
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene.get('showPositionPlayer_scene').move(this.player.x, this.player.y);
+      this.playerNameText.x = this.player.x - 32;
+      this.playerNameText.y = this.player.y - 100;
+    }
+
+
+    for (let i = 0; i < this.otherPlayerTags.length; i++) {
+      try {
+        this.otherPlayerTags[i].x = this.otherPlayers.children.entries[i].x - 32;
+        this.otherPlayerTags[i].y = this.otherPlayers.children.entries[i].y - 100;
+      } catch(e) {
+        delete this.otherPlayerTags[i];
+        delete this.otherPlayers.children.entries[i];
+      }
     }
 
   }
@@ -108,7 +122,7 @@ class gameplay_scene extends Phaser.Scene {
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
-      }, playerInfo.playerId, "john", 300);
+      }, playerInfo.playerId, playerInfo.playerName, 300);
 
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
@@ -120,6 +134,11 @@ class gameplay_scene extends Phaser.Scene {
         
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
+
+        this.playerNameText = this.add.text(this.player.x, this.player.y, this.player.playerName, {
+          font: "32px Ariel",
+          fill: "yellow",
+        })
         return this.player;
     }
 
@@ -129,12 +148,16 @@ class gameplay_scene extends Phaser.Scene {
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
-      }, playerInfo.playerId, "john", 300);
+      }, playerInfo.playerId, playerInfo.playerName, 300);
       
         //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
        
         this.add.existing(otherPlayer).setScale(1);
         this.otherPlayers.add(otherPlayer);
+        this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
+          font: "32px Ariel",
+          fill: "yellow",
+        }));
         return otherPlayer;
     }
 }
