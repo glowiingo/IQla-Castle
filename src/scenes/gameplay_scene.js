@@ -113,10 +113,6 @@ class gameplay_scene extends Phaser.Scene {
     this.sceneData.serverConnection.vote(votedFor);
   }
 
-  vote(votedFor) {
-    this.sceneData.serverConnection.vote(votedFor);
-  }
-
   // Worked on by: Evano
     addPlayer(playerInfo) {
         console.log("PLAYERINFO:", playerInfo);

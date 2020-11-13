@@ -8,7 +8,7 @@ class chat_scene extends Phaser.Scene {
   }
 
   init() {
-    this.showChat = true;
+    this.showChat = false;
   }
 
   preload() {}
@@ -18,18 +18,16 @@ class chat_scene extends Phaser.Scene {
     const screenY = this.cameras.main.height;
 
     this.textbox = document.getElementById("textbox");
-    this.textbox.style.display = "block";
+    //this.textbox.style.display = "block";
+
+    this.chatbox = document.getElementById("chatbox");
+    //this.chatbox.style.display = "block";
 
     // temp scene activation
     this.keyPress = this.input.keyboard.addKey("CTRL");
     this.keyPress.on("down", () => {
       this.toggleVisible();
     });
-
-    let rect = new Phaser.Geom.Rectangle(0, 100, screenX, screenY - 150);
-    let g = this.add.graphics();
-    g.fillStyle(0x000000, 0.8);
-    g.fillRectShape(rect);
 
     // bypass player movement inputs
     window.addEventListener('keydown', function(e) {
@@ -46,25 +44,36 @@ class chat_scene extends Phaser.Scene {
           let str = document.getElementById("textbox").value;
           document.getElementById("textbox").value = str.substring(0, str.length - 1);
         } else if (event.key === "Enter") {
-          // do same method as button click
+          if (document.getElementById("textbox").value !== "") {
+            let name = this.scene.get("gameplay_scene").player.playerName;
+          this.scene.get("gameplay_scene").sceneData.serverConnection.sendMessage(name, document.getElementById("textbox").value);
+          document.getElementById("textbox").value = "";
+          }
         }
       }
     });
-    
-  
+
+  }
+
+  receiveMsg(name, text) {
+    this.chatbox.value += name + ": " + text + "\r\n";
   }
 
 
 
   toggleVisible() {
+    this.scene.get("gameplay_scene").player.setVelocityX(0);
+    this.scene.get("gameplay_scene").player.setVelocityY(0);
+    this.scene.get("gameplay_scene").player.player_walk_anim_stop();
     this.showChat = !this.showChat;
     if (this.showChat) {
       this.scene.setVisible(true);
       this.textbox.style.display = "block";
-      
+      this.chatbox.style.display = "block";
     } else {
       this.scene.setVisible(false);
       this.textbox.style.display = "none";
+      this.chatbox.style.display = "none";
     }
   }
 }

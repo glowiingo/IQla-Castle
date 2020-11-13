@@ -50,9 +50,23 @@
 
 <body>
   <input readonly id="textbox" type="text"/>
+  <textarea readonly id="chatbox"></textarea>
 </body>
 
 <style>
+  #chatbox {
+    background-color: white;
+    border: black 2px solid;
+    display: none; 
+    width: 50%; 
+    height: 80%; 
+    position: absolute;
+    bottom: 80px;
+    margin-left: 20%;
+    opacity: 0.8;
+    overflow-y: scroll;
+  }
+
   #textbox {
     background-color: white;
     border: black 2px solid;
@@ -61,7 +75,7 @@
     height: 3%; 
     position: absolute;
     bottom: 30px;
-    margin-left: 10%;
+    margin-left: 20%;
   }
 </style>
 
