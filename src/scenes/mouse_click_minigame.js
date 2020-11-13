@@ -37,16 +37,17 @@ class mouse_click_minigame extends Phaser.Scene {
     let mice = [];
 
     for(let i = 0; i < NUM_OF_MICE; i++){
-      let randX = this.getRandomWidthFloat(data.width, mouseWidth);
-      let randY = this.getRandomHeightFloat(data.height, mouseHeight);
+      let randX = this.getRandomX(data.width, mouseWidth);
+      let randY = this.getRandomY(data.height, mouseHeight);
       mice.push(this.add.image(randX, randY, 'pp').setScale(MOUSE_SCALE));
     }
     let _this = this; // Idk why but this is suddenly no longer needed and nothing regarding this was change wtf js this is why no one likes you fucking piece of shit like srs how has no one fucking made a replacement for js fucking christ man so many languages i mean we got C, C++, C#, and Object C and that's just one fucking letter and you're gonna tell me out of all these plethora platypuses of languages the shittiest one just happened to be the only option we have for web? This is like the reverse of Mr.Strange's time stone probability thingy thang but instead of winning we end up with this fucking situation with js fucks sake ty for listening to my ted talk. // wait nvm I still need _talk but only one of my "this" needs this and literally every other this doesn't so my point still stands fuck you js. oh hey found a way to not use it but once more my point still stands fuck u mike fuck you.
     
-    // add animation for each mouse
+    // add animation and interactive functionality for each mouse
     mice.forEach((mouse) => {
       mouse.setInteractive();
-      mouse.on('pointerdown', function() {
+      // remove mouse if clicked on
+      mouse.on('pointerdown', () => {
         mice.splice(mice.indexOf(mouse), 1);
         tween.stop();
         mouse.setVisible(false);
@@ -56,9 +57,9 @@ class mouse_click_minigame extends Phaser.Scene {
         }
       });
       
-      //move objects to random coordinates on the board at random speeds.
-      mouse.nextX = this.getRandomWidthFloat(data.width, mouseWidth);
-      mouse.nextY = this.getRandomHeightFloat(data.height, mouseHeight);
+      // move mouse to random coordinates on the board at random speeds.
+      mouse.nextX = this.getRandomX(data.width, mouseWidth);
+      mouse.nextY = this.getRandomY(data.height, mouseHeight);
       mouse.rotation = this.getRadians(mouse.x, mouse.y, mouse.nextX, mouse.nextY);
       let tween = this.tweens.add({
         targets: mouse,
@@ -67,8 +68,8 @@ class mouse_click_minigame extends Phaser.Scene {
         duration: MIN_DUR + Math.random() * (MAX_DUR - MIN_DUR),
         repeat: -1,
         onEnd: () => {
-          mouse.nextX = this.getRandomWidthFloat(data.width, mouseWidth);
-          mouse.nextY = this.getRandomHeightFloat(data.height, mouseHeight);
+          mouse.nextX = this.getRandomX(data.width, mouseWidth);
+          mouse.nextY = this.getRandomY(data.height, mouseHeight);
           mouse.rotation = this.getRadians(mouse.x, mouse.y, mouse.nextX, mouse.nextY);
 
           tween.updateTo('x', mouse.nextX, true);
@@ -84,19 +85,23 @@ class mouse_click_minigame extends Phaser.Scene {
       // -- game logic mainly in this area
   }
 
-  // Returns a random float that falls within the given 1D coordinate.
-  // This assumes the board containing said coordinate is centered on
-  // the main game. Parameter object_size is used to account for the 
-  // image's anchor point being at its center (this function will not
-  // accurately work otherwise). IE: If this function is given a board 
-  // size of 3 and object size of 1 on a game of size 5, it will return 
-  // a random float between 2.5 and 3.5 (exclusive).
-  getRandomWidthFloat(board_size, object_size){
+  /**
+   * Returns a random float that falls within the minigame board. This
+   * assumes the board is centered on the main game canvas.
+   * 
+   * Parameter object_size is used to account for the image's anchor point 
+   * being at its center (this function will not accurately work otherwise). 
+   * IE: If this function is given a board size of 3 and object size of 1 on 
+   * a game of size 5, it will return a random float between 2.5 and 3.5 (exclusive).
+   * @param {*} board_size size of the board in width or height
+   * @param {*} object_size size of an object on the board in width or height.
+   */
+  getRandomX(board_size, object_size){
     let min = (this.game.config.width - board_size) / 2 + object_size / 2;
     return Math.random() * (board_size - object_size) + min;
   }
-
-  getRandomHeightFloat(board_size, object_size){
+  
+  getRandomY(board_size, object_size){
     let min = (this.game.config.height - board_size) / 2 + object_size / 2;
     return Math.random() * (board_size - object_size) + min;
   }

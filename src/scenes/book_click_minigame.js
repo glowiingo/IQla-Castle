@@ -161,17 +161,16 @@ class book_click_minigame extends Phaser.Scene {
       book.on('pointerdown', () => {
         if (numArr.includes(book.getData('id'))) {
           book.disableInteractive();
-          console.log(numArr);
           let idx = numArr.findIndex((num) => {
-            return num == book.getData('id');
+            return num === book.getData('id');
           });
           numArr.splice(idx, 1);
-          if (numArr.length == 0) {
+          if (numArr.length === 0) {
             no.stop();
             yes.play();
           }
         } else {
-          if (numArr.length != 0) {
+          if (numArr.length !== 0) {
             no.play();
           }
         }
