@@ -12,9 +12,7 @@ class mainmenu_scene extends Phaser.Scene {
 
   create() {
     console.log('Main Menu');
-    // Use this line to launch minigame in 'overlay'. Replace this.scene.start(SCENE_NAME) in 'pointerdown' events:
-    // this.scene.launch('minigame_scene_manager', 'mouse_click_minigame');
-
+    // Worked on by: Alexis
     this.goBackIcon = new ImageButton(
         this,
         5,

@@ -122,6 +122,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
     }
+
+  /**
+   * Get the position of nearby interactable MapObjects. If it's active and within a
+   * a certain range, return that MapObject and set its active variable to false.
+   * @param {MapObject[]} interactables 
+   */
+  interact(interactables) {
+    // Worked on by: Alexis
+    for (let i = 0; i < interactables.length; i++) {
+      let pos = Phaser.Math.Distance.Chebyshev(this.x, this.y, interactables[i].x, interactables[i].y);
+      if (interactables[i].active && pos < 60) {
+        interactables[i].setActive(false); // Bugged.
+        // Above line needs to be done only after the minigame is completed.
+        return interactables[i];
+      }
+    }
+  }
     
     // Worked on by Gloria
     /**

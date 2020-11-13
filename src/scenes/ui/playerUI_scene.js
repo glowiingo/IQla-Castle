@@ -232,9 +232,16 @@ class playerUI_scene extends Phaser.Scene {
         this.registry.values.sceneData.serverConnection.taskCompleted();
     }
 
-    use() {
-        console.log('use');
+  use() {
+    // Worked on by: Alexis
+    console.log('use');
+    let gameplay = this.scene.get('gameplay_scene');
+    let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
+
+    if (interactable) {
+      gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
     }
+  }
 
     report() {
         console.log('report');

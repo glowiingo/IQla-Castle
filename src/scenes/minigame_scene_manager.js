@@ -30,6 +30,11 @@ class minigame_scene_manager extends Phaser.Scene {
   }
   
   create(key) {
+    // Worked on by: Alexis
+    // Ensure the launched scene rendered above all of the others:
+    this.scene.bringToTop();
+    this.scene.bringToTop(key);
+
     // Worked on by: Charles
     this.scene.launch(key, {width: this.minigameWidth, height: this.minigameHeight});
     this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x123456);
@@ -65,6 +70,8 @@ class minigame_scene_manager extends Phaser.Scene {
    */
   static end(key) {
     game.scene.wake('mainmenu_scene');
+    game.scene.wake('playerUI_scene');
+    game.scene.wake('gameplay_scene');
     game.scene.stop('minigame_scene_manager');
     game.scene.stop(key);
   }

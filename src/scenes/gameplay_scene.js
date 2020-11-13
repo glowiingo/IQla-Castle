@@ -25,6 +25,7 @@ class gameplay_scene extends Phaser.Scene {
     this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
     this.otherPlayerTags = []
+    this.interactables = this.physics.add.group();
   }
 
   preload() {
@@ -166,14 +167,26 @@ class gameplay_scene extends Phaser.Scene {
 
   addInteractables() {
     // Worked on by: Alexis
+
     this.bookshelfMinigameObj = new MapObject({
       scene: this,
       x: 1200,
       y: 115,
-      sprite: 'bookshelfMinigame'
+      sprite: 'bookshelfMinigame',
+      triggeredScene: 'book_click_minigame',
+      isMinigameObj: true,
     });
     this.add.existing(this.bookshelfMinigameObj).setScale(0.1);
     this.physics.add.existing(this.bookshelfMinigameObj);
+
+    // ------------ Add MapObjects to a physics group ------------ //
+    this.interactables.add(this.bookshelfMinigameObj);
+  }
+
+  triggerScene(pauseKey, launchKey, launchData) {
+    // Worked on by: Alexis
+    this.scene.pause();
+    this.scene.pause(pauseKey);
+    this.scene.launch(launchKey, launchData);
   }
 }
-
