@@ -76,9 +76,9 @@ class trap_making_minigame extends Phaser.Scene {
             object.x = object.targetX;
             object.y = object.targetY;
             object.disableInteractive();
-            if(++this.correctPlacementCount === yPosArr.length){
+            if(++this.correctPlacementCount === yItemPosArr.length){
               wow2.play();
-              //minigame_scene_manager.minigameWon('trap_making_minigame');
+              minigame_scene_manager.minigameWon('trap_making_minigame');
             }else{
               wow.play();
             }
