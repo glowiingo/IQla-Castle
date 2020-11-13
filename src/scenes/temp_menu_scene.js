@@ -22,7 +22,7 @@ class temp_menu_scene extends Phaser.Scene {
 
     console.log("Temp Main Menu");
     // Worked on by: Evano
-    this.serverConnection = new ServerConnection();
+    this.scenData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
     this.mouse_click_text = this.add.text(20, 20, "Gameplay Scene", {
       font: "25px Arial",
       fill: "yellow"
@@ -31,8 +31,8 @@ class temp_menu_scene extends Phaser.Scene {
     this.mouse_click_text.on("pointerdown", () => {
       // Worked on by: Evano
       let r = prompt("Room name?");
-      this.serverConnection.setRoom(r);
-      this.scene.start("gameplay_scene", {serverConnection: this.serverConnection});
+      this.scenData.serverConnection.setRoom(r);
+      this.scene.start("gameplay_scene");
     });
     
     this.mouse_click_text = this.add.text(20, 60, "Back End POC Menu", {

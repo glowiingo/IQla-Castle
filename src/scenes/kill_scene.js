@@ -65,6 +65,7 @@ class kill_scene extends Phaser.Scene {
                 console.log("Hidden");
                 console.log(sprite[i].x, sprite[i].y);
                 this.create_deadBody(sprite[i].x, sprite[i].y);
+                // delete sprite[i];
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));

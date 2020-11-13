@@ -1,8 +1,11 @@
 //Worked on by Kiwon, John, Nav, Evano
 
+//const player = require("../player");
+
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(config, id, playerName, speed, iqla=false) {
         super(config.scene, config.x, config.y, config.sprite);
+
         
         // console.log(this);
         // this.scene.add.existing(this).setScale(1);
@@ -17,17 +20,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.alive = true;
         this.iqla = false;
         this.player_name = playerName;
-        
+
+        // we should set these to global variables
+        this.spawnX = 1408;
+        this.spawnY = 512;
     }
 
-    //worked on by Kiwon
+    //worked on by Kiwon and John
     player_movement() {
         let key = this.scene.input.keyboard.addKeys(
             {up:Phaser.Input.Keyboard.KeyCodes.W,
             down:Phaser.Input.Keyboard.KeyCodes.S,
             left:Phaser.Input.Keyboard.KeyCodes.A,
-            right:Phaser.Input.Keyboard.KeyCodes.D});
-
+            right:Phaser.Input.Keyboard.KeyCodes.D,
+            place_trap:Phaser.Input.Keyboard.KeyCodes.E}
+            );
+        if (!this.trap_placed && key.place_trap.isDown) {
+            console.log("placed");
+            this.trap = new Trap({scene:this.scene, x:this.x, y:this.y}, this);
+            this.trap_placed = true;
+        }
+        
         //console.log(this);
         if(key.left.isDown){
             this.setVelocityX(-this.speed);
@@ -79,9 +92,56 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //worked on by Mike
     create_deadBody(x, y) {
-        let dead_image = this.add.image(x, y, 'deadbody');
+        let dead_image = this.scene.add.image(x, y, 'deadbody');
         dead_image.setScale(0.5);
-        dead_image.setDepth(-1);
+        dead_image.setDepth(30);
+    }
+
+    //worked on by Mike
+    kill(sprite) {
+        for(let i = 0; i < sprite.length; i++) {
+            let a = Math.abs(this.x - sprite[i].x);
+            let b = Math.abs(this.y - sprite[i].y);
+            let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+            // console.log(c);
+            if (c < 60) {
+                sprite[i].setActive(false).setVisible(false);
+                sprite[i].alive = false;
+                //sprite[i].setTexture("ghost");
+                console.log("Hidden");
+                console.log(sprite[i].x, sprite[i].y);
+                this.create_deadBody(sprite[i].x, sprite[i].y);
+                console.log("I killed someone", sprite[i].id);
+                this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
+            }
+        }
+        // console.log(Math.abs(this.x - this.player2.x));
+    }
+
+    // Worked on by Gloria
+    // Sets the role for the player based on a random number generator 
+    // We should note that other player factors may need to be passed into this function
+    // Logic may need to be defined on the server? or server needs to pass all player ids in array
+    setRole(player_id_object) {
+        console.log("Object: " + player_id_object);
+        console.log("Accessing Object: " + player_id_object[this.id]);
+        let iqla_status = player_id_object[this.id];
+        // check for nulls
+        if (iqla_status) {
+            // set iqla
+            if (iqla_status == "vampire") {
+                this.iqla = true;
+                
+            }
+            console.log("Is iqla", this.iqla);
+        }
+    }
+
+    // Worked on by Gloria
+    // Sets player x and y to spawn point
+    sendToStartPos() {
+        this.x = this.spawnX;
+        this.y = this.spawnY;
     }
 
     //worked on by Mike
@@ -98,8 +158,30 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 console.log("Hidden");
                 console.log(sprite[i].x, sprite[i].y);
                 this.create_deadBody(sprite[i].x, sprite[i].y);
+                sprite[i].config.col.destroy();
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
     }
+    //worked on by Mike
+    kill(sprite) {
+        for (let i = 0; i < sprite.length; i++) {
+          // let a = Math.abs(this.player.x - sprite[i].x);
+          // let b = Math.abs(this.player.y - sprite[i].y);
+          // let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+          let c = Phaser.Math.Distance.Chebyshev(this.player.x, this.player.y, sprite[i].x, sprite[i].y);
+          console.log(c);
+          if(sprite[i].active) {
+            if (c < 60) {
+              sprite[i].setActive(false).setVisible(false);
+              //sprite[i].setTexture("ghost");
+              console.log("Hidden");
+              console.log(sprite[i].x, sprite[i].y);
+              this.create_deadBody(sprite[i].x, sprite[i].y);
+              this.serverConnection.kill(sprite[i].playerId);
+            }
+          }
+        }
+        // console.log(Math.abs(this.player.x - this.player2.x));
+      }
 }
