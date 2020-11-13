@@ -75,7 +75,6 @@ class gameplay_scene extends Phaser.Scene {
     let tileset = map.addTilesetImage('updated_tiles', 'tiles')
     map.createStaticLayer('Background', tileset);
     map.createStaticLayer('Ground', tileset);
-    map.createStaticLayer('Interactables', tileset);
 
     this.wallsLayer = map.createStaticLayer('Walls', tileset);
     this.wallsLayer.setCollisionByProperty({ collides: true });
