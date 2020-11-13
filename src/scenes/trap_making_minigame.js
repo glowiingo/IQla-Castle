@@ -46,12 +46,12 @@ class trap_making_minigame extends Phaser.Scene {
       wow2.setVolume(0.3);
       
 
-      let yItemPosArr = this.shuffleArray([150, 300, 450]);
-      let ySlotPosArr = this.shuffleArray([150, 300, 450]);
+      let yItemPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
+      let ySlotPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
       this.createItemSlotPair('bananaCage', 'bananaCage', 200, yItemPosArr[0], 600, ySlotPosArr[0]);
       this.createItemSlotPair('trump', 'corn', 200, yItemPosArr[1], 600, ySlotPosArr[1]);
       this.createItemSlotPair('drake', 'drake', 200, yItemPosArr[2], 600, ySlotPosArr[2]);
-      
+
       // pointer param is needed for drag to work
       this.input.on('drag', (pointer, object, nextX, nextY) => {
         let outerBorderX = (game.config.width - this.boardWidth) / 2;
@@ -123,17 +123,5 @@ class trap_making_minigame extends Phaser.Scene {
 
       let slot = this.add.image(slotX, slotY, slot_name);
       slot.setDisplaySize(item.displayWidth + ACCURACY * 2, item.displayHeight + ACCURACY * 2); 
-    }
-
-    // Returns a new array with the inputs array's elements randomized.
-    // This method will remove all the elements from the input array.
-    shuffleArray(arr){
-      let newArr = [];
-      let length = arr.length;
-      for(let i = 0; i < length; i++){
-        let randNum = Math.floor(Math.random() * arr.length);
-        newArr.push(arr.splice(randNum, 1)[0]);
-      }
-      return newArr;
     }
 }

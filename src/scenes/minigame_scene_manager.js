@@ -88,4 +88,16 @@ class minigame_scene_manager extends Phaser.Scene {
     background.displayHeight = 450;
     return background;
   }
+
+    // Returns a new array with the inputs array's elements randomized.
+    // This method will remove all the elements from the input array.
+    static shuffleArray(arr){
+      let newArr = [];
+      let length = arr.length;
+      for(let i = 0; i < length; i++){
+        let randNum = Math.floor(Math.random() * arr.length);
+        newArr.push(arr.splice(randNum, 1)[0]);
+      }
+      return newArr;
+    }
 }

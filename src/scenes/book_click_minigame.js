@@ -40,6 +40,7 @@ class book_click_minigame extends Phaser.Scene {
     // ---------- Pre-load Audio ---------- //
     this.load.audio('no', '../../assets/no.mp3');
     this.load.audio('yes', '../../assets/yes.mp3');
+    this.load.audio('ok', '../../assets/ok.mp3');
   }
 
   create(data) {
@@ -99,6 +100,7 @@ class book_click_minigame extends Phaser.Scene {
     // ---------- Audio ---------- //
     let no = this.sound.add('no');
     let yes = this.sound.add('yes');
+    let ok = this.sound.add('ok');
     no.setVolume(0.4);
     yes.setVolume(0.4);
 
@@ -112,39 +114,40 @@ class book_click_minigame extends Phaser.Scene {
     // ---------- Book Images ---------- //
     const booksNeeded = 2;
     let numArr = [];
+    let bookKeyArray = minigame_scene_manager.shuffleArray([BOOK0_KEY, BOOK1_KEY, BOOK2_KEY, BOOK3_KEY, BOOK4_KEY])
     const topShelfY = this.centreCoords.y - 62;
 
     let books = this.physics.add.group();
-    let book0 = this.add.image(245, topShelfY, BOOK0_KEY);
-    let book1 = this.add.image(300, topShelfY, BOOK1_KEY);
-    let book2 = this.add.image(this.centreCoords.x + bookWidth, topShelfY + (bookWidth), BOOK2_KEY);
+    let book0 = this.add.image(245, topShelfY, bookKeyArray[0]);
+    let book1 = this.add.image(300, topShelfY, bookKeyArray[1]);
+    let book2 = this.add.image(this.centreCoords.x + bookWidth, topShelfY + (bookWidth), bookKeyArray[2]);
     book2.setRotation(-1.5708); // Rotate -90 degrees
-    let book3 = this.add.image(215, this.bottomCentreCoords.y, BOOK3_KEY);
+    let book3 = this.add.image(215, this.bottomCentreCoords.y, bookKeyArray[3]);
     book3.setOrigin(0, 1);
-    let book4 = this.add.image(328, this.bottomCentreCoords.y, BOOK4_KEY);
+    let book4 = this.add.image(328, this.bottomCentreCoords.y, bookKeyArray[4]);
     book4.setOrigin(0, 1);
     book4.setRotation(-0.436332); // Rotate -25 degrees
 
     // Worked on by: Charles
     book0.setData({
       id: 0,
-      title: BOOK0_KEY
+      title: bookKeyArray[0]
     });
     book1.setData({
       id: 1,
-      title: BOOK1_KEY
+      title: bookKeyArray[1]
     });
     book2.setData({
       id: 2,
-      title:  BOOK2_KEY
+      title: bookKeyArray[2]
     });
     book3.setData({
       id: 3,
-      title: BOOK3_KEY
+      title: bookKeyArray[3]
     });
     book4.setData({
       id: 4,
-      title: BOOK4_KEY
+      title: bookKeyArray[4]
     });
 
     books.add(book0);
@@ -163,9 +166,11 @@ class book_click_minigame extends Phaser.Scene {
         if (idx >= 0) {
           book.disableInteractive();
           numArr.splice(idx, 1);
-          if (numArr.length === 0) {
-            no.stop();
+          no.stop();
+          if (numArr.length === 0) {  
             yes.play();
+          } else {
+            ok.play();
           }
         } else if(numArr.length !== 0){
             no.play();
