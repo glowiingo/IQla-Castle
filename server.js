@@ -87,7 +87,7 @@ io.on('connection', function (socket) {
         //
         // // when a player sends their vote
         socket.on('vote', function (votedFor) {
-          console.log(String(rooms[roomName].getPlayer(socket.id)) + " voted for " + votedFor)
+          console.log(rooms[roomName].getPlayer(socket.id).playerId + " voted for " + votedFor)
           socket.broadcast.to(roomName).emit('voted', votedFor);
         });
         

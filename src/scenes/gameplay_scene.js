@@ -151,7 +151,10 @@ class gameplay_scene extends Phaser.Scene {
       }, playerInfo.playerId, playerInfo.playerName, 300);
       
         //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
-       
+
+        this.scene.get('voting_scene').players.push(otherPlayer);
+        this.scene.get('voting_scene').displayPortraits();
+
         this.add.existing(otherPlayer).setScale(1);
         this.otherPlayers.add(otherPlayer);
         this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
