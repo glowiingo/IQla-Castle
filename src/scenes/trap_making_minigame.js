@@ -15,7 +15,7 @@ class trap_making_minigame extends Phaser.Scene {
     }
 
     preload() {
-        // load audio and images into memory
+        // load media into memory
         this.load.image('trap_making_background', '../../assets/shrek2.jpg');
         this.load.image('bananaCage', '../../assets/bananaCage.png');
         this.load.image('trump', '../../assets/cornTrumpItem.png');
@@ -24,34 +24,18 @@ class trap_making_minigame extends Phaser.Scene {
 
         this.load.audio('wrong', '../../assets/wrong.mp3');
         this.load.audio('wow', '../../assets/wow.mp3');
-        this.load.audio('wow2', '../../assets/wow2.mp3');
 
         this.load.video('omgwow', '../../assets/omgwow.mp4');
     }
     
-    create(data) {
-      // let background = this.add.image(
-      //   this.cameras.default.width / 2, 
-      //   this.cameras.default.height / 2, 
-      //   'trap_making_background'
-      // );
-      // background.displayWidth = data.width;
-      // background.displayHeight = data.height;
+    create() {
       minigame_scene_manager.setBackground('trap_making_minigame', 'trap_making_background');
       
       let wrong = this.sound.add('wrong');
       let wow = this.sound.add('wow');
-      let wow2 = this.sound.add('wow2');
-      
-      wrong.setVolume(1.5);
+
+      wrong.setVolume(3);
       wow.setVolume(1.5);
-      wow2.setVolume(0.3);  
-      
-      let omgwow = this.add.video(400, 300,'omgwow');
-      omgwow.setVolume(0.2);
-      omgwow.alpha = 0.5;
-      omgwow.setScale(5)
-      omgwow.play();
 
       let yItemPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
       let ySlotPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
@@ -84,8 +68,7 @@ class trap_making_minigame extends Phaser.Scene {
             object.y = object.targetY;
             object.disableInteractive();
             if(++this.correctPlacementCount === yItemPosArr.length){
-              wow2.play();
-              minigame_scene_manager.minigameWon('trap_making_minigame');
+              this.playVideo();
             }else{
               wow.play();
             }
@@ -130,5 +113,26 @@ class trap_making_minigame extends Phaser.Scene {
 
       let slot = this.add.image(slotX, slotY, slot_name);
       slot.setDisplaySize(item.displayWidth + ACCURACY * 2, item.displayHeight + ACCURACY * 2); 
+    }
+
+    playVideo(){
+      let omgwow = this.add.video(400, 300,'omgwow');
+      omgwow.setVolume(0.5);
+      omgwow.alpha = 0.5;
+      omgwow.setDepth(2);
+      omgwow.play();
+      
+      this.tweens.add({
+        targets: omgwow,
+        scale: 3,
+        duration: omgwow.getDuration() * 1000,
+        repeat: 0
+      });
+
+      omgwow.on('complete', () => {
+        // When the audio plays, the win condition has been satisfied.
+        // After the audio has finished playing, call the 'won' function.
+        minigame_scene_manager.minigameWon('trap_making_minigame');
+      });
     }
 }
