@@ -103,12 +103,7 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
     addPlayer(playerInfo) {
-<<<<<<< HEAD
-      console.log(this);
-        console.log(playerInfo);
-=======
         console.log("PLAYERINFO:", playerInfo);
->>>>>>> back_end
         this.player = new Player({
           scene:this, 
           x: playerInfo.x, 

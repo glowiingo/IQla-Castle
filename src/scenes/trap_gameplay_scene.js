@@ -89,36 +89,4 @@ class trap_gameplay_scene extends Phaser.Scene {
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
     }
-<<<<<<< Updated upstream
-=======
-
-    player_movement(key) {
-        if(key.left.isDown){
-            this.player1.setVelocityX(-500);
-        } else if (key.right.isDown) {
-            this.player1.setVelocityX(500);
-        } else {
-            this.player1.setVelocityX(0);
-        }
-        
-        if (key.up.isDown) {
-            this.player1.setVelocityY(-500);
-        } else if (key.down.isDown) {
-            this.player1.setVelocityY(500);
-        } else {
-            this.player1.setVelocityY(0);
-        }
-        
-        // print x y of player position to send to network team and update
-        // console.log(this.player.x, this.player.y)
-    }
-
-    toggle_body(key) {
-        if (key.left.isDown) {
-            this.player1.destroy();
-        }
-
-    
-    }
->>>>>>> Stashed changes
 }
