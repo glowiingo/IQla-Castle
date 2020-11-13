@@ -5,19 +5,25 @@ This class is defined in order for preloading of assets, animations, and sprites
 */
 
 class trap_gameplay_scene extends Phaser.Scene {
+    
+
     constructor() {
         super("trap_gameplay_scene");
+        
     }
 
     init() {
         // initialize and prepare data 
         // constants, configurations, etc.
+        this.players = this.physics.add.group();
     }
 
     preload() {
         // load audio and images into memory
         this.load.image('haachama', '../../assets/haachamachama112.png');
         this.load.image('trap', '../../assets/medzombie.png');
+        this.load.image('kiwon', '../../assets/kiwonface.png');
+
     }
 
     create() {
@@ -35,9 +41,25 @@ class trap_gameplay_scene extends Phaser.Scene {
             y: game.config.height / 2, 
             sprite:'haachama'
         }, 1, "john", 500);
+
+        this.add.existing(this.player1).setScale(1);
+        this.physics.add.existing(this.player1);
+        this.players.add(this.player1);
         
-        
+        //this.trap = new Trap({scene:this, x:200, y:200}, this.players);
+       
         this.trap = new Trap({scene:this, x:200, y:200});
+
+        //test conflict wall
+        this.wall = this.add.sprite(600, 200, 'kiwon');
+        this.wall.displayWidth = (100);
+        this.wall.displayHeight = (100);
+        this.physics.world.enable([this.wall, this.player1]);
+        this.wall.allowGravity = false;
+        this.wall.immovable = true;
+        // this.physics.world.removeCollider(collider);
+        // this.physics.world.colliders.destroy();
+        // this.player1.enable = false;
     }
        
     update() {
@@ -45,6 +67,10 @@ class trap_gameplay_scene extends Phaser.Scene {
         this.player1.player_movement(cursors);
         //this.player_movement(cursors);
         this.trap.in_trap_radius();
+        
+        // this.player1.toggle_body(cursors);
+        this.physics.world.collide(this.player1, [this.wall]);
+        
 
         
     }
@@ -62,26 +88,5 @@ class trap_gameplay_scene extends Phaser.Scene {
             }
         }
         // console.log(Math.abs(this.player.x - this.player2.x));
-    }
-
-    player_movement(key) {
-        if(key.left.isDown){
-            this.player1.setVelocityX(-500);
-        } else if (key.right.isDown) {
-            this.player1.setVelocityX(500);
-        } else {
-            this.player1.setVelocityX(0);
-        }
-        
-        if (key.up.isDown) {
-            this.player1.setVelocityY(-500);
-        } else if (key.down.isDown) {
-            this.player1.setVelocityY(500);
-        } else {
-            this.player1.setVelocityY(0);
-        }
-        
-        // print x y of player position to send to network team and update
-        // console.log(this.player.x, this.player.y)
     }
 }
