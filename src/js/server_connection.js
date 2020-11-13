@@ -35,6 +35,8 @@ class ServerConnection{
           });
         this.socket.on('playerMoved', function (playerInfo) {
             sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
+            sceneData.otherPlayers[playerInfo.playerId].flipX = playerInfo.flipX;
+            sceneData.otherPlayers[playerInfo.playerId].player_walk_anim_start();
         });
         this.socket.on('gameStart', function (roleData) {
             sceneData.startGame(roleData);
@@ -44,6 +46,9 @@ class ServerConnection{
         });
         this.socket.on('taskCompleted', function (voteId) {
             sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").setBar(Math.floor(504 * 0.1));
+        });
+        this.socket.on('stoppedPlayerMovement', function (playerId) {
+            sceneData.otherPlayers[playerId].player_walk_anim_stop();
         });
         this.socket.on('killed', function(playerId){
             if(sceneData.serverConnection.socket.id === playerId){
@@ -55,12 +60,20 @@ class ServerConnection{
             }
             
         });
+        //Worked on by: Jayce
+        this.socket.on('receive message', function(msg){
+			sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").receiveMsg(msg.name, msg.text);
+		});
     }
 
     movement(player){
-        this.socket.emit('playerMovement', { x: player.x, y: player.y, rotation: 0});
-        if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
-            this.prevPlayerLocation = {x: player.x, y: player.y};
+        if(player.isWalking){
+            this.socket.emit('playerMovement', { x: player.x, y: player.y, flipX: player.flipX});
+            if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
+                this.prevPlayerLocation = {x: player.x, y: player.y};
+            }
+        } else {
+            this.socket.emit('stopPlayerMovement', player.id);
         }
     }
 
@@ -76,6 +89,13 @@ class ServerConnection{
         this.socket.emit('alertGameStart', {});
         console.log("sent alert from client");
     }
+
+    //Worked on by: Jayce
+    sendMessage(name, text){
+        this.socket.emit('send message', name, text);
+    }
+
+
     //Worked on by: Kian
     taskCompleted() {
         this.socket.emit('taskComplete')
