@@ -88,8 +88,8 @@ class join_game_scene extends Phaser.Scene {
   okClicked() {
     if (
       this.nameInputBox.value != "" &&
-      this.roomIdInputBox.value != "" &&
-      /^\d+$/.test(this.roomIdInputBox.value) // Check if roomID value is numeric
+      this.roomIdInputBox.value != "" //&&
+      ///^\d+$/.test(this.roomIdInputBox.value) // Check if roomID value is numeric
     ) {
       console.log(
         "ok clicked, Hello " +
@@ -97,6 +97,9 @@ class join_game_scene extends Phaser.Scene {
         "\nJoining Room: " +
         this.roomIdInputBox.value
       );
+      this.sceneData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
+      this.sceneData.serverConnection.setRoom(this.roomIdInputBox.value);
+      this.scene.start("gameplay_scene");
     } else {
       // Do nothing
     }
