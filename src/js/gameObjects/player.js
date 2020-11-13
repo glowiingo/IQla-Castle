@@ -18,7 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.speed = speed;
         this.alive = true;
         this.iqla = false;
-        this.player_name = playerName;
+        this.playerName = playerName;
 
         // we should set these to global variables
         this.spawnX = 1408;
