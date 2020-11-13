@@ -8,7 +8,7 @@ class gameplay_scene extends Phaser.Scene {
   // Worked on by: Gloria Ngo
   constructor() {
     super({
-      key: "gameplay_scene",
+      key: 'gameplay_scene',
     });
   }
 
@@ -29,42 +29,42 @@ class gameplay_scene extends Phaser.Scene {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
     this.load.spritesheet(
-      "haachama",
-      "../../assets/player/PlayerWalkCycle.png",
+      'haachama',
+      '../../assets/player/PlayerWalkCycle.png',
       { frameWidth: 128, frameHeight: 128, endFrame: 7 }
     );
 
     this.load.tilemapTiledJSON(
-      "map",
-      "../../assets/tilemaps/maps/protypeMap.json"
+      'map',
+      '../../assets/tilemaps/maps/protypeMap.json'
     );
-    this.load.image("tiles", "../../assets/tilemaps/tiles/updated-tiles.png");
-    this.load.image("deadbody", "assets/deadCharacter.png");
-    this.load.audio("BGM", "../../assets/audio/BGM.mp3");
+    this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
+    this.load.image('deadbody', 'assets/deadCharacter.png');
+    this.load.audio('BGM', '../../assets/audio/BGM.mp3');
   }
 
   create() {
     // add objects into the game
-    console.log("gameplay_scene");
+    console.log('gameplay_scene');
 
-    this.scene.launch("playerUI_scene");
+    this.scene.launch('playerUI_scene');
     // this.scene.launch("timer_scene");
-    this.scene.launch("mapOverlay_scene");
-    this.scene.launch("showPositionPlayer_scene");
-    this.scene.launch("voting_scene");
+    this.scene.launch('mapOverlay_scene');
+    this.scene.launch('showPositionPlayer_scene');
+    this.scene.launch('voting_scene');
 
     // Worked on by: Anna
     this.isWalking = false;
 
     let config = {
-      key: "WalkCycle",
-      frames: this.anims.generateFrameNumbers("haachama", { start: 0, end: 7 }),
+      key: 'WalkCycle',
+      frames: this.anims.generateFrameNumbers('haachama', { start: 0, end: 7 }),
       frameRate: 8,
       repeat: -1,
     };
     this.anims.create(config);
 
-    this.bgmusic = this.sound.add("BGM");
+    this.bgmusic = this.sound.add('BGM');
     let musicConfig = {
       mute: false,
       volume: 0.5,
@@ -77,13 +77,12 @@ class gameplay_scene extends Phaser.Scene {
     this.bgmusic.play(musicConfig);
 
     // Worked on by: Flemming, William
-    let map = this.make.tilemap({ key: "map" });
-    let tileset = map.addTilesetImage("updated_tiles", "tiles");
-    map.createStaticLayer("Background", tileset);
-    map.createStaticLayer("Ground", tileset);
-    map.createStaticLayer("Interactables", tileset);
+    let map = this.make.tilemap({ key: 'map' });
+    let tileset = map.addTilesetImage('updated_tiles', 'tiles');
+    map.createStaticLayer('Background', tileset);
+    map.createStaticLayer('Ground', tileset);
 
-    this.wallsLayer = map.createStaticLayer("Walls", tileset);
+    this.wallsLayer = map.createStaticLayer('Walls', tileset);
     this.wallsLayer.setCollisionByProperty({ collides: true });
 
     // Worked on by: Evano
@@ -99,7 +98,7 @@ class gameplay_scene extends Phaser.Scene {
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
-        .get("showPositionPlayer_scene")
+        .get('showPositionPlayer_scene')
         .move(this.player.x, this.player.y);
       this.playerNameText.x = this.player.x - 32;
       this.playerNameText.y = this.player.y - 100;
@@ -124,13 +123,13 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
   addPlayer(playerInfo) {
-    console.log("PLAYERINFO:", playerInfo);
+    console.log('PLAYERINFO:', playerInfo);
     this.player = new Player(
       {
         scene: this,
         x: playerInfo.x,
         y: playerInfo.y,
-        sprite: "haachama",
+        sprite: 'haachama',
       },
       playerInfo.playerId,
       playerInfo.playerName,
@@ -153,8 +152,8 @@ class gameplay_scene extends Phaser.Scene {
       this.player.y,
       this.player.playerName,
       {
-        font: "32px Ariel",
-        fill: "yellow",
+        font: '32px Ariel',
+        fill: 'yellow',
       }
     );
     return this.player;
@@ -166,7 +165,7 @@ class gameplay_scene extends Phaser.Scene {
         scene: this,
         x: playerInfo.x,
         y: playerInfo.y,
-        sprite: "haachama",
+        sprite: 'haachama',
       },
       playerInfo.playerId,
       playerInfo.playerName,
@@ -179,8 +178,8 @@ class gameplay_scene extends Phaser.Scene {
     this.otherPlayers.add(otherPlayer);
     this.otherPlayerTags.push(
       this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
-        font: "32px Ariel",
-        fill: "yellow",
+        font: '32px Ariel',
+        fill: 'yellow',
       })
     );
     return otherPlayer;
