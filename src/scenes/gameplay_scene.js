@@ -33,7 +33,7 @@ class gameplay_scene extends Phaser.Scene {
     this.load.image('trap', '../../assets/medzombie.png');
 
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
-    this.load.image('tiles', '../../assets/tilemaps/tiles/drawtiles.png');
+    this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
   }
@@ -44,6 +44,7 @@ class gameplay_scene extends Phaser.Scene {
 
     this.scene.launch("playerUI_scene");
     this.scene.launch("mapOverlay_scene");
+    this.scene.launch("showPositionPlayer_scene");
     this.scene.launch("voting_scene");
 
     // Worked on by: Anna
@@ -71,8 +72,10 @@ class gameplay_scene extends Phaser.Scene {
 
     // Worked on by: Flemming, William
     let map = this.make.tilemap({ key: 'map' });
-    let tileset = map.addTilesetImage('better_tiles', 'tiles')
+    let tileset = map.addTilesetImage('updated_tiles', 'tiles')
+    map.createStaticLayer('Background', tileset);
     map.createStaticLayer('Ground', tileset);
+    map.createStaticLayer('Interactables', tileset);
 
     this.wallsLayer = map.createStaticLayer('Walls', tileset);
     this.wallsLayer.setCollisionByProperty({ collides: true });
@@ -89,6 +92,7 @@ class gameplay_scene extends Phaser.Scene {
     if(this.player){
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
+      this.scene.get('showPositionPlayer_scene').move(this.player.x, this.player.y);
     }
 
   }
@@ -99,17 +103,26 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by: Evano
     addPlayer(playerInfo) {
+<<<<<<< HEAD
       console.log(this);
         console.log(playerInfo);
+=======
+        console.log("PLAYERINFO:", playerInfo);
+>>>>>>> back_end
         this.player = new Player({
           scene:this, 
           x: playerInfo.x, 
           y: playerInfo.y, 
           sprite:'haachama'
       }, playerInfo.playerId, "john", 300);
-      
+
         this.add.existing(this.player).setScale(1);
         this.physics.add.existing(this.player);
+
+        this.player.body.offset.y = 64;
+        this.player.body.offset.x = 32;
+        this.player.body.height = 64;
+        this.player.body.width = 64;
         
         this.physics.add.collider(this.player, this.wallsLayer);
         this.cameras.main.startFollow(this.player, true, 1, 1);
