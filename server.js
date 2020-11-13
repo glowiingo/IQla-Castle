@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
-const {Player} = require('./src/js/player.js');
+const {ServerPlayer} = require('./src/js/server_player.js');
 const {Room} = require('./src/js/room.js');
 var rooms = {};
 
@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
         if (!rooms.hasOwnProperty(roomName)) {
             rooms[roomName] = new Room(roomName);
         }
-        rooms[roomName].addPlayer(new Player(roomName, socket));
+        rooms[roomName].addPlayer(new ServerPlayer(roomName, socket));
 
         // send the rooms object to the new player
         socket.emit('currentPlayers', rooms[roomName].players);
@@ -50,7 +50,8 @@ io.on('connection', function (socket) {
         socket.on('playerMovement', function (movementData) {
             rooms[roomName].getPlayer(socket.id).x = movementData.x;
             rooms[roomName].getPlayer(socket.id).y = movementData.y;
-            rooms[roomName].getPlayer(socket.id).rotation = movementData.rotation;
+            rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
+            //console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
             // emit a message to all players about the player that moved
             socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
         });
@@ -110,7 +111,13 @@ io.on('connection', function (socket) {
             io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
         });
 
-        //// to be added: gameOver, gameStart, roleAssignment
+        // When a player stops moving, goes stationary
+        socket.on('stopPlayerMovement', function (playerId) {
+            socket.broadcast.to(roomName).emit('stoppedPlayerMovement', playerId);
+        });
+        
+
+        //// to be added: gameOver
 
     })
 });

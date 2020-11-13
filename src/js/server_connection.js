@@ -31,6 +31,8 @@ class ServerConnection{
           });
         this.socket.on('playerMoved', function (playerInfo) {
             sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
+            sceneData.otherPlayers[playerInfo.playerId].flipX = playerInfo.flipX;
+            sceneData.otherPlayers[playerInfo.playerId].player_walk_anim_start();
         });
         this.socket.on('gameStart', function (roleData) {
             sceneData.startGame(roleData);
@@ -40,6 +42,9 @@ class ServerConnection{
         });
         this.socket.on('taskCompleted', function (voteId) {
             sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").setBar(Math.floor(504 * 0.1));
+        });
+        this.socket.on('stoppedPlayerMovement', function (playerId) {
+            sceneData.otherPlayers[playerId].player_walk_anim_stop();
         });
         this.socket.on('killed', function(playerId){
             if(sceneData.serverConnection.socket.id === playerId){
@@ -54,9 +59,13 @@ class ServerConnection{
     }
 
     movement(player){
-        this.socket.emit('playerMovement', { x: player.x, y: player.y, rotation: 0});
-        if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
-            this.prevPlayerLocation = {x: player.x, y: player.y};
+        if(player.isWalking){
+            this.socket.emit('playerMovement', { x: player.x, y: player.y, flipX: player.flipX});
+            if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
+                this.prevPlayerLocation = {x: player.x, y: player.y};
+            }
+        } else {
+            this.socket.emit('stopPlayerMovement', player.id);
         }
     }
 
