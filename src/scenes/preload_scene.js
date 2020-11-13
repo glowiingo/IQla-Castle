@@ -4,7 +4,7 @@ This class is defined in order for preloading of assets, animations, and sprites
 
 class preload_scene extends Phaser.Scene {
   constructor() {
-    super("preload_scene");
+    super('preload_scene');
   }
 
   init() {
@@ -12,10 +12,10 @@ class preload_scene extends Phaser.Scene {
   }
 
   create() {
-    this.add.text(20, 20, "Loading Game...");
-    console.log("Load Scene");
+    this.add.text(20, 20, 'Loading Game...');
+    console.log('Load Scene');
     // this.scene.start("title_screen_scene"); // Switch back
-    this.scene.start("temp_menu_scene");
+    this.scene.start('temp_menu_scene');
     // this.scene.start("gameplay_scene");
   }
 }
