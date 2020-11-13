@@ -7,6 +7,7 @@ class ServerPlayer{
         this.flipX = false;
         this.state = 0;
         this.playerId = socket.id;
+        this.team = "detective";
     }
 }
 

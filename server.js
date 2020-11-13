@@ -25,7 +25,11 @@ io.on('connection', function (socket) {
         console.log('a user joined room', roomName);
         socket.join(roomName);
         if (!rooms.hasOwnProperty(roomName)) {
-            rooms[roomName] = new Room(roomName);
+            let victoryHandler = (team) => {
+                // io.in(roomName).emit('gameOver', team);
+                console.log("Winners! team:", team)
+            };
+            rooms[roomName] = new Room(roomName, victoryHandler);
         }
         rooms[roomName].addPlayer(new ServerPlayer(roomName, socket));
 
@@ -77,6 +81,7 @@ io.on('connection', function (socket) {
         // when a player kills, update the victim's player data
         socket.on('kill', function (victimID) {
             socket.broadcast.to(roomName).emit('killed', victimID);
+            rooms[roomName].playerEliminated(victimID);
         });
         // 
         //
@@ -109,6 +114,7 @@ io.on('connection', function (socket) {
         //
         socket.on('taskComplete', function () {
             io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
+            rooms[roomName].taskComplete(socket.id);
         });
 
         // When a player stops moving, goes stationary
