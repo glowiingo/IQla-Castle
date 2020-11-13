@@ -4,7 +4,7 @@ const config = {
   type: Phaser.AUTO,
 
   // Following parent and dom setting is to allow adding dom element
-  parent: "container",
+  parent: 'container',
   dom: {
     createContainer: true,
   },
@@ -15,9 +15,9 @@ const config = {
     width: 800,
     height: 600,
   },
-  backgroundColor: "0x000000",
+  backgroundColor: '0x000000',
   physics: {
-    default: "arcade",
+    default: 'arcade',
     arcade: {
       enableBody: true,
       debug: false,
@@ -40,11 +40,10 @@ const config = {
     join_game_scene,
     voting_scene,
     showPositionPlayer_scene,
-    timer_scene,
   ],
 
   // Specify scenes in the array above
 };
-console.log("game.js with specified config");
+console.log('game.js with specified config');
 
 const game = new Phaser.Game(config);
