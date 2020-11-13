@@ -103,9 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-# MACOS
+# MAC OS
 */.DS_Store
 
-# Visual Studio Code
-.vs/
-.vscode/
+# VSCode
+.vs/*
+.vscode/*
