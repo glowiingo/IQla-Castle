@@ -42,6 +42,7 @@ class book_click_minigame extends Phaser.Scene {
     this.load.audio('yes', '../../assets/yes.mp3');
     this.load.audio('ok', '../../assets/ok.mp3');
 
+    // ---------- Pre-load Video ---------- //
     this.load.video('bravo', '../../assets/bravowow.mp4');
   }
 
