@@ -83,9 +83,11 @@ class playerUI_scene extends Phaser.Scene {
         this.startBtn.destroy();
         this.isIqla = role;
 
+        console.log("IQLA:" + role);
         if (this.isIqla) {
             this.canKill = true;
             this.renderKillerUI();
+            console.log("Rendered Killer UI")
         } else {
             this.renderDetectiveUI();
         }
@@ -193,6 +195,7 @@ class playerUI_scene extends Phaser.Scene {
      * Renders the kill button object then calls renderDetectiveUI()
      */
     renderKillerUI() {
+        console.log ("Rendering killer UI");
         this.killButtonX = 80;
         this.killButtonY = this.cameras.main.height - 80;
 
