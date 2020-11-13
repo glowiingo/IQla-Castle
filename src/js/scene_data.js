@@ -30,13 +30,19 @@ class SceneData {
     }
 
     startGame(roleData) {
-        console.log(roleData);
+        // console.log(roleData);
         this.player.setRole(roleData);
         this.player.sendToStartPos();
         this.serverConnection.movement(this.player);
-        this.gamePlayScene.scene.manager
-            .getScene("playerUI_scene")
-            .startGame();
+        // we need to find a better way to ensure 
+        // this.player.iqla is not sent into the start game as
+        // undefined -- this is why the setTimeout exists
+        // this is FLAKY X___X
+        setTimeout(
+            this.gamePlayScene.scene.manager
+            .getScene('playerUI_scene')
+            .startGame(this.player.iqla), 1000);
+        
     }
 
     alertGameStart() {
