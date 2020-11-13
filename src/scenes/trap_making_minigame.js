@@ -40,10 +40,15 @@ class trap_making_minigame extends Phaser.Scene {
       
       let wrong = this.sound.add('wrong');
       let wow = this.sound.add('wow');
-      let wow2 = this.sound.add('wow2');
+      let wow2 = this.sound.add('wow2'); // Played when minigame is won.
       wrong.setVolume(1.5);
       wow.setVolume(1.5);
       wow2.setVolume(0.3);
+      wow2.on('complete', () => {
+        // When the audio plays, the win condition has been satisfied.
+        // After the audio has finished playing, call the 'won' function.
+        minigame_scene_manager.minigameWon('trap_making_minigame');
+      });
       
 
       let yItemPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
@@ -78,7 +83,6 @@ class trap_making_minigame extends Phaser.Scene {
             object.disableInteractive();
             if(++this.correctPlacementCount === yItemPosArr.length){
               wow2.play();
-              minigame_scene_manager.minigameWon('trap_making_minigame');
             }else{
               wow.play();
             }
