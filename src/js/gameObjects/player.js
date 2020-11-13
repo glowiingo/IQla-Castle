@@ -1,6 +1,4 @@
-//Worked on by Kiwon, John, Nav, Evano
-
-//const player = require("../player");
+//Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(config, id, playerName, speed, iqla = false) {
@@ -34,7 +32,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //worked on by Kiwon
     player_movement() {
-
         //console.log(this);
         if (this.key.left.isDown) {
             this.setVelocityX(-this.speed);
@@ -120,9 +117,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Worked on by Gloria
-    // Sets the role for the player based on a random number generator
-    // We should note that other player factors may need to be passed into this function
-    // Logic may need to be defined on the server? or server needs to pass all player ids in array
+    /**
+     * Sets the role for the player based on what has been decided by the server
+     */ 
     setRole(player_id_object) {
         console.log('Object: ' + player_id_object);
         console.log('Accessing Object: ' + player_id_object[this.id]);

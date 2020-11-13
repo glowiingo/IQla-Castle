@@ -35,8 +35,8 @@ class SceneData {
         this.player.sendToStartPos();
         this.serverConnection.movement(this.player);
         this.gamePlayScene.scene.manager
-            .getScene('playerUI_scene')
-            .startGame(this.player.iqla);
+            .getScene("playerUI_scene")
+            .startGame();
     }
 
     alertGameStart() {
