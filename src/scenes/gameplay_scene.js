@@ -31,12 +31,12 @@ class gameplay_scene extends Phaser.Scene {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
     this.load.spritesheet('haachama', '../../assets/player/PlayerWalkCycle.png', { frameWidth: 128, frameHeight: 128, endFrame: 7 });
-    this.load.image('trap', '../../assets/medzombie.png');
 
     this.load.tilemapTiledJSON('map', '../../assets/tilemaps/maps/protypeMap.json');
     this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
+    this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
   }
 
   create() {
@@ -80,6 +80,8 @@ class gameplay_scene extends Phaser.Scene {
 
     this.wallsLayer = map.createStaticLayer('Walls', tileset);
     this.wallsLayer.setCollisionByProperty({ collides: true });
+
+    this.addInteractables();
 
     // Worked on by: Evano
     //Start networking & create player once networking is connected
@@ -161,5 +163,17 @@ class gameplay_scene extends Phaser.Scene {
         }));
         return otherPlayer;
     }
+
+  addInteractables() {
+    // Worked on by: Alexis
+    this.bookshelfMinigameObj = new MapObject({
+      scene: this,
+      x: 1200,
+      y: 115,
+      sprite: 'bookshelfMinigame'
+    });
+    this.add.existing(this.bookshelfMinigameObj).setScale(0.1);
+    this.physics.add.existing(this.bookshelfMinigameObj);
+  }
 }
 

@@ -23,7 +23,7 @@ const config = {
       debug: true,
     }
   },
-  scene: [preload_scene, temp_menu_scene, mainmenu_scene, gameplay_scene, kill_scene,
+  scene: [preload_scene, mainmenu_scene, gameplay_scene, kill_scene,
     mapOverlay_scene, minigame_scene_manager, mouse_click_minigame, book_click_minigame,
     trap_gameplay_scene, playerUI_scene, title_screen_scene, create_game_scene, join_game_scene,
     voting_scene, showPositionPlayer_scene, trap_making_minigame]
