@@ -56,6 +56,10 @@ class ServerConnection{
             }
             
         });
+        //Worked on by: Jayce
+        this.socket.on('receive message', function(msg){
+			sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").receiveMsg(msg.name, msg.text);
+		});
     }
 
     movement(player){
@@ -81,6 +85,13 @@ class ServerConnection{
         this.socket.emit('alertGameStart', {});
         console.log("sent alert from client");
     }
+
+    //Worked on by: Jayce
+    sendMessage(name, text){
+        this.socket.emit('send message', name, text);
+    }
+
+
     //Worked on by: Kian
     taskCompleted() {
         this.socket.emit('taskComplete')

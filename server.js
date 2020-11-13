@@ -115,6 +115,23 @@ io.on('connection', function (socket) {
         socket.on('stopPlayerMovement', function (playerId) {
             socket.broadcast.to(roomName).emit('stoppedPlayerMovement', playerId);
         });
+
+        // Worked on by: Jayce
+        socket.on('send message', function(name,text){
+            ftext = text.replace(/</gi, "&lt")
+                            .replace(/>/gi, "&gt")
+                            .replace(/\(/gi, "& #40")
+                            .replace(/\)/gi, "& #41")
+                            .replace(/'/gi, "& #39")
+                            .replace(/eval\(\(.*\)\)/gi, "[[FILTERED]]")
+                            .replace(/script/gi, "[[FILTERED]]")
+                            .replace(/alert/gi, "[[FILTERED]]")
+                            .replace(/[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']/gi, "\"\"");
+                
+            var msg = {name: name, text: ftext};
+            console.log(msg);
+            io.in(roomName).emit('receive message', msg);
+        });
         
 
         //// to be added: gameOver
