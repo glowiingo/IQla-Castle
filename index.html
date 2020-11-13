@@ -28,6 +28,7 @@
     <script src="./src/scenes/kill_scene.js"></script>
     <script src="./src/scenes/trap_gameplay_scene.js"></script>
     <script src="src/scenes/ui/voting_scene.js"></script>
+    <script src="src/scenes/ui/chat_scene.js"></script>
     
     <!-- Networking -->
     <script src="./js/server_connection.js"></script>
@@ -48,6 +49,20 @@
 </head>
 
 <body>
+  <input readonly id="textbox" type="text"/>
 </body>
+
+<style>
+  #textbox {
+    background-color: white;
+    border: black 2px solid;
+    display: none; 
+    width: 50%; 
+    height: 3%; 
+    position: absolute;
+    bottom: 30px;
+    margin-left: 10%;
+  }
+</style>
 
 </html>

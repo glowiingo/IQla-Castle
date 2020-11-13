@@ -47,6 +47,7 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.launch("showPositionPlayer_scene");
     this.scene.launch("voting_scene");
 
+    this.scene.launch("chat_scene");
 
     let config = {
       key: 'WalkCycle',
@@ -87,7 +88,7 @@ class gameplay_scene extends Phaser.Scene {
   update() {
     // loop that runs constantly 
     // -- game logic mainly in this area
-    if(this.player){
+    if(this.player && !this.scene.get("chat_scene").showChat){
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene.get('showPositionPlayer_scene').move(this.player.x, this.player.y);

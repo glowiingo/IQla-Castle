@@ -33,8 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     //worked on by Kiwon
-    player_movement() {
-
+    player_movement() { 
         //console.log(this);
         if (this.key.left.isDown) {
             this.setVelocityX(-this.speed);

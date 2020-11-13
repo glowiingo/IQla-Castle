@@ -18,6 +18,15 @@ class join_game_scene extends Phaser.Scene {
   }
 
   create() {
+
+    // TEMP FOR TESTING
+    this.sceneData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
+    this.sceneData.serverConnection.setRoom("a");
+    this.sceneData.serverConnection.setName("Kotailri");
+    this.scene.start("gameplay_scene");
+    return;
+    // ================
+
     const screenX = this.cameras.main.width;
     const screenY = this.cameras.main.height;
     const screenCenterX = this.cameras.main.worldView.x + screenX / 2;
