@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
         if (!rooms.hasOwnProperty(roomName)) {
             rooms[roomName] = new Room(roomName);
         }
-        rooms[roomName].addPlayer(new Player(roomName, socket, playerName));
+        rooms[roomName].addPlayer(new ServerPlayer(roomName, socket, playerName));
 
         // send the rooms object to the new player
         socket.emit('currentPlayers', rooms[roomName].players);

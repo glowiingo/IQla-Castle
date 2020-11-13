@@ -1,5 +1,5 @@
 // Worked on by: Evano
-class Player{
+class ServerPlayer{
     constructor(room, socket, playerName) {
         this.rotation =  0;
         this.x = 1408;

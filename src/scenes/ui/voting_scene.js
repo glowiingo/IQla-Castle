@@ -33,7 +33,7 @@ class voting_scene extends Phaser.Scene {
     });
 
 
-    let rect = new Phaser.Geom.Rectangle(0,50,screenX,screenY-50);
+    let rect = new Phaser.Geom.Rectangle(0, 50, this.screenX, this.screenY - 50);
     let g = this.add.graphics()
     g.fillStyle(0x000000, 0.8);
     g.fillRectShape(rect);
@@ -90,6 +90,9 @@ class voting_scene extends Phaser.Scene {
       for (let i = 0; i < this.playerPortraits.length; i++) {
         this.playerPortraits[i].updateColor(mouseStatus.none);
         this.playerPortraits[i].disabled = false;
+        if (this.votedText) {
+          this.votedText.destroy();
+        }
       }
     }
   }
