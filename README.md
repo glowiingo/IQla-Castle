@@ -25,7 +25,7 @@ To ensure the socket.io module is installed, please do `npm socket.io -v`.
 
 2. Run the server on local host by typing in `node server.js` in the main directory of the project.
 
-3. Open up the server port on the browser - Example: `http://localhost:8080/`
+3. Open up the server port on the browser - Example: `http://localhost:8081/`
 
 The main menu should appear, and the gameplay scene should work with multiple players if the host has set up port forwarding.
 
