@@ -26,6 +26,7 @@ class trap_making_minigame extends Phaser.Scene {
         this.load.audio('wow', '../../assets/wow.mp3');
         this.load.audio('wow2', '../../assets/wow2.mp3');
 
+        this.load.video('omgwow', '../../assets/omgwow.mp4');
     }
     
     create(data) {
@@ -41,10 +42,16 @@ class trap_making_minigame extends Phaser.Scene {
       let wrong = this.sound.add('wrong');
       let wow = this.sound.add('wow');
       let wow2 = this.sound.add('wow2');
+      
       wrong.setVolume(1.5);
       wow.setVolume(1.5);
-      wow2.setVolume(0.3);
+      wow2.setVolume(0.3);  
       
+      let omgwow = this.add.video(400, 300,'omgwow');
+      omgwow.setVolume(0.2);
+      omgwow.alpha = 0.5;
+      omgwow.setScale(5)
+      omgwow.play();
 
       let yItemPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
       let ySlotPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
