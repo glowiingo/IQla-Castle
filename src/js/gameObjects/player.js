@@ -1,5 +1,7 @@
 //Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike
 
+//const player = require("../player");
+
 class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(config, id, playerName, speed, iqla = false) {
         super(config.scene, config.x, config.y, config.sprite);
