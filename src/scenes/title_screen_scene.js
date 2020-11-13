@@ -89,6 +89,7 @@ class title_screen_scene extends Phaser.Scene {
 
   helpIconClicked() {
     console.log("help");
+    this.scene.start('mainmenu_scene');
   }
 
   update() {

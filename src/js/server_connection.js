@@ -3,17 +3,21 @@ class ServerConnection{
     constructor(){
         this.socket = io();
         this.roomName = null;
+        this.playerName = "John";
         this.prevPlayerLocation = {x: null, y: null};
     }
     setRoom(roomName) {
         this.roomName = roomName;
+    }
+    setName(playerName) {
+      this.playerName = playerName;
     }
     //Joins room, only if room has been set / selected.
     joinRoom(){
         if(!this.roomName){
             throw "Cannot join Room, room is null";
         }
-        this.socket.emit("joinRoom", this.roomName);
+        this.socket.emit("joinRoom", this.roomName, this.playerName);
     }
     //Add's the required event handlers to support gameplay
     addGameplayHandlers(sceneData){
