@@ -46,7 +46,6 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.launch("mapOverlay_scene");
     this.scene.launch("showPositionPlayer_scene");
     this.scene.launch("voting_scene");
-
     this.scene.launch("chat_scene");
 
     let config = {

@@ -17,6 +17,7 @@ class voting_scene extends Phaser.Scene {
       'votePortrait',
       '../../assets/votingScene/VotePortrait.png'
     );
+    this.load.image("chatButton", "../../assets/votingScene/chatButton.png");
   }
 
   create() {
@@ -26,7 +27,7 @@ class voting_scene extends Phaser.Scene {
     this.screenX = this.cameras.main.width;
     this.screenY = this.cameras.main.height;
 
-    // temp voting activation
+    // temp voting activation, actual voting activation should call toggleVisible
     this.keyPress = this.input.keyboard.addKey('V');
     this.keyPress.on('down', () => {
       this.toggleVisible();
@@ -38,12 +39,14 @@ class voting_scene extends Phaser.Scene {
     g.fillStyle(0x000000, 0.8);
     g.fillRectShape(rect);
 
-    //this.players = this.scene.get('gameplay_scene').otherPlayers.children.entries; // The array of players
-    
-    // for (let i = 0; i < this.scene.get('gameplay_scene').otherPlayers.children.entries.length; i++) {
-    //   this.players.push(this.scene.get('gameplay_scene').otherPlayers.children.entries[0]);
-    // }
+    this.chatButton = this.add.sprite(this.screenX - 50, 110, 'chatButton');
 
+    this.chatButton.setInteractive();
+    this.chatButton.setScale(0.25);
+    this.chatButton
+      .on('pointerdown', () => this.scene.get("chat_scene").toggleVisible())
+      .on('pointerover', () => console.log("IN"))
+      .on('pointerout', () => console.log("OUT"));
     
     this.voted = false;
 
@@ -84,7 +87,7 @@ class voting_scene extends Phaser.Scene {
       this.scene.setVisible(true);
     } else {
       this.scene.setVisible(false);
-
+      this.scene.get("chat_scene").hide();
       // reset the voting scene when closed
       this.voted = false;
       for (let i = 0; i < this.playerPortraits.length; i++) {

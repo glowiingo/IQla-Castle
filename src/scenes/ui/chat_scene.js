@@ -18,24 +18,12 @@ class chat_scene extends Phaser.Scene {
     const screenY = this.cameras.main.height;
 
     this.textbox = document.getElementById('textbox');
-    //this.textbox.style.display = 'block';
-
     this.chatbox = document.getElementById('chatbox');
-    //this.chatbox.style.display = 'block';
 
-    // temp scene activation
-    this.keyPress = this.input.keyboard.addKey('CTRL');
-    this.keyPress.on('down', () => {
-      this.toggleVisible();
-    });
+    // prevent spacebar default functionality
+    this.input.keyboard.addKey('space', true, false);
 
     // bypass player movement inputs
-    window.addEventListener('keydown', function(e) {
-      if(e.keyCode === 32) {
-        e.preventDefault();
-      }
-    });
-
     this.input.keyboard.on('keydown', (event) => {
       if (this.showChat === true) {
         if (event.key.length === 1) {
@@ -52,19 +40,32 @@ class chat_scene extends Phaser.Scene {
         }
       }
     });
+  }
 
+  clearChat() {
+    document.getElementById('chatbox').value = '';
   }
 
   receiveMsg(name, text) {
-    this.chatbox.value += name + ': ' + text + '\r\n';
+    let date = new Date();
+    let chat_string = "[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] (";
+    chat_string += name + '): ' + text + '\r\n';
+    this.chatbox.value += chat_string;
   }
 
-
+  hide() {
+    this.showChat = false;
+    this.scene.setVisible(false);
+    this.textbox.style.display = 'none';
+    this.chatbox.style.display = 'none';
+  }
 
   toggleVisible() {
+    // stop player from getting stuck in a walk animation
     this.scene.get('gameplay_scene').player.setVelocityX(0);
     this.scene.get('gameplay_scene').player.setVelocityY(0);
     this.scene.get('gameplay_scene').player.player_walk_anim_stop();
+
     this.showChat = !this.showChat;
     if (this.showChat) {
       this.scene.setVisible(true);

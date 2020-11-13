@@ -129,7 +129,6 @@ io.on('connection', function (socket) {
                             .replace(/[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']/gi, "\"\"");
                 
             var msg = {name: name, text: ftext};
-            console.log(msg);
             io.in(roomName).emit('receive message', msg);
         });
         
