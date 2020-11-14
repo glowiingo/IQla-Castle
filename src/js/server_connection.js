@@ -33,6 +33,9 @@ class ServerConnection{
         this.socket.on('disconnect', function (playerId) {
             sceneData.removePlayer(playerId);
           });
+        this.socket.on('gameOver', function (team) {
+            sceneData.gamePlayScene.gameOver(team);
+        });
         this.socket.on('playerMoved', function (playerInfo) {
             sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
             sceneData.otherPlayers[playerInfo.playerId].flipX = playerInfo.flipX;

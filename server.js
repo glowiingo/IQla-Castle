@@ -51,7 +51,7 @@ io.on('connection', function (socket) {
 
         // when a player moves, update the player data
         socket.on('playerMovement', function (movementData) {
-            console.log(rooms[roomName].getRoleAssignments());
+            //console.log(rooms[roomName].getRoleAssignments());
             rooms[roomName].getPlayer(socket.id).x = movementData.x;
             rooms[roomName].getPlayer(socket.id).y = movementData.y;
             rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
