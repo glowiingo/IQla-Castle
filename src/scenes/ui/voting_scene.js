@@ -43,10 +43,11 @@ class voting_scene extends Phaser.Scene {
 
     this.chatButton.setInteractive();
     this.chatButton.setScale(0.25);
+    this.chatButton.tintFill = false;
     this.chatButton
       .on('pointerdown', () => this.scene.get("chat_scene").toggleVisible())
-      .on('pointerover', () => console.log("IN"))
-      .on('pointerout', () => console.log("OUT"));
+      .on('pointerover', () => this.chatButton.setTint(0x00FF00))
+      .on('pointerout', () => this.chatButton.clearTint());
     
     this.voted = false;
 
