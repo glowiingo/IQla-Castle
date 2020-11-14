@@ -21,8 +21,8 @@ app.use("/assets", express.static(__dirname + '/assets'));
 io.on('connection', function (socket) {
 
     console.log('a user connected');
-    socket.on('joinRoom', (roomName) => {
-        console.log('a user joined room', roomName);
+    socket.on('joinRoom', (roomName, playerName) => {
+        console.log(playerName, 'joined room', roomName);
         socket.join(roomName);
         if (!rooms.hasOwnProperty(roomName)) {
             let victoryHandler = (team) => {
@@ -31,7 +31,7 @@ io.on('connection', function (socket) {
             };
             rooms[roomName] = new Room(roomName, victoryHandler);
         }
-        rooms[roomName].addPlayer(new ServerPlayer(roomName, socket));
+        rooms[roomName].addPlayer(new ServerPlayer(roomName, socket, playerName));
 
         // send the rooms object to the new player
         socket.emit('currentPlayers', rooms[roomName].players);
@@ -51,7 +51,7 @@ io.on('connection', function (socket) {
 
         // when a player moves, update the player data
         socket.on('playerMovement', function (movementData) {
-            console.log(rooms[roomName].getRoleAssignments());
+            //console.log(rooms[roomName].getRoleAssignments());
             rooms[roomName].getPlayer(socket.id).x = movementData.x;
             rooms[roomName].getPlayer(socket.id).y = movementData.y;
             rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
@@ -129,10 +129,9 @@ io.on('connection', function (socket) {
                             .replace(/[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']/gi, "\"\"");
                 
             var msg = {name: name, text: ftext};
-            console.log(msg);
             io.in(roomName).emit('receive message', msg);
         });
-
+        
         // when a player sends their vote
         socket.on('vote', function (votedFor) {
             // socket.broadcast.to(roomName).emit('voted', votedFor);

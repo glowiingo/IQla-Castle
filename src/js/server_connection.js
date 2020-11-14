@@ -3,17 +3,21 @@ class ServerConnection{
     constructor(){
         this.socket = io();
         this.roomName = null;
+        this.playerName = "John";
         this.prevPlayerLocation = {x: null, y: null};
     }
     setRoom(roomName) {
         this.roomName = roomName;
+    }
+    setName(playerName) {
+      this.playerName = playerName;
     }
     //Joins room, only if room has been set / selected.
     joinRoom(){
         if(!this.roomName){
             throw "Cannot join Room, room is null";
         }
-        this.socket.emit("joinRoom", this.roomName);
+        this.socket.emit("joinRoom", this.roomName, this.playerName);
     }
     //Add's the required event handlers to support gameplay
     addGameplayHandlers(sceneData){
@@ -29,6 +33,9 @@ class ServerConnection{
         this.socket.on('disconnect', function (playerId) {
             sceneData.removePlayer(playerId);
           });
+        this.socket.on('gameOver', function (team) {
+            sceneData.gamePlayScene.gameOver(team);
+        });
         this.socket.on('playerMoved', function (playerInfo) {
             sceneData.otherPlayers[playerInfo.playerId].setPosition(playerInfo.x, playerInfo.y);
             sceneData.otherPlayers[playerInfo.playerId].flipX = playerInfo.flipX;
@@ -66,8 +73,8 @@ class ServerConnection{
         });
         //Worked on by: Jayce
         this.socket.on('receive message', function(msg){
-			sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").receiveMsg(msg.name, msg.text);
-		});
+			    sceneData.gamePlayScene.scene.get("chat_scene").receiveMsg(msg.name, msg.text);
+		    });
     }
 
     movement(player){

@@ -11,7 +11,6 @@ class Room{
         this.votedList = [];
     }
     addPlayer(player){
-        console.log("adding new player to room");
         this.players[player.playerId] = player;
     }
     getPlayer(id){
