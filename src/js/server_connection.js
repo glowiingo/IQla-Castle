@@ -88,6 +88,10 @@ class ServerConnection{
         }
     }
 
+    updatePos(player){
+        this.socket.emit('playerMovement', { x: player.x, y: player.y, flipX: player.flipX});
+    }
+
     kill(playerId){
         this.socket.emit('kill', playerId);
     }
