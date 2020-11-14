@@ -244,9 +244,12 @@ class playerUI_scene extends Phaser.Scene {
             gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
         }
     }
-
+    
+    
     report() {
-        console.log('report');
+        //worked on by Mike
+        let gameplay = this.scene.get('gameplay_scene');
+        gameplay.player.report();
     }
 
     showMap() {
