@@ -100,8 +100,7 @@ class join_game_scene extends Phaser.Scene {
       this.sceneData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
       this.sceneData.serverConnection.setRoom(this.roomIdInputBox.value);
       this.sceneData.serverConnection.setName(this.nameInputBox.value);
-      //this.scene.start("gameplay_scene");
-      this.scene.start("temp_game_end_scene");
+      this.scene.start("gameplay_scene");
     } else {
       // Do nothing
     }
