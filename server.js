@@ -92,10 +92,7 @@ io.on('connection', function (socket) {
         // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
         //
         // // when a player sends their vote
-        socket.on('vote', function (votedFor) {
-          console.log(String(rooms[roomName].getPlayer(socket.id)) + " voted for " + votedFor)
-          socket.broadcast.to(roomName).emit('voted', votedFor);
-        });
+
         
         //
         // // when a player places a trap
@@ -138,8 +135,15 @@ io.on('connection', function (socket) {
             console.log(msg);
             io.in(roomName).emit('receive message', msg);
         });
-        
 
+        socket.on('vote', function (votedFor) {
+            socket.broadcast.to(roomName).emit('voted', votedFor);
+            rooms[roomName].vote(votedFor);
+            if (!rooms[roomName].voteCompleted()) {
+                socket.broadcast.to(roomName).emit('voted', rooms[roomName].voteCompleted());
+            }
+        });
+        
         //// to be added: gameOver
 
     })
