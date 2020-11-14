@@ -1,5 +1,6 @@
 // Worked on by: William, Alexis
 // Worked on by: Bisht, Brian, Kian
+// Worked on by: Lewis
 
 class playerUI_scene extends Phaser.Scene {
     constructor() {
@@ -8,53 +9,219 @@ class playerUI_scene extends Phaser.Scene {
         });
     }
 
-  preload() {
-    this.load.image('kill', '../../assets/kill.png');
-    this.load.image('TaskBar', '../../assets/TaskBar.png');
-    this.load.image('BackBar', '../../assets/BackBar.png');
-    this.load.image('startGame', '../../assets/StartGame.png');
-    // This is to be added once the bar image is made: this.load.image('progress', '../../assets/progressbar.png')
-  }
+    preload() {
+        this.load.image('reportBtn', '../../assets/reportButton.png');
+        this.load.image('useBtn', '../../assets/useButton.png');
+        this.load.image('killBtn', '../../assets/killButton.png');
+        this.load.image('mapBtn', '../../assets/mapButton.png');
+        this.load.image('TaskBar', '../../assets/TaskBar.png');
+        this.load.image('BackBar', '../../assets/BackBar.png');
+        this.load.image('startGame', '../../assets/StartGame.png');
+    }
 
-  create() {
-  	this.actionBtn = this.add.sprite(
+    create() {
+        this.startBtn = this.add.sprite(
             game.config.width - 100,
             game.config.height - 100,
             'startGame'
         );
-        this.actionBtn.setInteractive();
-        this.actionBtn.setScale(0.25);
-    // instantiate a progress bar in the top left corner of game screen, similar to the kill button
-    // note: add ProgressBar.increase(1) into each mini-game
-    // this.progressBar = this.add.sprite(0, 0, "progress");
-    this.bBar = this.add.sprite(game.config.width - 504, 0, 'BackBar').setOrigin(0, 0);
-    this.tBar = this.add.sprite(game.config.width - 504, 0, 'TaskBar').setOrigin(0, 0);
-    this.fill = 0;
-    //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
-    //this.txt.setColor('#000000');
-    //this.txt.setFontSize(40);
-    //this.tBar.flipX = true;
-    //The bar ranges from 0-504 set bar adds an amount to it
-    this.setBar(0);
-    this.timedEvent;
-    this.canKill = true;
+        this.startBtn.setInteractive();
+        this.startBtn.setScale(0.25);
 
-    this.actionBtn
-            .on('pointerdown', () => this.registry.values.sceneData.alertGameStart())
-            .on('pointerover', () => this.enterButtonHoverState())
-            .on('pointerout', () => this.exitButtonHoverState());
-    window.addEventListener('resize', () => {
-        this.resize();
-    });
-}
+        this.isStartGame = false;
+        // instantiate a progress bar in the top right corner of game screen, similar to the kill button
+        // note: add ProgressBar.increase(1) into each mini-game
+        // this.progressBar = this.add.sprite(0, 0, "progress");
+        this.bBar = this.add
+            .sprite(game.config.width - 504, 0, 'BackBar')
+            .setOrigin(0, 0);
+        this.tBar = this.add
+            .sprite(game.config.width - 504, 0, 'TaskBar')
+            .setOrigin(0, 0);
+        this.fill = 0;
+        //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
+        //this.txt.setColor('#000000');
+        //this.txt.setFontSize(40);
+        //this.tBar.flipX = true;
+        //The bar ranges from 0-504 set bar adds an amount to it
+        this.setBar(0);
+
+        this.startBtn
+            .on('pointerdown', () =>
+                this.registry.values.sceneData.alertGameStart()
+            )
+            .on('pointerover', () => this.enterButtonHoverState(this.startBtn))
+            .on('pointerout', () => this.exitButtonHoverState(this.startBtn));
+        window.addEventListener('resize', () => {
+            this.resize();
+        });
+
+        this.taskStringArr = [
+            'Clean the bathroom',
+            'Stand in the storage room for 10 seconds',
+            'Do the dishes in the kitchen',
+            'Close the closet door',
+        ];
+
+        this.btnOriginScale = 0.35;
+        this.btnHoverScale = 0.4;
+        this.mapOverlayDisplayed = false;
+
+        // What is this for??
+        this.timedEvent;
+
+        // When window is resized, fix things
+        window.addEventListener('resize', () => {
+            this.resize();
+        });
+    }
+
+    /**
+     * called by scene_data after server returned start game data
+     */
+    startGame(role) {
+        this.startBtn.destroy();
+        this.isIqla = role;
+
+        if (this.isIqla) {
+            this.canKill = true;
+            this.renderKillerUI();
+        } else {
+            this.renderDetectiveUI();
+        }
+
+        this.renderTaskList(this.taskStringArr);
+
+        // Domo for how to show task complete.
+        this.taskList[1].setColor('#8D8D8D');
+        this.taskList[3].setColor('#8D8D8D');
+    }
+
+    renderTaskList(arr) {
+        const taskListBoxX = 0;
+        const taskListBoxY = 30;
+        const taskListBoxWidth = 180;
+        const taskListBoxHeight = 300;
+
+        this.taskListBox = this.add
+            .rectangle(
+                taskListBoxX,
+                taskListBoxY,
+                taskListBoxWidth,
+                taskListBoxHeight,
+                0x393f4a,
+                0.7
+            )
+            .setOrigin(0, 0);
+
+        console.log(this.taskListBox.x, this.taskListBox.y);
+
+        this.taskList = [];
+        let x = taskListBoxX + 20;
+        let y = taskListBoxY + 20;
+        const style = { font: '13px' };
+
+        for (let i = 0; i < arr.length; i++) {
+            this.taskList[i] = this.add
+                .text(x, y, arr[i], style)
+                .setOrigin(0, 0);
+
+            this.taskList[i].wordWrap = true;
+            this.taskList[i].setWordWrapWidth(taskListBoxWidth * 0.9);
+
+            y += this.taskList[i].height + 10;
+        }
+    }
+
+    /**
+     * Renders the following object
+     * - Report Button
+     * - Use Button
+     * - Map Button
+     */
+    renderDetectiveUI() {
+        const screenX = this.cameras.main.width;
+        const screenY = this.cameras.main.height;
+
+        this.rptButtonX = screenX - 80;
+        this.rptButtonY = screenY - 80;
+        this.useButtonX = screenX - 80;
+        this.useButtonY = screenY - 200;
+        this.mapButtonX = screenX - 80;
+        this.mapButtonY = screenY - 280;
+
+        this.rptButton = this.add.sprite(
+            this.rptButtonX,
+            this.rptButtonY,
+            'reportBtn'
+        );
+        this.useButton = this.add.sprite(
+            this.useButtonX,
+            this.useButtonY,
+            'useBtn'
+        );
+        this.mapButton = this.add.sprite(
+            this.mapButtonX,
+            this.mapButtonY,
+            'mapBtn'
+        );
+
+        this.rptButton.setInteractive();
+        this.rptButton.setScale(this.btnOriginScale);
+        this.useButton.setInteractive();
+        this.useButton.setScale(this.btnOriginScale);
+        this.mapButton.setInteractive();
+        this.mapButton.setScale(this.btnOriginScale);
+
+        this.rptButton
+            .on('pointerdown', () => this.report())
+            .on('pointerover', () => this.enterButtonHoverState(this.rptButton))
+            .on('pointerout', () => this.exitButtonHoverState(this.rptButton));
+
+        this.useButton
+            .on('pointerdown', () => this.use())
+            .on('pointerover', () => this.enterButtonHoverState(this.useButton))
+            .on('pointerout', () => this.exitButtonHoverState(this.useButton));
+
+        this.mapButton
+            .on('pointerdown', () => this.showMap())
+            .on('pointerover', () => this.enterButtonHoverState(this.mapButton))
+            .on('pointerout', () => this.exitButtonHoverState(this.mapButton));
+    }
+
+    /**
+     * Renders the kill button object then calls renderDetectiveUI()
+     */
+    renderKillerUI() {
+        this.killButtonX = 80;
+        this.killButtonY = this.cameras.main.height - 80;
+
+        this.killButton = this.add.sprite(
+            this.killButtonX,
+            this.killButtonY,
+            'killBtn'
+        );
+
+        this.killButton.setInteractive();
+        this.killButton.setScale(this.btnOriginScale);
+
+        this.killButton
+            .on('pointerdown', () => this.kill())
+            .on('pointerover', () =>
+                this.enterButtonHoverState(this.killButton)
+            )
+            .on('pointerout', () => this.exitButtonHoverState(this.killButton));
+
+        this.renderDetectiveUI();
+    }
 
     enablePress() {
-        this.actionBtn.setTint(0xffffff);
+        this.killButton.setTint(0xffffff);
         this.canKill = true;
     }
 
     kill() {
-        this.actionBtn.setTint(0x2b2a2a);
+        this.killButton.setTint(0x2b2a2a);
         this.time.delayedCall(2000, this.enablePress, [], this);
         this.canKill = false;
         let gameplay = this.scene.get('gameplay_scene');
@@ -62,41 +229,62 @@ class playerUI_scene extends Phaser.Scene {
         this.registry.values.sceneData.serverConnection.taskCompleted();
     }
 
-    startGame() {
-        // Do something
-        console.log('Game started');
-        this.actionBtn.setTexture('kill');
-        this.actionBtn.removeListener('pointerdown');
-        this.actionBtn.on('pointerdown', () => this.kill());
-        
+    use() {
+        console.log('use');
     }
 
-    enterButtonHoverState() {
-        if (this.canKill) {
-            this.actionBtn.setScale(0.5);
+    report() {
+        console.log('report');
+    }
+
+    showMap() {
+        const mapOverlay = this.scene.get('mapOverlay_scene');
+        const dotOverlay = this.scene.get('showPositionPlayer_scene')
+
+        if (this.mapOverlayDisplayed) {
+            this.mapOverlayDisplayed = false;
+            mapOverlay.mapHide();
+            dotOverlay.dotHide();
+        } else {
+            this.mapOverlayDisplayed = true;
+            mapOverlay.mapShow();
+            dotOverlay.dotShow();
         }
     }
 
-    exitButtonHoverState() {
-        this.actionBtn.setScale(0.25);
+    enterButtonHoverState(btn) {
+        if (this.isIqla && this.canKill) {
+            btn.setScale(this.btnHoverScale);
+        } else {
+            btn.setScale(this.btnHoverScale);
+        }
+
+        // Do nothing if isIqla but !canKill
+    }
+
+    exitButtonHoverState(btn) {
+        btn.setScale(this.btnOriginScale);
     }
 
     resize() {
         //this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
-        this.actionBtn.setPosition(
+
+        this.startBtn.setPosition(
             this.cameras.main.width - 100,
             this.cameras.main.height - 100
         );
+
+        if (this.isStartGame) {
+            this.rptButton.setPosition(this.rptButtonX, this.rptButtonY);
+            this.useButton.setPosition(this.useButtonX, this.useButtonY);
+            this.killButton.setPosition(this.killButtonX, this.killButtonY);
+            this.mapButton.setPosition(this.mapButtonX, this.mapButtonY);
+        }
     }
-//   resize(width, height) {
-//     //this.titleText.setPosition(document.body.offsetWidth / 2 - 300, 80);
-//     this.killButton.setPosition(document.body.offsetWidth - 200, document.body.offsetHeight - 200);
 
-//   }
-
-  //Sets the progress bar size by adding a positive or negative amount as *perc* 
-  setBar(perc) {
-  	this.fill += perc;
-  	this.tBar.setCrop(0, 0, this.fill, 84);
-  }
+    //Sets the progress bar size by adding a positive or negative amount as *perc*
+    setBar(perc) {
+        this.fill += perc;
+        this.tBar.setCrop(0, 0, this.fill, 84);
+    }
 }

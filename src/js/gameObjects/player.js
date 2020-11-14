@@ -3,16 +3,15 @@
 //const player = require("../player");
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(config, id, playerName, speed, iqla=false) {
+    constructor(config, id, playerName, speed, iqla = false) {
         super(config.scene, config.x, config.y, config.sprite);
 
-        
         // console.log(this);
         // this.scene.add.existing(this).setScale(1);
         // this.scene.physics.add.existing(this);
         // this.setCollideWorldBounds(true);
-        
-        if(config.iqla) {
+
+        if (config.iqla) {
             this.iqla = iqla;
         }
         this.id = id;
@@ -23,47 +22,54 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Worked on by: Anna, Evano
         this.isWalking = false;
-
+        
         // we should set these to global variables
         this.spawnX = 1408;
         this.spawnY = 512;
+
+        this.key = this.scene.input.keyboard.addKeys({
+          up: Phaser.Input.Keyboard.KeyCodes.W,
+          down: Phaser.Input.Keyboard.KeyCodes.S,
+          left: Phaser.Input.Keyboard.KeyCodes.A,
+          right: Phaser.Input.Keyboard.KeyCodes.D,
+        });
     }
 
     //worked on by Kiwon
     player_movement() {
-        let key = this.scene.input.keyboard.addKeys(
-            {up:Phaser.Input.Keyboard.KeyCodes.W,
-            down:Phaser.Input.Keyboard.KeyCodes.S,
-            left:Phaser.Input.Keyboard.KeyCodes.A,
-            right:Phaser.Input.Keyboard.KeyCodes.D});
 
         //console.log(this);
-        if(key.left.isDown){
+        if (this.key.left.isDown) {
             this.setVelocityX(-this.speed);
             this.flipX = false;
-        } else if (key.right.isDown) {
+        } else if (this.key.right.isDown) {
             this.setVelocityX(this.speed);
             this.flipX = true;
         } else {
             this.setVelocityX(0);
         }
-        
-        if (key.up.isDown) {
+
+        if (this.key.up.isDown) {
             this.setVelocityY(-this.speed);
-        } else if (key.down.isDown) {
+        } else if (this.key.down.isDown) {
             this.setVelocityY(this.speed);
         } else {
             this.setVelocityY(0);
         }
 
         // Worked on by: William, Brian, Anna, Flemming
-        if (key.down.isDown || key.up.isDown || key.left.isDown || key.right.isDown) {
+        if (
+          this.key.down.isDown ||
+          this.key.up.isDown ||
+          this.key.left.isDown ||
+          this.key.right.isDown
+        ) {
             if (!this.isWalking) {
-              this.player_walk_anim_start();
+                this.player_walk_anim_start();
             }
-          } else {
+        } else {
             this.player_walk_anim_stop();
-          }
+        }
         // print x y of player position to send to network team and update
         // console.log(this.x, this.y);
     }
@@ -95,7 +101,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     //worked on by Mike
     kill(sprite) {
-        for(let i = 0; i < sprite.length; i++) {
+        for (let i = 0; i < sprite.length; i++) {
             let a = Math.abs(this.x - sprite[i].x);
             let b = Math.abs(this.y - sprite[i].y);
             let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
@@ -104,32 +110,33 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 sprite[i].setActive(false).setVisible(false);
                 sprite[i].alive = false;
                 //sprite[i].setTexture("ghost");
-                console.log("Hidden");
+                console.log('Hidden');
                 console.log(sprite[i].x, sprite[i].y);
                 this.create_deadBody(sprite[i].x, sprite[i].y);
-                console.log("I killed someone", sprite[i].id);
-                this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
+                console.log('I killed someone', sprite[i].id);
+                this.scene.registry.values.sceneData.serverConnection.kill(
+                    sprite[i].id
+                );
             }
         }
         // console.log(Math.abs(this.x - this.player2.x));
     }
 
     // Worked on by Gloria
-    // Sets the role for the player based on a random number generator 
+    // Sets the role for the player based on a random number generator
     // We should note that other player factors may need to be passed into this function
     // Logic may need to be defined on the server? or server needs to pass all player ids in array
     setRole(player_id_object) {
-        console.log("Object: " + player_id_object);
-        console.log("Accessing Object: " + player_id_object[this.id]);
+        console.log('Object: ' + player_id_object);
+        console.log('Accessing Object: ' + player_id_object[this.id]);
         let iqla_status = player_id_object[this.id];
         // check for nulls
         if (iqla_status) {
             // set iqla
-            if (iqla_status == "vampire") {
+            if (iqla_status == 'vampire') {
                 this.iqla = true;
-                
             }
-            console.log("Is iqla", this.iqla);
+            console.log('Is iqla', this.iqla);
         }
     }
 
