@@ -12,6 +12,10 @@ const BOOK4_KEY = 'Nicholas Cage';
 class book_click_minigame extends Phaser.Scene {
   constructor() {
     super('book_click_minigame');
+  }
+
+  init() {
+    // Worked on by: Alexis
     this.sceneKey = 'book_click_minigame';
     this.background; // The background image to be used for relative positioning.
     // Objects used for storing the background image's x,y coordinates:
@@ -21,8 +25,6 @@ class book_click_minigame extends Phaser.Scene {
 
     this.paperNoteTopLeftCoords = {};
   }
-
-  init() {}
 
   preload() {
     // Worked on by: Alexis
@@ -49,11 +51,7 @@ class book_click_minigame extends Phaser.Scene {
   create(data) {
     // Worked on by: Alexis
     // ---------- Background Image ---------- //
-    this.background = this.add.image(
-      this.cameras.default.width / 2, 
-      this.cameras.default.height / 2, 
-      BG_IMG_KEY
-    );
+    this.background = this.add.image(this.cameras.default.width / 2, this.cameras.default.height / 2, BG_IMG_KEY);
     this.background.setTint(BG_COLOUR);
     this.background.displayWidth = data.width;
     this.background.displayHeight = data.height;
@@ -108,13 +106,13 @@ class book_click_minigame extends Phaser.Scene {
     // ---------- Book Images ---------- //
     const booksNeeded = 2;
     let numArr = [];
-    let bookKeyArray = minigame_scene_manager.shuffleArray([BOOK0_KEY, BOOK1_KEY, BOOK2_KEY, BOOK3_KEY, BOOK4_KEY])
+    let bookKeyArray = minigame_scene_manager.shuffleArray([BOOK0_KEY, BOOK1_KEY, BOOK2_KEY, BOOK3_KEY, BOOK4_KEY]);
     const topShelfY = this.centreCoords.y - 62;
 
     let books = this.physics.add.group();
     let book0 = this.add.image(245, topShelfY, bookKeyArray[0]);
     let book1 = this.add.image(300, topShelfY, bookKeyArray[1]);
-    let book2 = this.add.image(this.centreCoords.x + bookWidth, topShelfY + (bookWidth), bookKeyArray[2]);
+    let book2 = this.add.image(this.centreCoords.x + bookWidth, topShelfY + bookWidth, bookKeyArray[2]);
     book2.setRotation(-1.5708); // Rotate -90 degrees
     let book3 = this.add.image(215, this.bottomCentreCoords.y, bookKeyArray[3]);
     book3.setOrigin(0, 1);
@@ -125,23 +123,23 @@ class book_click_minigame extends Phaser.Scene {
     // Worked on by: Charles
     book0.setData({
       id: 0,
-      title: bookKeyArray[0]
+      title: bookKeyArray[0],
     });
     book1.setData({
       id: 1,
-      title: bookKeyArray[1]
+      title: bookKeyArray[1],
     });
     book2.setData({
       id: 2,
-      title: bookKeyArray[2]
+      title: bookKeyArray[2],
     });
     book3.setData({
       id: 3,
-      title: bookKeyArray[3]
+      title: bookKeyArray[3],
     });
     book4.setData({
       id: 4,
-      title: bookKeyArray[4]
+      title: bookKeyArray[4],
     });
 
     books.add(book0);
@@ -156,18 +154,18 @@ class book_click_minigame extends Phaser.Scene {
 
       book.setInteractive();
       book.on('pointerdown', () => {
-        let idx = numArr.indexOf(book.getData('id'))
+        let idx = numArr.indexOf(book.getData('id'));
         if (idx >= 0) {
           book.disableInteractive();
           numArr.splice(idx, 1);
           no.stop();
-          if (numArr.length === 0) {  
+          if (numArr.length === 0) {
             this.playVideo();
           } else {
             ok.play();
           }
-        } else if(numArr.length !== 0){
-            no.play();
+        } else if (numArr.length !== 0) {
+          no.play();
         }
       });
     });
@@ -188,24 +186,24 @@ class book_click_minigame extends Phaser.Scene {
     numArr.forEach((num) => {
       this.add.text(xPosition, yPosition, books.children.entries[num].getData('title'), {
         font: '20px Arial',
-        fill: 'black'
+        fill: 'black',
       });
       yPosition += yDistance;
     });
   }
 
-  playVideo(){
-    let bravo= this.add.video(400, 300,'bravo');
+  playVideo() {
+    let bravo = this.add.video(400, 300, 'bravo');
     bravo.setVolume(0.8);
     bravo.alpha = 0.5;
     bravo.setDepth(2);
     bravo.play();
-    
+
     this.tweens.add({
       targets: bravo,
       scale: 4,
       duration: bravo.getDuration() * 1000,
-      repeat: 0
+      repeat: 0,
     });
 
     bravo.on('complete', () => {
