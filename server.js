@@ -45,13 +45,13 @@ io.on('connection', function (socket) {
             // emit a message to all players to remove this player
             io.to(roomName).emit('disconnect', socket.id);
             if (!rooms[roomName].hasPlayers()) {
-                //rooms[roomName].stop();
                 delete rooms[roomName];
             }
         });
 
         // when a player moves, update the player data
         socket.on('playerMovement', function (movementData) {
+            console.log(rooms[roomName].getRoleAssignments());
             rooms[roomName].getPlayer(socket.id).x = movementData.x;
             rooms[roomName].getPlayer(socket.id).y = movementData.y;
             rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
