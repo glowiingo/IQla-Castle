@@ -77,7 +77,7 @@ class playerUI_scene extends Phaser.Scene {
    */
   startGame(role) {
     this.startBtn.destroy();
-    this.isIqla = true;
+    this.isIqla = role;
 
     if (this.isIqla) {
       this.canKill = true;
