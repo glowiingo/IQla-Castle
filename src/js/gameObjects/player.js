@@ -20,6 +20,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.iqla = false;
     this.playerName = playerName;
 
+    // Worked on by: Anna, Evano
+    this.isWalking = false;
+
     // we should set these to global variables
     this.spawnX = 1408;
     this.spawnY = 512;
@@ -67,7 +70,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.key.left.isDown ||
       this.key.right.isDown
     ) {
-      if (!this.scene.isWalking) {
+      if (!this.isWalking) {
         this.player_walk_anim_start();
       }
     } else {
@@ -77,15 +80,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Worked on by: Anna
   player_walk_anim_start() {
-    if (!this.scene.isWalking) {
-      this.scene.isWalking = true;
+    if (!this.isWalking) {
+      this.isWalking = true;
       this.play("WalkCycle");
     }
   }
 
+  getPlayerName() {
+    return this.playerName;
+  }
+
   // Worked on by: Anna
   player_walk_anim_stop() {
-    this.scene.isWalking = false;
+    this.isWalking = false;
     this.anims.stop();
   }
 

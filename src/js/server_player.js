@@ -10,6 +10,7 @@ class ServerPlayer{
         this.playerName = playerName;
     
         console.log("Creating Player", this.playerId);
+        this.team = "detective";
     }
 }
 

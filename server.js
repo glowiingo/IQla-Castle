@@ -25,7 +25,11 @@ io.on('connection', function (socket) {
         console.log(playerName, 'joined room', roomName);
         socket.join(roomName);
         if (!rooms.hasOwnProperty(roomName)) {
-            rooms[roomName] = new Room(roomName);
+            let victoryHandler = (team) => {
+                io.in(roomName).emit('gameOver', team);
+                console.log("Winners! team:", team);
+            };
+            rooms[roomName] = new Room(roomName, victoryHandler);
         }
         rooms[roomName].addPlayer(new ServerPlayer(roomName, socket, playerName));
 
@@ -77,6 +81,7 @@ io.on('connection', function (socket) {
         // when a player kills, update the victim's player data
         socket.on('kill', function (victimID) {
             socket.broadcast.to(roomName).emit('killed', victimID);
+            rooms[roomName].playerEliminated(victimID);
         });
         // 
         //
@@ -85,12 +90,6 @@ io.on('connection', function (socket) {
         //
         // });
         // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
-        //
-        // // when a player sends their vote
-        socket.on('vote', function (votedFor) {
-          console.log(rooms[roomName].getPlayer(socket.id).playerId + " voted for " + votedFor)
-          socket.broadcast.to(roomName).emit('voted', votedFor);
-        });
         
         //
         // // when a player places a trap
@@ -109,6 +108,7 @@ io.on('connection', function (socket) {
         //
         socket.on('taskComplete', function () {
             io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
+            rooms[roomName].taskComplete(socket.id);
         });
 
         // When a player stops moving, goes stationary
@@ -132,8 +132,16 @@ io.on('connection', function (socket) {
             io.in(roomName).emit('receive message', msg);
         });
         
-
-        //// to be added: gameOver
+        // when a player sends their vote
+        socket.on('vote', function (votedFor) {
+            // socket.broadcast.to(roomName).emit('voted', votedFor);
+            rooms[roomName].vote(votedFor);
+            let complete = rooms[roomName].voteCompleted()
+            if (complete) {
+                console.log("vote complete: ", complete);
+                io.in(roomName).emit('voted', complete);
+            }
+        });
 
     })
 });

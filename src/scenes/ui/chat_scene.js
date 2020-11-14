@@ -31,22 +31,6 @@ class chat_scene extends Phaser.Scene {
       }
     });
     
-    // bypass player movement inputs
-      // disable player movement keys
-
-    // this.input.keyboard.on('keydown', (event) => {
-    //   if (this.showChat === true) {
-    //     console.log(document.getElementById('textbox').focus())
-    //     // if (event.key.length === 1) {
-    //     //   document.getElementById('textbox').value += event.key;
-    //     // } else if (event.key === 'Backspace') {
-    //     //   let str = document.getElementById('textbox').value;
-    //     //   document.getElementById('textbox').value = str.substring(0, str.length - 1);
-    //     // } else if (event.key === 'Enter') {
-    
-    //     // }
-    //   }
-    // }, true, false);
   }
 
 
