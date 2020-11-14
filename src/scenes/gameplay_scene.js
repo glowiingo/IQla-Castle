@@ -46,8 +46,7 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.launch("showPositionPlayer_scene");
     this.scene.launch("voting_scene");
 
-    // Worked on by: Anna
-    this.isWalking = false;
+    
 
     let config = {
       key: 'WalkCycle',
