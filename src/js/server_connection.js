@@ -39,10 +39,10 @@ class ServerConnection{
         });
         // Worked by Jayce
         this.socket.on('voted', function (voteId) {
-            if(sceneData.serverConnection.socket.id === playerId){
+            if(sceneData.serverConnection.socket.id === voteId){
                 sceneData.player.setActive(false).setVisible(false);
                 sceneData.player.alive = false;
-                alert("you died");
+                alert("you were voted for");
             } else {
                 sceneData.otherPlayers[voteId].setActive(false).setVisible(false);;
             }

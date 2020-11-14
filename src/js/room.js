@@ -61,26 +61,29 @@ class Room{
         } else {
             this.taskCount++;
         }
-        if(this.taskCount > 2){
+        if(this.taskCount > 3){
             this.victoryHandler("detectives");
         }
     }
 
-    // Jayce working on here
+    // Worked on by: Jayce
     vote(playerId) {
+        console.log("Vote for", playerId);
         this.votedList.push(playerId);
     }
 
     voteCompleted(){
         if (Object.keys(this.players).length === this.votedList.length) {
-            let votedPlayerID = this.fineTheMajority(this.votedList);
+            let votedPlayerID = this.findTheMajority(this.votedList);
+            console.log("majority voted for: ", votedPlayerID);
             this.votedList = [];
-            return playerEliminated(votedPlayerID);
+            this.playerEliminated(votedPlayerID);
+            return votedPlayerID;
         }
-        return false;
+        return null;
     }
 
-    fineTheMajority(voteList) {
+    findTheMajority(voteList) {
         if (voteList.length == 0)
             return null;
         let modeMap = {};
@@ -96,8 +99,8 @@ class Room{
                 maxCount = modeMap[el];
             }
         }
-    return majority;
-}
+        return majority;
+    }
 }
 
 module.exports = {Room};

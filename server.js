@@ -137,14 +137,14 @@ io.on('connection', function (socket) {
         });
 
         socket.on('vote', function (votedFor) {
-            socket.broadcast.to(roomName).emit('voted', votedFor);
+            // socket.broadcast.to(roomName).emit('voted', votedFor);
             rooms[roomName].vote(votedFor);
-            if (!rooms[roomName].voteCompleted()) {
-                socket.broadcast.to(roomName).emit('voted', rooms[roomName].voteCompleted());
+            let complete = rooms[roomName].voteCompleted()
+            if (complete) {
+                console.log("vote complete: ", complete);
+                io.in(roomName).emit('voted', complete);
             }
         });
-        
-        //// to be added: gameOver
 
     })
 });
