@@ -30,14 +30,14 @@ class title_screen_scene extends Phaser.Scene {
       .setOrigin(0.5);
 
     // ------------------------- Create and Join Game Buttons ------------------------- //
-    this.createGameButton = new TextButton(
-      this,
-      screenCenterX,
-      screenCenterY,
-      "Create Game",
-      { font: "30px Ariel", fill: "yellow" },
-      () => this.createNewGame()
-    );
+    // this.createGameButton = new TextButton(
+    //   this,
+    //   screenCenterX,
+    //   screenCenterY,
+    //   "Create Game",
+    //   { font: "30px Ariel", fill: "yellow" },
+    //   () => this.createNewGame()
+    // );
 
     this.joinGameButton = new TextButton(
       this,
@@ -76,7 +76,7 @@ class title_screen_scene extends Phaser.Scene {
   }
 
   createNewGame() {
-    this.scene.start("create_game_scene");
+    // this.scene.start("create_game_scene");
   }
 
   joinNewGame() {

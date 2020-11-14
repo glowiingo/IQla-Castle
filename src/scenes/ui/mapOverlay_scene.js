@@ -9,25 +9,22 @@ class mapOverlay_scene extends Phaser.Scene {
   }
 
   preload() {
-    //load the image into the scene
     this.load.image('map', '../../assets/protypeMap.png');
-
   }
 
   create() {
-    // add object into the game
     this.scene.setVisible(false)
     let showMap = false;
 
     this.mapOverlay = this.add.sprite(game.config.width / 2, game.config.height / 2, 'map');
     this.mapOverlay.setScale(0.1);
 
+    // toggle map on tab
     this.tabPress = this.input.keyboard.addKey('TAB');
     this.tabPress.on('down', () => {
-      showMap = !showMap;
+      showMap ==! showMap;
       showMap ? this.mapShow() : this.mapHide();
     });
-
   }
 
   mapShow() {
@@ -36,7 +33,7 @@ class mapOverlay_scene extends Phaser.Scene {
   }
 
   mapHide() {
-    // non-display map-overlay
+    // hide map-overlay
     this.scene.setVisible(false);
   }
 }  
