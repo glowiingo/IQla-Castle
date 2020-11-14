@@ -159,24 +159,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   //worked on by Mike
   kill(sprite) {
     for (let i = 0; i < sprite.length; i++) {
-      let a = Math.abs(this.x - sprite[i].x);
-      let b = Math.abs(this.y - sprite[i].y);
-      let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-      // console.log(c);
-      if (c < 60) {
-        sprite[i].setActive(false).setVisible(false);
-        sprite[i].alive = false;
-        //sprite[i].setTexture("ghost");
-        console.log("Hidden");
-        console.log(sprite[i].x, sprite[i].y);
-        this.create_deadBody(sprite[i].x, sprite[i].y);
-        console.log("I killed someone", sprite[i].id);
-        this.scene.registry.values.sceneData.serverConnection.kill(
-          sprite[i].id
-        );
+      let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, sprite[i].x, sprite[i].y);
+      if (sprite[i].active) {
+        if (c < 60) {
+          sprite[i].setActive(false).setVisible(false);
+          sprite[i].alive = false;
+          //sprite[i].setTexture("ghost");
+          console.log("Hidden");
+          console.log(sprite[i].x, sprite[i].y);
+          this.create_deadBody(sprite[i].x, sprite[i].y);
+          console.log("I killed someone", sprite[i].id);
+          this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
+        }
+        break;
       }
     }
-    // console.log(Math.abs(this.x - this.player2.x));
   }
 
   // Worked on by Gloria
