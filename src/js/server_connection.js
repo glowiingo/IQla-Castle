@@ -37,8 +37,16 @@ class ServerConnection{
         this.socket.on('gameStart', function (roleData) {
             sceneData.startGame(roleData);
         });
+        // Worked by Jayce
         this.socket.on('voted', function (voteId) {
-            console.log(voteId, " was voted for");
+            if(sceneData.serverConnection.socket.id === playerId){
+                sceneData.player.setActive(false).setVisible(false);
+                sceneData.player.alive = false;
+                alert("you died");
+            } else {
+                sceneData.otherPlayers[voteId].setActive(false).setVisible(false);;
+            }
+            // console.log(voteId, " was voted for");
         });
         this.socket.on('taskCompleted', function (voteId) {
             sceneData.gamePlayScene.scene.manager.getScene("playerUI_scene").setBar(Math.floor(504 * 0.1));

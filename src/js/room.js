@@ -8,6 +8,7 @@ class Room{
         this.vampireCount = 0;
         this.victoryHandler = victoryHandler;
         this.taskCount = 0;
+        this.votedList = [];
     }
     addPlayer(player){
         console.log("adding new player to room");
@@ -64,6 +65,39 @@ class Room{
             this.victoryHandler("detectives task victory");
         }
     }
+
+    // Jayce working on here
+    vote(playerId) {
+        this.votedList.push(playerId);
+    }
+
+    voteCompleted(){
+        if (Object.keys(this.players).length === this.votedList.length) {
+            let votedPlayerID = this.fineTheMajority(this.votedList);
+            this.votedList = [];
+            return playerEliminated(votedPlayerID);
+        }
+        return false;
+    }
+
+    fineTheMajority(voteList) {
+        if (voteList.length == 0)
+            return null;
+        let modeMap = {};
+        let majority = voteList[0], maxCount = 1;
+        for (let i = 0; i < voteList.length; i++) {
+            let el = voteList[i];
+            if(modeMap[el] == null)
+                modeMap[el] = 1;
+            else
+                modeMap[el]++;  
+            if(modeMap[el] > maxCount) {
+                majority = el;
+                maxCount = modeMap[el];
+            }
+        }
+    return majority;
+}
 }
 
 module.exports = {Room};
