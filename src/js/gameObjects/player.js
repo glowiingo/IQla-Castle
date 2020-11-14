@@ -30,6 +30,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
+    
+  }
+  
+  removeCaptures() {
+    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
+    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
+    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.S);
+    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.D);
   }
 
   //worked on by Kiwon

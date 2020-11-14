@@ -28,7 +28,7 @@ class voting_scene extends Phaser.Scene {
     this.screenY = this.cameras.main.height;
 
     // temp voting activation, actual voting activation should call toggleVisible
-    this.keyPress = this.input.keyboard.addKey('V');
+    this.keyPress = this.input.keyboard.addKey('ZERO');
     this.keyPress.on('down', () => {
       this.toggleVisible();
     });
