@@ -26,8 +26,8 @@ io.on('connection', function (socket) {
         socket.join(roomName);
         if (!rooms.hasOwnProperty(roomName)) {
             let victoryHandler = (team) => {
-                // io.in(roomName).emit('gameOver', team);
-                console.log("Winners! team:", team)
+                io.in(roomName).emit('gameOver', team);
+                console.log("Winners! team:", team);
             };
             rooms[roomName] = new Room(roomName, victoryHandler);
         }

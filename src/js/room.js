@@ -61,7 +61,7 @@ class Room{
             this.taskCount++;
         }
         if(this.taskCount > 2){
-            this.victoryHandler("detectives task victory");
+            this.victoryHandler("detectives");
         }
     }
 }
