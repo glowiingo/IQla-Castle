@@ -42,7 +42,7 @@ class title_screen_scene extends Phaser.Scene {
     this.joinGameButton = new TextButton(
       this,
       screenCenterX,
-      screenCenterY + 100,
+      screenCenterY,
       "Join Game",
       { font: "30px Ariel", fill: "yellow" },
       () => this.joinNewGame()
@@ -69,7 +69,7 @@ class title_screen_scene extends Phaser.Scene {
       () => this.helpIconClicked()
     );
 
-    this.add.existing(this.createGameButton);
+    //this.add.existing(this.createGameButton);
     this.add.existing(this.joinGameButton);
     this.add.existing(this.settingIcon);
     this.add.existing(this.helpIcon);

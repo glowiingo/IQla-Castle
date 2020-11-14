@@ -33,7 +33,9 @@ class SceneData {
         // console.log(roleData);
         this.player.setRole(roleData);
         this.player.sendToStartPos();
-        this.serverConnection.movement(this.player);
+        this.serverConnection.updatePos(this.player);   
+        // this.serverConnection.movement(this.player);
+        
         // we need to find a better way to ensure 
         // this.player.iqla is not sent into the start game as
         // undefined -- this is why the setTimeout exists
