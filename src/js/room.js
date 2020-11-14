@@ -32,6 +32,11 @@ class Room{
 
         let vampireRate = 0.25;
         let players = Object.keys(this.players);
+
+        if(players.length == 1){
+            return roles;
+        }
+
         do{
             let choice = Math.floor(Math.random() * players.length);
             roles[players[choice]] = "vampire";

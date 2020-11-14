@@ -71,7 +71,6 @@ class ServerConnection{
     }
 
     movement(player){
-        console.log(player.isWalking);
         if(player.isWalking){
             this.socket.emit('playerMovement', { x: player.x, y: player.y, flipX: player.flipX});
             if(player.x != this.prevPlayerLocation.x && player.y != this.prevPlayerLocation.y){
