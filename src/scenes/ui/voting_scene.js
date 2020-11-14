@@ -8,8 +8,8 @@ class voting_scene extends Phaser.Scene {
   }
 
   init() {
-    // initialize and prepare data
-    // constants, configurations, etc.
+    this.players = [];
+    this.playerPortraits = [];
   }
 
   preload() {
@@ -17,44 +17,57 @@ class voting_scene extends Phaser.Scene {
       'votePortrait',
       '../../assets/votingScene/VotePortrait.png'
     );
+    this.load.image("chatButton", "../../assets/votingScene/chatButton.png");
   }
 
   create() {
-    // temp voting activation
-    let showVote = false;
+    this.showVote = false;
     this.scene.setVisible(false);
-    this.keyPress = this.input.keyboard.addKey('V');
-    this.keyPress.on('down', () => {
-      showVote = !showVote;
-      if (showVote) {
-        this.scene.setVisible(true);
-      } else {
-        this.scene.setVisible(false);
 
-        // reset the voting scene when closed
-        this.scene.restart();
-      }
+    this.screenX = this.cameras.main.width;
+    this.screenY = this.cameras.main.height;
+
+    // temp voting activation, actual voting activation should call toggleVisible
+    this.keyPress = this.input.keyboard.addKey('ZERO');
+    this.keyPress.on('down', () => {
+      this.toggleVisible();
     });
 
-    const screenX = this.cameras.main.width;
-    const screenY = this.cameras.main.height;
-    //=================================================================================
-    this.players = Object.keys(this.registry.values.sceneData.otherPlayers) // This array should be the players
-    //=================================================================================
-    this.playerPortraits = [];
+
+    let rect = new Phaser.Geom.Rectangle(0, 50, this.screenX, this.screenY - 50);
+    let g = this.add.graphics()
+    g.fillStyle(0x000000, 0.8);
+    g.fillRectShape(rect);
+
+    this.chatButton = this.add.sprite(this.screenX - 50, 110, 'chatButton');
+
+    this.chatButton.setInteractive();
+    this.chatButton.setScale(0.25);
+    this.chatButton.tintFill = false;
+    this.chatButton
+      .on('pointerdown', () => this.scene.get("chat_scene").toggleVisible())
+      .on('pointerover', () => this.chatButton.setTint(0x00FF00))
+      .on('pointerout', () => this.chatButton.clearTint());
+    
     this.voted = false;
 
     // Display the portraits of the players.
+    this.displayPortraits();
+  } 
+
+  displayPortraits() {
     for (let i = 0; i < this.players.length; i++) {
-      let yPos = screenY / 5;
-      let xPos = screenX / 5;
+      let yPos =this.screenY / 5;
+      let xPos =this.screenX / 5;
 
       let portrait;
       if (i < 5) {
-        portrait = new Portrait(xPos * i, yPos, 'votePortrait', this);
+        portrait = new Portrait(xPos * i, yPos, 'votePortrait', 
+          this.players[i].playerName.substring(0,12), this.players[i].id, this);
         portrait.draw();
       } else {
-        portrait = new Portrait(xPos * (i - 5), yPos * 3, 'votePortrait', this);
+        portrait = new Portrait(xPos * (i - 5), yPos * 3, 'votePortrait', 
+          this.players[i].playerName.substring(0,12), this.players[i].id, this);
         portrait.draw();
       }
       this.playerPortraits.push(portrait);
@@ -63,27 +76,32 @@ class voting_scene extends Phaser.Scene {
     for (let i = 0; i < this.playerPortraits.length; i++) {
       this.playerPortraits[i].others = this.playerPortraits;
     }
+  }
 
-    // Get who was voted for.
-    this.input.on('pointerdown', () => {
-      if (this.voted) {
-        return;
-      }
+  vote(votedFor) {
+    this.scene.get('gameplay_scene').vote(votedFor);
+  }
+
+  toggleVisible() {
+    this.showVote = !this.showVote;
+    if (this.showVote) {
+      this.scene.setVisible(true);
+    } else {
+      this.scene.setVisible(false);
+      this.scene.get("chat_scene").hide();
+      // reset the voting scene when closed
+      this.voted = false;
       for (let i = 0; i < this.playerPortraits.length; i++) {
-        if (this.playerPortraits[i].mouseStatus === mouseStatus.selected) {
-          this.voted = true;
-          this.add.text(screenX / 12, 50, 'You voted for ' + this.players[i], {
-            font: '55px Ariel',
-            fill: 'yellow',
-          });
-
-          // change who was voted for from string to id
-          this.scene.get('gameplay_scene').vote(this.players[i]);
+        this.playerPortraits[i].updateColor(mouseStatus.none);
+        this.playerPortraits[i].disabled = false;
+        if (this.votedText) {
+          this.votedText.destroy();
         }
       }
-    });
+    }
   }
 }
+ 
 
 const mouseStatus = {
   hover: 1,
@@ -92,12 +110,23 @@ const mouseStatus = {
 };
 
 class Portrait {
-  constructor(x, y, sprite, game) {
+  constructor(x, y, sprite, name, id, game) {
     this.xpos = x;
     this.ypos = y;
+    this.id = id;
     this.mouseStatus = mouseStatus.none;
     this.sprite = sprite;
+    this.name = name;
     this.spr = game.add.sprite(this.xpos, this.ypos, this.sprite);
+    this.nametag = game.add.text(this.xpos, this.ypos + 10, name,{
+      fontFamily: 'Ariel',
+      fontSize: '22px',
+      color: 'green',
+      backgroundColor: 'white',
+      stroke: 'black',
+      strokeThickness: 3,
+    });
+    this.nametag.setDisplayOrigin(-20, 0);
     this.game = game;
     this.disabled = false;
   }
@@ -144,6 +173,12 @@ class Portrait {
         for (let i = 0; i < this.others.length; i++) {
           this.others[i].disabled = true;
         }
+
+        this.game.votedText = this.game.add.text(this.game.screenX / 12, 50, 'You voted for ' + this.name.substring(0,12), {
+          font: '55px Ariel',
+          fill: 'green',
+        });
+        this.game.vote(this.id);
       })
 
       .on('pointerout', () => {

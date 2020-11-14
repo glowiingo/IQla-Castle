@@ -47,14 +47,11 @@ class gameplay_scene extends Phaser.Scene {
     // add objects into the game
     console.log('gameplay_scene');
 
-    this.scene.launch('playerUI_scene');
-    // this.scene.launch("timer_scene");
-    this.scene.launch('mapOverlay_scene');
-    this.scene.launch('showPositionPlayer_scene');
-    this.scene.launch('voting_scene');
-
-    // Worked on by: Anna
-    this.isWalking = false;
+    this.scene.launch("playerUI_scene");
+    this.scene.launch("mapOverlay_scene");
+    this.scene.launch("showPositionPlayer_scene");
+    this.scene.launch("voting_scene");
+    this.scene.launch("chat_scene");
 
     let config = {
       key: 'WalkCycle',
@@ -94,7 +91,7 @@ class gameplay_scene extends Phaser.Scene {
   update() {
     // loop that runs constantly
     // -- game logic mainly in this area
-    if (this.player) {
+    if(this.player && !this.scene.get("chat_scene").showChat){
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
@@ -159,29 +156,25 @@ class gameplay_scene extends Phaser.Scene {
     return this.player;
   }
 
-  addOtherPlayer(playerInfo) {
-    const otherPlayer = new Player(
-      {
-        scene: this,
-        x: playerInfo.x,
-        y: playerInfo.y,
-        sprite: 'haachama',
-      },
-      playerInfo.playerId,
-      playerInfo.playerName,
-      300
-    );
+    addOtherPlayer(playerInfo) {
+        const otherPlayer = new Player({
+          scene:this, 
+          x: playerInfo.x, 
+          y: playerInfo.y, 
+          sprite:'haachama'
+      }, playerInfo.playerId, playerInfo.playerName, 300);
+      
+        //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
 
-    //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
+        this.scene.get('voting_scene').players.push(otherPlayer);
+        this.scene.get('voting_scene').displayPortraits();
 
-    this.add.existing(otherPlayer).setScale(1);
-    this.otherPlayers.add(otherPlayer);
-    this.otherPlayerTags.push(
-      this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
-        font: '32px Ariel',
-        fill: 'yellow',
-      })
-    );
-    return otherPlayer;
-  }
+        this.add.existing(otherPlayer).setScale(1);
+        this.otherPlayers.add(otherPlayer);
+        this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
+          font: "32px Ariel",
+          fill: "yellow",
+        }));
+        return otherPlayer;
+    }
 }

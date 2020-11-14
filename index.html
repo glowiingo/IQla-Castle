@@ -26,8 +26,10 @@
     <script src="./src/scenes/join_game_scene.js"></script>
     <script src="./src/scenes/kill_scene.js"></script>
     <script src="./src/scenes/trap_gameplay_scene.js"></script>
+    <script src="src/scenes/temp_game_end_scene.js"></script>
     <script src="src/scenes/ui/voting_scene.js"></script>
-
+    <script src="src/scenes/ui/chat_scene.js"></script>
+    
     <!-- Networking -->
     <script src="./js/server_connection.js"></script>
     <script src="./js/scene_data.js"></script>
@@ -46,5 +48,37 @@
     <script defer src="./src/game.js"></script>
   </head>
 
-  <body></body>
+</head>
+
+<body>
+  <input id="textbox" type="text"/>
+  <textarea readonly id="chatbox"></textarea>
+</body>
+
+<style>
+  #chatbox {
+    background-color: white;
+    border: black 2px solid;
+    display: none; 
+    width: 50%; 
+    height: 80%; 
+    position: absolute;
+    bottom: 80px;
+    margin-left: 20%;
+    opacity: 0.8;
+    overflow-y: scroll;
+  }
+
+  #textbox {
+    background-color: white;
+    border: black 2px solid;
+    display: none; 
+    width: 50%; 
+    height: 3%; 
+    position: absolute;
+    bottom: 30px;
+    margin-left: 20%;
+  }
+</style>
+
 </html>
