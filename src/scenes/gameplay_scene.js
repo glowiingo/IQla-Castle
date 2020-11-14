@@ -101,6 +101,7 @@ class gameplay_scene extends Phaser.Scene {
       this.playerNameText.y = this.player.y - 100;
     }
 
+    // worked on by William
     for (let i = 0; i < this.otherPlayerTags.length; i++) {
       try {
         this.otherPlayerTags[i].x =
@@ -114,12 +115,14 @@ class gameplay_scene extends Phaser.Scene {
     }
   }
 
+  // Worked on by William (Front End)
   gameOver(team) {
     this.scene.stop("playerUI_scene");
     this.scene.stop("mapOverlay_scene");
     this.scene.stop("showPositionPlayer_scene");
     this.scene.stop("voting_scene");
     this.scene.stop("chat_scene");
+
     this.scene.start('temp_game_end_scene', team + " win")
   }
 

@@ -13,16 +13,14 @@ class voting_scene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(
-      'votePortrait',
-      '../../assets/votingScene/VotePortrait.png'
-    );
-    this.load.image("chatButton", "../../assets/votingScene/chatButton.png");
+    this.load.image('votePortrait', '../../assets/votingScene/VotePortrait.png');
+    this.load.image('chatButton', '../../assets/votingScene/chatButton.png');
   }
 
   create() {
     this.showVote = false;
     this.scene.setVisible(false);
+    this.voted = false;
 
     this.screenX = this.cameras.main.width;
     this.screenY = this.cameras.main.height;
@@ -33,14 +31,14 @@ class voting_scene extends Phaser.Scene {
       this.toggleVisible();
     });
 
-
+    // create semi-transparent rectangle
     let rect = new Phaser.Geom.Rectangle(0, 50, this.screenX, this.screenY - 50);
     let g = this.add.graphics()
     g.fillStyle(0x000000, 0.8);
     g.fillRectShape(rect);
 
+    // chat toggle button
     this.chatButton = this.add.sprite(this.screenX - 50, 110, 'chatButton');
-
     this.chatButton.setInteractive();
     this.chatButton.setScale(0.25);
     this.chatButton.tintFill = false;
@@ -49,8 +47,6 @@ class voting_scene extends Phaser.Scene {
       .on('pointerover', () => this.chatButton.setTint(0x00FF00))
       .on('pointerout', () => this.chatButton.clearTint());
     
-    this.voted = false;
-
     // Display the portraits of the players.
     this.displayPortraits();
   } 
@@ -60,6 +56,7 @@ class voting_scene extends Phaser.Scene {
       let yPos =this.screenY / 5;
       let xPos =this.screenX / 5;
 
+      // create portrait objects and draw them
       let portrait;
       if (i < 5) {
         portrait = new Portrait(xPos * i, yPos, 'votePortrait', 
@@ -70,6 +67,7 @@ class voting_scene extends Phaser.Scene {
           this.players[i].playerName.substring(0,12), this.players[i].id, this);
         portrait.draw();
       }
+
       this.playerPortraits.push(portrait);
     }
 
@@ -101,8 +99,8 @@ class voting_scene extends Phaser.Scene {
     }
   }
 }
- 
 
+// status of mouse relative to portrait
 const mouseStatus = {
   hover: 1,
   selected: 2,
@@ -145,7 +143,7 @@ class Portrait {
     }
   }
 
-  // Change the colors of the portraits depending on mouse state.
+  // Change the colors of the portraits depending on mouse status
   draw() {
     this.spr.setScale(0.9);
     this.spr.setDisplayOrigin(-20, 0);
