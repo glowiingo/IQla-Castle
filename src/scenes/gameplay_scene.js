@@ -24,7 +24,7 @@ class gameplay_scene extends Phaser.Scene {
     this.otherPlayers = this.physics.add.group();
     this.otherPlayerTags = [];
   }
-
+  // Worked on by: Brian
   preload() {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
@@ -62,10 +62,11 @@ class gameplay_scene extends Phaser.Scene {
     this.anims.create(config);
 
     this.bgmusic = this.sound.add('BGM');
+    // BGM settings.
     let musicConfig = {
       mute: false,
-      volume: 0.5,
-      rate: 1,
+      volume: 0.3,
+      rate: 0.9,
       detune: 0,
       seek: 0,
       loop: true,

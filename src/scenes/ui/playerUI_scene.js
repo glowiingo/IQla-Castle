@@ -28,21 +28,16 @@ class playerUI_scene extends Phaser.Scene {
     });
 
     this.isStartGame = false;
-    // instantiate a progress bar in the top right corner of game screen, similar to the kill button
-    // note: add ProgressBar.increase(1) into each mini-game
-    // this.progressBar = this.add.sprite(0, 0, "progress");
+    //Add two sprites in the same location in the top right of the screen.
     this.bBar = this.add
       .sprite(game.config.width - 504, 0, 'BackBar')
       .setOrigin(0, 0);
     this.tBar = this.add
       .sprite(game.config.width - 504, 0, 'TaskBar')
       .setOrigin(0, 0);
+    //The bar starts empty at the beginning fo the game.
     this.fill = 0;
-    //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
-    //this.txt.setColor('#000000');
-    //this.txt.setFontSize(40);
-    //this.tBar.flipX = true;
-    //The bar ranges from 0-504 set bar adds an amount to it
+    //Init the empty crop.
     this.setBar(0);
 
     this.startBtn.on('pointerdown', () =>
@@ -244,7 +239,10 @@ class playerUI_scene extends Phaser.Scene {
     }
   }
 
-  //Sets the progress bar size by adding a positive or negative amount as *perc*
+  /**
+   * Adds an amount to the bars value then crops the top image appropriately. 
+   * @param perc An amount to add to the bars value of 0-504, can be negative to lower the bar. 
+   */
   setBar(perc) {
     this.fill += perc;
     this.tBar.setCrop(0, 0, this.fill, 84);
