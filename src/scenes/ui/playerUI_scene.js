@@ -121,7 +121,9 @@ class playerUI_scene extends Phaser.Scene {
         this.taskList = [];
         let x = taskListBoxX + 20;
         let y = taskListBoxY + 20;
-        const style = { font: '13px' };
+        const style = {
+            font: '13px'
+        };
 
         for (let i = 0; i < arr.length; i++) {
             this.taskList[i] = this.add
@@ -195,7 +197,7 @@ class playerUI_scene extends Phaser.Scene {
      * Renders the kill button object then calls renderDetectiveUI()
      */
     renderKillerUI() {
-        console.log ("Rendering killer UI");
+        console.log("Rendering killer UI");
         this.killButtonX = 80;
         this.killButtonY = this.cameras.main.height - 80;
 
@@ -233,7 +235,14 @@ class playerUI_scene extends Phaser.Scene {
     }
 
     use() {
+        // Worked on by: Alexis
         console.log('use');
+        let gameplay = this.scene.get('gameplay_scene');
+        let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
+
+        if (interactable) {
+            gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
+        }
     }
 
     report() {
