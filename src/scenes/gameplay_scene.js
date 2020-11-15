@@ -30,17 +30,19 @@ class gameplay_scene extends Phaser.Scene {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
     this.load.spritesheet(
-      'haachama',
-      '../../assets/player/PlayerWalkCycle.png',
-      { frameWidth: 128, frameHeight: 128, endFrame: 7 }
-    );
+      'haachama', 
+      '../../assets/player/PlayerWalkCycle.png', 
+      {
+        frameWidth: 128,
+        frameHeight: 128,
+        endFrame: 7
+      });
+    this.load.image('trap', '../../assets/medzombie.png');
 
     this.load.tilemapTiledJSON(
       'map',
       '../../assets/tilemaps/maps/protypeMap.json'
     );
-
-    this.load.image('trap', '../../assets/medzombie.png');
     this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
@@ -104,7 +106,7 @@ class gameplay_scene extends Phaser.Scene {
   update() {
     // loop that runs constantly
     // -- game logic mainly in this area
-    if(this.player && !this.scene.get("chat_scene").showChat) {
+    if (this.player && !this.scene.get("chat_scene").showChat) {
       this.player.player_movement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
@@ -180,12 +182,12 @@ class gameplay_scene extends Phaser.Scene {
 
   addOtherPlayer(playerInfo) {
     const otherPlayer = new Player({
-      scene:this, 
-      x: playerInfo.x, 
-      y: playerInfo.y, 
-      sprite:'haachama'
-  }, playerInfo.playerId, playerInfo.playerName, 300);
-  
+      scene: this,
+      x: playerInfo.x,
+      y: playerInfo.y,
+      sprite: 'haachama'
+    }, playerInfo.playerId, playerInfo.playerName, 300);
+
     //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
 
     this.scene.get('voting_scene').players.push(otherPlayer);
@@ -199,7 +201,7 @@ class gameplay_scene extends Phaser.Scene {
     }));
     return otherPlayer;
   }
-  
+
   addInteractables() {
     // Worked on by: Alexis
 

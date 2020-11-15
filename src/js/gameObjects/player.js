@@ -60,7 +60,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       }, this);
       this.trap_placed = true;
     }
-    
+
     if (this.key.up.isDown) {
       this.setVelocityY(-this.speed);
     } else if (this.key.down.isDown) {
@@ -97,15 +97,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   // Worked on by: Anna
   player_walk_anim_start() {
-    if (!this.scene.isWalking) {
-      this.scene.isWalking = true;
+    if (!this.isWalking) {
+      this.isWalking = true;
       this.play('WalkCycle');
     }
   }
 
   // Worked on by: Anna
   player_walk_anim_stop() {
-    this.scene.isWalking = false;
+    this.isWalking = false;
     this.anims.stop();
   }
 
@@ -124,9 +124,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   //worked on by Mike
   report() {
-    for(let i = 0; i < this.deadbodies.length; i++) {
+    for (let i = 0; i < this.deadbodies.length; i++) {
       let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.deadbodies[i].x, this.deadbodies[i].y);
-      if(c < 60) {
+      if (c < 60) {
         console.log("FOUND A DEADBODY!");
         break;
       }
@@ -149,6 +149,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
           this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
           break;
         }
+      }
+    }
+  }
+
+  /**
+  * Get the position of nearby interactable MapObjects. If it's active and within a
+  * a certain range, return that MapObject and set its active variable to false.
+  * @param {MapObject[]} interactables 
+  */
+  interact(interactables) {
+    // Worked on by: Alexis
+    for (let i = 0; i < interactables.length; i++) {
+      let pos = Phaser.Math.Distance.Chebyshev(this.x, this.y, interactables[i].x, interactables[i].y);
+      if (interactables[i].active && pos < 60) {
+        interactables[i].setActive(false); // Bugged.
+        // Above line needs to be done only after the minigame is completed.
+        return interactables[i];
       }
     }
   }

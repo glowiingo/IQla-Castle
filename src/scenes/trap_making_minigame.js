@@ -85,7 +85,7 @@ class trap_making_minigame extends Phaser.Scene {
       });
     }
 
-  // update() {}
+  //update() {}
 
   /**
    * Creates a draggable image and a slot for the image to move to.

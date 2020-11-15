@@ -28,8 +28,6 @@ class trap_gameplay_scene extends Phaser.Scene {
 
     create() {
         console.log("gameplay_scene");
-        
-        
         // this.player1 = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'haachama').setScale(1);
         // //console.log(this.player1);
         // this.player1.setCollideWorldBounds(true);
@@ -61,7 +59,7 @@ class trap_gameplay_scene extends Phaser.Scene {
         // this.physics.world.colliders.destroy();
         // this.player1.enable = false;
     }
-       
+
     update() {
         const cursors = this.input.keyboard.createCursorKeys();
         this.player1.player_movement(cursors);
@@ -70,10 +68,8 @@ class trap_gameplay_scene extends Phaser.Scene {
         
         // this.player1.toggle_body(cursors);
         this.physics.world.collide(this.player1, [this.wall]);
-        
-
-        
     }
+
     kill(sprite) {
         for(let i = 0; i < sprite.length; i++) {
             let a = Math.abs(this.player.x - sprite[i].x);
