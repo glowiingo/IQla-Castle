@@ -2,7 +2,7 @@
 
 class join_game_scene extends Phaser.Scene {
   constructor() {
-    super("join_game_scene");
+    super('join_game_scene');
   }
 
   init() {
@@ -12,9 +12,9 @@ class join_game_scene extends Phaser.Scene {
 
   preload() {
     // load audio and images into memory
-    this.load.html("nameForm", "../../assets/domEle/text-input.html");
-    this.load.image("goBackImage", "../../assets/go-back-icon.png");
-    this.load.image("okImage", "../../assets/check-icon.png");
+    this.load.html('nameForm', '../../assets/domEle/text-input.html');
+    this.load.image('goBackImage', '../../assets/go-back-icon.png');
+    this.load.image('okImage', '../../assets/check-icon.png');
   }
 
   create() {
@@ -24,21 +24,21 @@ class join_game_scene extends Phaser.Scene {
     const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
 
     this.add
-      .text(screenCenterX, screenCenterY - 150, "Join Game", {
-        font: "55px Ariel",
-        fill: "yellow",
+      .text(screenCenterX, screenCenterY - 150, 'Join Game', {
+        font: '55px Ariel',
+        fill: 'yellow',
       })
       .setOrigin(0.5);
 
     // ------------------------- NAME AND ROOM ID INPUT BOX ------------------------- //
-    const nameField = this.add.dom(0, 0).createFromCache("nameForm");
-    const roomIdField = this.add.dom(0, 0).createFromCache("nameForm");
+    const nameField = this.add.dom(0, 0).createFromCache('nameForm');
+    const roomIdField = this.add.dom(0, 0).createFromCache('nameForm');
 
-    this.nameInputBox = nameField.getChildByName("inputField");
-    this.roomIdInputBox = roomIdField.getChildByName("inputField");
+    this.nameInputBox = nameField.getChildByName('inputField');
+    this.roomIdInputBox = roomIdField.getChildByName('inputField');
 
-    this.nameInputBox.placeholder = "Enter Name";
-    this.roomIdInputBox.placeholder = "Enter Room ID";
+    this.nameInputBox.placeholder = 'Enter Name';
+    this.roomIdInputBox.placeholder = 'Enter Room ID';
 
     nameField.x = screenCenterX;
     nameField.y = screenCenterY;
@@ -52,7 +52,7 @@ class join_game_scene extends Phaser.Scene {
       screenY - 5,
       0,
       1,
-      "goBackImage",
+      'goBackImage',
       () => this.goBackClicked()
     );
 
@@ -62,7 +62,7 @@ class join_game_scene extends Phaser.Scene {
       screenY - 10,
       1,
       1,
-      "okImage",
+      'okImage',
       () => this.okClicked()
     );
 
@@ -71,7 +71,7 @@ class join_game_scene extends Phaser.Scene {
   }
 
   goBackClicked() {
-    this.scene.start("title_screen_scene");
+    this.scene.start('title_screen_scene');
   }
 
   /**
@@ -82,25 +82,25 @@ class join_game_scene extends Phaser.Scene {
    *
    *       2. Workaround method, add verification in the if statement below, so input thats not numeric will not work.
    *
-   * TODO: Add some type of error notification to user. For example, if user input is "", a text message pop up and says
-   *       "Name (or room id) cannot be empty."
+   * TODO: Add some type of error notification to user. For example, if user input is '', a text message pop up and says
+   *       'Name (or room id) cannot be empty.'
    */
   okClicked() {
     if (
-      this.nameInputBox.value != "" &&
-      this.roomIdInputBox.value != "" //&&
+      this.nameInputBox.value != '' &&
+      this.roomIdInputBox.value != '' //&&
       ///^\d+$/.test(this.roomIdInputBox.value) // Check if roomID value is numeric
     ) {
       console.log(
-        "ok clicked, Hello " +
+        'ok clicked, Hello ' +
         this.nameInputBox.value +
-        "\nJoining Room: " +
+        '\nJoining Room: ' +
         this.roomIdInputBox.value
       );
-      this.sceneData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
+      this.sceneData = new SceneData(this.scene.manager.getScene('gameplay_scene'));
       this.sceneData.serverConnection.setRoom(this.roomIdInputBox.value);
       this.sceneData.serverConnection.setName(this.nameInputBox.value);
-      this.scene.start("gameplay_scene");
+      this.scene.start('gameplay_scene');
     } else {
       // Do nothing
     }

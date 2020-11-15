@@ -1,4 +1,7 @@
 // Worked on by: Gloria Ngo
+/**
+ * This scene will allow for developers to access their sandbox development scenes.
+ */
 
 class mainmenu_scene extends Phaser.Scene {
   constructor() {

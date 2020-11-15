@@ -53,11 +53,11 @@ class gameplay_scene extends Phaser.Scene {
     // add objects into the game
     console.log('gameplay_scene');
 
-    this.scene.launch("playerUI_scene");
-    this.scene.launch("mapOverlay_scene");
-    this.scene.launch("showPositionPlayer_scene");
-    this.scene.launch("voting_scene");
-    this.scene.launch("chat_scene");
+    this.scene.launch('playerUI_scene');
+    this.scene.launch('mapOverlay_scene');
+    this.scene.launch('showPositionPlayer_scene');
+    this.scene.launch('voting_scene');
+    this.scene.launch('chat_scene');
 
     let config = {
       key: 'WalkCycle',
@@ -106,8 +106,8 @@ class gameplay_scene extends Phaser.Scene {
   update() {
     // loop that runs constantly
     // -- game logic mainly in this area
-    if (this.player && !this.scene.get("chat_scene").showChat) {
-      this.player.player_movement();
+    if (this.player && !this.scene.get('chat_scene').showChat) {
+      this.player.playerMovement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
         .get('showPositionPlayer_scene')
@@ -130,12 +130,12 @@ class gameplay_scene extends Phaser.Scene {
   }
 
   gameOver(team) {
-    this.scene.stop("playerUI_scene");
-    this.scene.stop("mapOverlay_scene");
-    this.scene.stop("showPositionPlayer_scene");
-    this.scene.stop("voting_scene");
-    this.scene.stop("chat_scene");
-    this.scene.start('temp_game_end_scene', team + " win")
+    this.scene.stop('playerUI_scene');
+    this.scene.stop('mapOverlay_scene');
+    this.scene.stop('showPositionPlayer_scene');
+    this.scene.stop('voting_scene');
+    this.scene.stop('chat_scene');
+    this.scene.start('temp_game_end_scene', team + ' win')
   }
 
   vote(votedFor) {
@@ -196,8 +196,8 @@ class gameplay_scene extends Phaser.Scene {
     this.add.existing(otherPlayer).setScale(1);
     this.otherPlayers.add(otherPlayer);
     this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
-      font: "32px Ariel",
-      fill: "yellow",
+      font: '32px Ariel',
+      fill: 'yellow',
     }));
     return otherPlayer;
   }

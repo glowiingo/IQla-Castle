@@ -28,7 +28,7 @@ class Trap extends Phaser.GameObjects.Sprite {
     //     // else if(inZone) {
     //     //     this.scene.player1.setTint(0x00ffff);
     //     //     this.trapZone.emit('inzone');
-    //     //     console.log("inzone");
+    //     //     console.log('inzone');
     //     // }
     
     //     this.trapZone.body.debugBodyColor = this.trapZone.body.touching.none ? 0x00ffff : 0xffff00;
@@ -59,7 +59,7 @@ class Trap extends Phaser.GameObjects.Sprite {
      */
     activateTrap() {
         if (!this.trapTriggered) {
-            console.log("triggered");
+            console.log('triggered');
             this.trapZone.destroy();
             let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
             this.kill(killList);
@@ -76,15 +76,16 @@ class Trap extends Phaser.GameObjects.Sprite {
             if(sprite.active && sprite.id) {
                 console.log(i);
                 sprite.setActive(false).setVisible(false);
-                console.log("Hidden");
+                console.log('Hidden');
                 console.log(sprite.x, sprite.y);
-                this.create_deadBody(sprite.x, sprite.y);
+                this.createDeadBody(sprite.x, sprite.y);
                 console.log(sprite.id);
                 this.scene.registry.values.sceneData.serverConnection.kill(sprite.id);
             }
         }
     }
-    create_deadBody(x, y) {
+    
+    createDeadBody(x, y) {
         let dead_image = this.scene.add.image(x, y, 'deadbody');
         dead_image.setScale(0.5);
         dead_image.setDepth(30);

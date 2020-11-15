@@ -30,7 +30,7 @@ class playerUI_scene extends Phaser.Scene {
     this.isStartGame = false;
     // instantiate a progress bar in the top right corner of game screen, similar to the kill button
     // note: add ProgressBar.increase(1) into each mini-game
-    // this.progressBar = this.add.sprite(0, 0, "progress");
+    // this.progressBar = this.add.sprite(0, 0, 'progress');
     this.bBar = this.add
       .sprite(game.config.width - 504, 0, 'BackBar')
       .setOrigin(0, 0);

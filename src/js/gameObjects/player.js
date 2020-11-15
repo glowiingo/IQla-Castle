@@ -1,6 +1,6 @@
 //Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike
 
-//const player = require("../player");
+//const player = require('../player');
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(config, id, playerName, speed, iqla = false) {
@@ -49,10 +49,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   //worked on by Kiwon and John
-  player_movement() {
+  playerMovement() {
 
     if (!this.trap_placed && this.key.place_trap.isDown) {
-      console.log("placed");
+      console.log('placed');
       this.trap = new Trap({
         scene: this.scene,
         x: this.x,
@@ -86,17 +86,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.key.right.isDown
     ) {
       if (!this.isWalking) {
-        this.player_walk_anim_start();
+        this.playerWalkAnimStart();
       }
     } else {
-      this.player_walk_anim_stop();
+      this.playerWalkAnimStop();
     }
     // print x y of player position to send to network team and update
     // console.log(this.x, this.y);
   }
 
   // Worked on by: Anna
-  player_walk_anim_start() {
+  playerWalkAnimStart() {
     if (!this.isWalking) {
       this.isWalking = true;
       this.play('WalkCycle');
@@ -104,7 +104,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   // Worked on by: Anna
-  player_walk_anim_stop() {
+  playerWalkAnimStop() {
     this.isWalking = false;
     this.anims.stop();
   }
@@ -114,7 +114,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   //worked on by Mike
-  create_deadBody(x, y) {
+  createDeadBody(x, y) {
     let dead_image = this.scene.add.image(x, y, 'deadbody');
     dead_image.setScale(0.5);
     dead_image.setDepth(30);
@@ -127,7 +127,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     for (let i = 0; i < this.deadbodies.length; i++) {
       let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.deadbodies[i].x, this.deadbodies[i].y);
       if (c < 60) {
-        console.log("FOUND A DEADBODY!");
+        console.log('FOUND A DEADBODY!');
         break;
       }
     }
@@ -141,11 +141,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (c < 60) {
           sprite[i].setActive(false).setVisible(false);
           sprite[i].alive = false;
-          //sprite[i].setTexture("ghost");
-          console.log("Hidden");
+          //sprite[i].setTexture('ghost');
+          console.log('Hidden');
           console.log(sprite[i].x, sprite[i].y);
-          this.create_deadBody(sprite[i].x, sprite[i].y);
-          console.log("I killed someone", sprite[i].id);
+          this.createDeadBody(sprite[i].x, sprite[i].y);
+          console.log('I killed someone', sprite[i].id);
           this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
           break;
         }

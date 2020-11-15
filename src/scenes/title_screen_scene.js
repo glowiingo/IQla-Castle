@@ -2,7 +2,7 @@
 
 class title_screen_scene extends Phaser.Scene {
   constructor() {
-    super("title_screen_scene");
+    super('title_screen_scene');
   }
 
   init() {
@@ -12,8 +12,8 @@ class title_screen_scene extends Phaser.Scene {
 
   preload() {
     // load audio and images into memory
-    this.load.image("settingImage", "../../assets/settings-icon.png");
-    this.load.image("helpImage", "../../assets/help-icon.png");
+    this.load.image('settingImage', '../../assets/settings-icon.png');
+    this.load.image('helpImage', '../../assets/help-icon.png');
   }
 
   create() {
@@ -23,9 +23,9 @@ class title_screen_scene extends Phaser.Scene {
     const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
 
     this.add
-      .text(screenCenterX, screenCenterY - 150, "IQla's Castle", {
-        font: "55px Ariel",
-        fill: "yellow",
+      .text(screenCenterX, screenCenterY - 150, 'IQla\'s Castle', {
+        font: '55px Ariel',
+        fill: 'yellow',
       })
       .setOrigin(0.5);
 
@@ -34,8 +34,8 @@ class title_screen_scene extends Phaser.Scene {
       this,
       screenCenterX,
       screenCenterY,
-      "Create Game",
-      { font: "30px Ariel", fill: "yellow" },
+      'Create Game',
+      { font: '30px Ariel', fill: 'yellow' },
       () => this.createNewGame()
     );
 
@@ -43,8 +43,8 @@ class title_screen_scene extends Phaser.Scene {
       this,
       screenCenterX,
       screenCenterY,
-      "Join Game",
-      { font: "30px Ariel", fill: "yellow" },
+      'Join Game',
+      { font: '30px Ariel', fill: 'yellow' },
       () => this.joinNewGame()
     );
 
@@ -55,7 +55,7 @@ class title_screen_scene extends Phaser.Scene {
       screenY - 10,
       0,
       1,
-      "settingImage",
+      'settingImage',
       () => this.settingIconClicked()
     );
 
@@ -65,7 +65,7 @@ class title_screen_scene extends Phaser.Scene {
       screenY - 10,
       1,
       1,
-      "helpImage",
+      'helpImage',
       () => this.helpIconClicked()
     );
 
@@ -76,19 +76,19 @@ class title_screen_scene extends Phaser.Scene {
   }
 
   createNewGame() {
-    this.scene.start("create_game_scene");
+    this.scene.start('create_game_scene');
   }
 
   joinNewGame() {
-    this.scene.start("join_game_scene");
+    this.scene.start('join_game_scene');
   }
 
   settingIconClicked() {
-    console.log("settings");
+    console.log('settings');
   }
 
   helpIconClicked() {
-    console.log("help");
+    console.log('help');
     this.scene.start('mainmenu_scene');
   }
 

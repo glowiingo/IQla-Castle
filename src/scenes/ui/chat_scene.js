@@ -40,7 +40,7 @@ class chat_scene extends Phaser.Scene {
 
   receiveMsg(name, text) {
     let date = new Date();
-    let chat_string = "[" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "] (";
+    let chat_string = '[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '] (';
     chat_string += name + '): ' + text + '\r\n';
     this.chatbox.value += chat_string;
   }
@@ -57,7 +57,7 @@ class chat_scene extends Phaser.Scene {
     // stop player from getting stuck in a walk animation
     this.scene.get('gameplay_scene').player.setVelocityX(0);
     this.scene.get('gameplay_scene').player.setVelocityY(0);
-    this.scene.get('gameplay_scene').player.player_walk_anim_stop();
+    this.scene.get('gameplay_scene').player.playerWalkAnimStop();
 
     this.showChat = !this.showChat;
     if (this.showChat) {
