@@ -61,7 +61,7 @@ class Trap extends Phaser.GameObjects.Sprite {
         if (!this.trapTriggered) {
             console.log("triggered");
             this.trapZone.destroy();
-            let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth*2, true);
+            let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
             this.kill(killList);
             this.destroy();
             
@@ -73,7 +73,7 @@ class Trap extends Phaser.GameObjects.Sprite {
         for (let i = 0; i < sprites.length; i++) {
             console.log(sprites[i].gameObject);
             let sprite = sprites[i].gameObject
-            if(sprite.active) {
+            if(sprite.active && sprite.id) {
                 console.log(i);
                 sprite.setActive(false).setVisible(false);
                 console.log("Hidden");
