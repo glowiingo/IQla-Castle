@@ -15,20 +15,21 @@ class mouse_click_minigame extends Phaser.Scene {
   }
 
   preload() {
-    // Load audio and images into memory.
+    // Load media into memory.
     this.load.image('haachama', '../../assets/haachamachama112.png');
     this.load.image('mouse_click_background', '../../assets/shrek.jpg');
     this.load.image('pp', '../../assets/pp.png');
+
+    this.load.audio('nyes', '../../assets/nyes.mp3');
+
+    this.load.video('recorder', '../../assets/recorder.mp4');
   }
   
   create(data) {
-    // let background = this.add.image(
-    //   this.cameras.default.width / 2, 
-    //   this.cameras.default.height / 2, 
-    //   'mouse_click_background'
-    // );
-    // background.displayWidth = data.width;
-    // background.displayHeight = data.height;
+    // sound effect of someone saying 'n-yes'
+    let nyes = this.sound.add('nyes');
+    nyes.setVolume(0.4);
+    
     minigame_scene_manager.setBackground('mouse_click_minigame', 'mouse_click_background');
 
     // setScale does not affect image width/height so separate variables are created
@@ -48,12 +49,14 @@ class mouse_click_minigame extends Phaser.Scene {
       mouse.setInteractive();
       // remove mouse if clicked on
       mouse.on('pointerdown', () => {
-        mice.splice(mice.indexOf(mouse), 1);
         tween.stop();
         mouse.setVisible(false);
+        mice.splice(mice.indexOf(mouse), 1);
         
         if (mice.length === 0){
-          minigame_scene_manager.minigameWon('mouse_click_minigame');
+          this.playVideo();
+        } else {
+          nyes.play();
         }
       });
       
@@ -100,7 +103,6 @@ class mouse_click_minigame extends Phaser.Scene {
     let min = (this.game.config.width - board_size) / 2 + object_size / 2;
     return Math.random() * (board_size - object_size) + min;
   }
-  
   getRandomY(board_size, object_size){
     let min = (this.game.config.height - board_size) / 2 + object_size / 2;
     return Math.random() * (board_size - object_size) + min;
@@ -112,5 +114,26 @@ class mouse_click_minigame extends Phaser.Scene {
   // up from (0, 0)). 
   getRadians(currX, currY, nextX, nextY){
       return Math.atan2(nextY - currY, nextX - currX) + Math.PI / 2;
+  }
+
+  playVideo(){
+    let recorder= this.add.video(400, 300,'recorder');
+    recorder.setVolume(0.6);
+    recorder.alpha = 0.6;
+    recorder.setDepth(2);
+    recorder.play();
+    
+    this.tweens.add({
+      targets: recorder,
+      scale: 4,
+      duration: recorder.getDuration() * 1000,
+      repeat: 0
+    });
+
+    recorder.on('complete', () => {
+      // When the audio plays, the win condition has been satisfied.
+      // After the audio has finished playing, call the 'won' function.
+      minigame_scene_manager.minigameWon('mouse_click_minigame');
+    });
   }
 }

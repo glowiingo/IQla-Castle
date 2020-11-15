@@ -34,6 +34,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       right: Phaser.Input.Keyboard.KeyCodes.D,
       place_trap: Phaser.Input.Keyboard.KeyCodes.E
     });
+    this.deadbodies = [];
   }
 
   /**
@@ -52,10 +53,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     if (!this.trap_placed && this.key.place_trap.isDown) {
       console.log("placed");
-      this.trap = new Trap({ scene: this.scene, x: this.x, y: this.y }, this);
+      this.trap = new Trap({
+        scene: this.scene,
+        x: this.x,
+        y: this.y
+      }, this);
       this.trap_placed = true;
     }
-
+    
+    if (this.key.up.isDown) {
+      this.setVelocityY(-this.speed);
+    } else if (this.key.down.isDown) {
+      this.setVelocityY(this.speed);
+    } else {
+      this.setVelocityY(0);
+    }
     //console.log(this);
     if (this.key.left.isDown) {
       this.setVelocityX(-this.speed);
@@ -67,14 +79,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityX(0);
     }
 
-    if (this.key.up.isDown) {
-      this.setVelocityY(-this.speed);
-    } else if (this.key.down.isDown) {
-      this.setVelocityY(this.speed);
-    } else {
-      this.setVelocityY(0);
-    }
-    // Worked on by: William, Brian, Anna, Flemming
     if (
       this.key.down.isDown ||
       this.key.up.isDown ||
@@ -91,21 +95,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // console.log(this.x, this.y);
   }
 
-  getPlayerName() {
-    return this.playerName;
+  // Worked on by: Anna
+  player_walk_anim_start() {
+    if (!this.scene.isWalking) {
+      this.scene.isWalking = true;
+      this.play('WalkCycle');
+    }
   }
 
   // Worked on by: Anna
   player_walk_anim_stop() {
-    this.isWalking = false;
+    this.scene.isWalking = false;
     this.anims.stop();
-  }
-  // Worked on by: Anna
-  player_walk_anim_start() {
-    if (!this.isWalking) {
-      this.isWalking = true;
-      this.play("WalkCycle");
-    }
   }
 
   getPlayerName() {
@@ -114,9 +115,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   //worked on by Mike
   create_deadBody(x, y) {
-    let dead_image = this.scene.add.image(x, y, "deadbody");
+    let dead_image = this.scene.add.image(x, y, 'deadbody');
     dead_image.setScale(0.5);
     dead_image.setDepth(30);
+    dead_image.setInteractive();
+    this.deadbodies.push(dead_image);
+  }
+
+  //worked on by Mike
+  report() {
+    for(let i = 0; i < this.deadbodies.length; i++) {
+      let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.deadbodies[i].x, this.deadbodies[i].y);
+      if(c < 60) {
+        console.log("FOUND A DEADBODY!");
+        break;
+      }
+    }
   }
 
   //worked on by Mike
@@ -133,27 +147,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
           this.create_deadBody(sprite[i].x, sprite[i].y);
           console.log("I killed someone", sprite[i].id);
           this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
+          break;
         }
-        break;
       }
     }
   }
 
   // Worked on by Gloria
-  // Sets the role for the player based on a random number generator
-  // We should note that other player factors may need to be passed into this function
-  // Logic may need to be defined on the server? or server needs to pass all player ids in array
+  /**
+   * Sets the role for the player based on what has been decided by the server
+   */
   setRole(player_id_object) {
-    console.log("Object: " + player_id_object);
-    console.log("Accessing Object: " + player_id_object[this.id]);
+    console.log('Object: ' + player_id_object);
+    console.log('Accessing Object: ' + player_id_object[this.id]);
     let iqla_status = player_id_object[this.id];
     // check for nulls
     if (iqla_status) {
       // set iqla
-      if (iqla_status == "vampire") {
+      if (iqla_status == 'vampire') {
         this.iqla = true;
       }
-      console.log("Is iqla", this.iqla);
+      console.log('Is iqla', this.iqla);
     }
   }
 

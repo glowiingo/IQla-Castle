@@ -15,7 +15,7 @@ class trap_making_minigame extends Phaser.Scene {
     }
 
     preload() {
-        // load audio and images into memory
+        // load media into memory
         this.load.image('trap_making_background', '../../assets/shrek2.jpg');
         this.load.image('bananaCage', '../../assets/bananaCage.png');
         this.load.image('trump', '../../assets/cornTrumpItem.png');

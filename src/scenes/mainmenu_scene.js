@@ -7,15 +7,27 @@ class mainmenu_scene extends Phaser.Scene {
 
   preload() {
     // Load audio and images into memory.
+    this.load.image('goBackImage', '../../assets/go-back-icon.png');
   }
 
   create() {
     console.log('Main Menu');
+    // Worked on by: Alexis
+    this.goBackIcon = new ImageButton(
+        this,
+        5,
+        this.cameras.main.height - 5,
+        0,
+        1,
+        'goBackImage',
+        () => this.scene.start('title_screen_scene')
+    );
     // Use this line to launch minigame in 'overlay'. Replace this.scene.start(SCENE_NAME) in 'pointerdown' events:
     // this.scene.launch('minigame_scene_manager', 'mouse_click_minigame');
+    this.add.existing(this.goBackIcon);
 
     // Worked on by: Evano
-    this.scenData = new SceneData(this.scene.manager.getScene("gameplay_scene"));
+    this.sceneData = new SceneData(this.scene.manager.getScene('gameplay_scene'));
 
     this.gameplay_text = this.add.text(20, 20, 'Gameplay Scene', { font: '25px Arial', fill: 'yellow' });
     

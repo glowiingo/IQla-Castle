@@ -22,7 +22,8 @@ class gameplay_scene extends Phaser.Scene {
     console.log(this.registry.values.sceneData);
     this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
-    this.otherPlayerTags = [];
+    this.otherPlayerTags = []
+    this.interactables = this.physics.add.group();
   }
 
   preload() {
@@ -38,9 +39,12 @@ class gameplay_scene extends Phaser.Scene {
       'map',
       '../../assets/tilemaps/maps/protypeMap.json'
     );
+
+    this.load.image('trap', '../../assets/medzombie.png');
     this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
+    this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
   }
 
   create() {
@@ -55,7 +59,10 @@ class gameplay_scene extends Phaser.Scene {
 
     let config = {
       key: 'WalkCycle',
-      frames: this.anims.generateFrameNumbers('haachama', { start: 0, end: 7 }),
+      frames: this.anims.generateFrameNumbers('haachama', {
+        start: 0,
+        end: 7
+      }),
       frameRate: 8,
       repeat: -1,
     };
@@ -69,18 +76,24 @@ class gameplay_scene extends Phaser.Scene {
       detune: 0,
       seek: 0,
       loop: true,
-      delay: 0,
-    };
+      delay: 0
+    }
     this.bgmusic.play(musicConfig);
 
     // Worked on by: Flemming, William
-    let map = this.make.tilemap({ key: 'map' });
-    let tileset = map.addTilesetImage('updated_tiles', 'tiles');
+    let map = this.make.tilemap({
+      key: 'map'
+    });
+    let tileset = map.addTilesetImage('updated_tiles', 'tiles')
     map.createStaticLayer('Background', tileset);
     map.createStaticLayer('Ground', tileset);
 
     this.wallsLayer = map.createStaticLayer('Walls', tileset);
-    this.wallsLayer.setCollisionByProperty({ collides: true });
+    this.wallsLayer.setCollisionByProperty({
+      collides: true
+    });
+
+    this.addInteractables();
 
     // Worked on by: Evano
     //Start networking & create player once networking is connected
@@ -165,25 +178,50 @@ class gameplay_scene extends Phaser.Scene {
     return this.player;
   }
 
-    addOtherPlayer(playerInfo) {
-        const otherPlayer = new Player({
-          scene:this, 
-          x: playerInfo.x, 
-          y: playerInfo.y, 
-          sprite:'haachama'
-      }, playerInfo.playerId, playerInfo.playerName, 300);
-      
-        //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
+  addOtherPlayer(playerInfo) {
+    const otherPlayer = new Player({
+      scene:this, 
+      x: playerInfo.x, 
+      y: playerInfo.y, 
+      sprite:'haachama'
+  }, playerInfo.playerId, playerInfo.playerName, 300);
+  
+    //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
 
-        this.scene.get('voting_scene').players.push(otherPlayer);
-        this.scene.get('voting_scene').displayPortraits();
+    this.scene.get('voting_scene').players.push(otherPlayer);
+    this.scene.get('voting_scene').displayPortraits();
 
-        this.add.existing(otherPlayer).setScale(1);
-        this.otherPlayers.add(otherPlayer);
-        this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
-          font: "32px Ariel",
-          fill: "yellow",
-        }));
-        return otherPlayer;
-    }
+    this.add.existing(otherPlayer).setScale(1);
+    this.otherPlayers.add(otherPlayer);
+    this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
+      font: "32px Ariel",
+      fill: "yellow",
+    }));
+    return otherPlayer;
+  }
+  
+  addInteractables() {
+    // Worked on by: Alexis
+
+    this.bookshelfMinigameObj = new MapObject({
+      scene: this,
+      x: 1200,
+      y: 115,
+      sprite: 'bookshelfMinigame',
+      triggeredScene: 'book_click_minigame',
+      isMinigameObj: true,
+    });
+    this.add.existing(this.bookshelfMinigameObj).setScale(0.1);
+    this.physics.add.existing(this.bookshelfMinigameObj);
+
+    // ------------ Add MapObjects to a physics group ------------ //
+    this.interactables.add(this.bookshelfMinigameObj);
+  }
+
+  triggerScene(pauseKey, launchKey, launchData) {
+    // Worked on by: Alexis
+    this.scene.pause();
+    this.scene.pause(pauseKey);
+    this.scene.launch(launchKey, launchData);
+  }
 }

@@ -41,6 +41,9 @@ class book_click_minigame extends Phaser.Scene {
     this.load.audio('no', '../../assets/no.mp3');
     this.load.audio('yes', '../../assets/yes.mp3');
     this.load.audio('ok', '../../assets/ok.mp3');
+
+    // ---------- Pre-load Video ---------- //
+    this.load.video('bravo', '../../assets/bravowow.mp4');
   }
 
   create(data) {
@@ -197,6 +200,27 @@ class book_click_minigame extends Phaser.Scene {
         fill: 'black'
       });
       yPosition += yDistance;
+    });
+  }
+
+  playVideo(){
+    let bravo= this.add.video(400, 300,'bravo');
+    bravo.setVolume(0.8);
+    bravo.alpha = 0.5;
+    bravo.setDepth(2);
+    bravo.play();
+    
+    this.tweens.add({
+      targets: bravo,
+      scale: 4,
+      duration: bravo.getDuration() * 1000,
+      repeat: 0
+    });
+
+    bravo.on('complete', () => {
+      // When the audio plays, the win condition has been satisfied.
+      // After the audio has finished playing, call the 'won' function.
+      minigame_scene_manager.minigameWon('book_click_minigame');
     });
   }
 }

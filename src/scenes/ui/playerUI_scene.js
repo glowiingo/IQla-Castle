@@ -38,6 +38,7 @@ class playerUI_scene extends Phaser.Scene {
       .sprite(game.config.width - 504, 0, 'TaskBar')
       .setOrigin(0, 0);
     this.fill = 0;
+    
     //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
     //this.txt.setColor('#000000');
     //this.txt.setFontSize(40);
@@ -45,9 +46,10 @@ class playerUI_scene extends Phaser.Scene {
     //The bar ranges from 0-504 set bar adds an amount to it
     this.setBar(0);
 
-    this.startBtn.on('pointerdown', () =>
-      this.registry.values.sceneData.alertGameStart()
-    );
+    this.startBtn
+      .on('pointerdown', () =>
+        this.registry.values.sceneData.alertGameStart()
+      );
     window.addEventListener('resize', () => {
       this.resize();
     });
@@ -115,10 +117,14 @@ class playerUI_scene extends Phaser.Scene {
     this.taskList = [];
     let x = taskListBoxX + 20;
     let y = taskListBoxY + 20;
-    const style = { font: '13px' };
+    const style = {
+      font: '13px'
+    };
 
     for (let i = 0; i < arr.length; i++) {
-      this.taskList[i] = this.add.text(x, y, arr[i], style).setOrigin(0, 0);
+      this.taskList[i] = this.add
+          .text(x, y, arr[i], style)
+          .setOrigin(0, 0);
 
       this.taskList[i].wordWrap = true;
       this.taskList[i].setWordWrapWidth(taskListBoxWidth * 0.9);
@@ -170,6 +176,8 @@ class playerUI_scene extends Phaser.Scene {
     this.mapButton.on('pointerdown', () => this.showMap());
   }
 
+
+
   /**
    * Renders the kill button object then calls renderDetectiveUI()
    */
@@ -198,6 +206,9 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   kill() {
+    
+    // this.killButton.setTint(0x2b2a2a);
+    // this.time.delayedCall(2000, this.enablePress, [], this);
     this.canKill = false;
 
     let gameplay = this.scene.get('gameplay_scene');
@@ -206,11 +217,20 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   use() {
+    // Worked on by: Alexis
     console.log('use');
-  }
+    let gameplay = this.scene.get('gameplay_scene');
+    let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
 
+    if (interactable) {
+        gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
+    }
+  }
+   
   report() {
-    console.log('report');
+    //worked on by Mike
+    let gameplay = this.scene.get('gameplay_scene');
+    gameplay.player.report();
   }
 
   showMap() {
