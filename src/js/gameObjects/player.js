@@ -1,6 +1,6 @@
-//Worked on by Kiwon, John, Nav, Evano
+//Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike
 
-//const player = require("../player");
+//const player = require('../player');
 
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(config, id, playerName, speed, iqla = false) {
@@ -32,19 +32,43 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+      place_trap: Phaser.Input.Keyboard.KeyCodes.E
     });
-    
+    this.deadbodies = [];
   }
-  
+
+  /**
+   * Removes captures when chat scene is being used so that you are able to use the letters
+   */
   removeCaptures() {
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.S);
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.D);
+    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
   }
 
-  //worked on by Kiwon
-  player_movement() {
+  //worked on by Kiwon and John
+  playerMovement() {
+
+    if (!this.trap_placed && this.key.place_trap.isDown) {
+      console.log('placed');
+      this.trap = new Trap({
+        scene: this.scene,
+        x: this.x,
+        y: this.y
+      }, this);
+      this.trap_placed = true;
+    }
+
+    if (this.key.up.isDown) {
+      this.setVelocityY(-this.speed);
+    } else if (this.key.down.isDown) {
+      this.setVelocityY(this.speed);
+    } else {
+      this.setVelocityY(0);
+    }
+    //console.log(this);
     if (this.key.left.isDown) {
       this.setVelocityX(-this.speed);
       this.flipX = false;
@@ -55,15 +79,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityX(0);
     }
 
-    if (this.key.up.isDown) {
-      this.setVelocityY(-this.speed);
-    } else if (this.key.down.isDown) {
-      this.setVelocityY(this.speed);
-    } else {
-      this.setVelocityY(0);
-    }
-
-    // Worked on by: William, Brian, Anna, Flemming
     if (
       this.key.down.isDown ||
       this.key.up.isDown ||
@@ -71,27 +86,25 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.key.right.isDown
     ) {
       if (!this.isWalking) {
-        this.player_walk_anim_start();
+        this.playerWalkAnimStart();
       }
     } else {
-      this.player_walk_anim_stop();
+      this.playerWalkAnimStop();
     }
+    // print x y of player position to send to network team and update
+    // console.log(this.x, this.y);
   }
 
   // Worked on by: Anna
-  player_walk_anim_start() {
+  playerWalkAnimStart() {
     if (!this.isWalking) {
       this.isWalking = true;
-      this.play("WalkCycle");
+      this.play('WalkCycle');
     }
   }
 
-  getPlayerName() {
-    return this.playerName;
-  }
-
   // Worked on by: Anna
-  player_walk_anim_stop() {
+  playerWalkAnimStop() {
     this.isWalking = false;
     this.anims.stop();
   }
@@ -101,50 +114,77 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   //worked on by Mike
-  create_deadBody(x, y) {
-    let dead_image = this.scene.add.image(x, y, "deadbody");
+  createDeadBody(x, y) {
+    let dead_image = this.scene.add.image(x, y, 'deadbody');
     dead_image.setScale(0.5);
     dead_image.setDepth(30);
+    dead_image.setInteractive();
+    this.deadbodies.push(dead_image);
+  }
+
+  //worked on by Mike
+  report() {
+    for (let i = 0; i < this.deadbodies.length; i++) {
+      let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.deadbodies[i].x, this.deadbodies[i].y);
+      if (c < 60) {
+        console.log('FOUND A DEADBODY!');
+        break;
+      }
+    }
   }
 
   //worked on by Mike
   kill(sprite) {
     for (let i = 0; i < sprite.length; i++) {
-      let a = Math.abs(this.x - sprite[i].x);
-      let b = Math.abs(this.y - sprite[i].y);
-      let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-      // console.log(c);
-      if (c < 60) {
-        sprite[i].setActive(false).setVisible(false);
-        sprite[i].alive = false;
-        //sprite[i].setTexture("ghost");
-        console.log("Hidden");
-        console.log(sprite[i].x, sprite[i].y);
-        this.create_deadBody(sprite[i].x, sprite[i].y);
-        console.log("I killed someone", sprite[i].id);
-        this.scene.registry.values.sceneData.serverConnection.kill(
-          sprite[i].id
-        );
+      let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, sprite[i].x, sprite[i].y);
+      if (sprite[i].active) {
+        if (c < 60) {
+          sprite[i].setActive(false).setVisible(false);
+          sprite[i].alive = false;
+          //sprite[i].setTexture('ghost');
+          console.log('Hidden');
+          console.log(sprite[i].x, sprite[i].y);
+          this.createDeadBody(sprite[i].x, sprite[i].y);
+          console.log('I killed someone', sprite[i].id);
+          this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
+          break;
+        }
       }
     }
-    // console.log(Math.abs(this.x - this.player2.x));
+  }
+
+  /**
+  * Get the position of nearby interactable MapObjects. If it's active and within a
+  * a certain range, return that MapObject and set its active variable to false.
+  * @param {MapObject[]} interactables 
+  */
+  interact(interactables) {
+    // Worked on by: Alexis
+    for (let i = 0; i < interactables.length; i++) {
+      let pos = Phaser.Math.Distance.Chebyshev(this.x, this.y, interactables[i].x, interactables[i].y);
+      if (interactables[i].active && pos < 60) {
+        interactables[i].setActive(false); // Bugged.
+        // Above line needs to be done only after the minigame is completed.
+        return interactables[i];
+      }
+    }
   }
 
   // Worked on by Gloria
-  // Sets the role for the player based on a random number generator
-  // We should note that other player factors may need to be passed into this function
-  // Logic may need to be defined on the server? or server needs to pass all player ids in array
+  /**
+   * Sets the role for the player based on what has been decided by the server
+   */
   setRole(player_id_object) {
-    console.log("Object: " + player_id_object);
-    console.log("Accessing Object: " + player_id_object[this.id]);
+    console.log('Object: ' + player_id_object);
+    console.log('Accessing Object: ' + player_id_object[this.id]);
     let iqla_status = player_id_object[this.id];
     // check for nulls
     if (iqla_status) {
       // set iqla
-      if (iqla_status == "vampire") {
+      if (iqla_status == 'vampire') {
         this.iqla = true;
       }
-      console.log("Is iqla", this.iqla);
+      console.log('Is iqla', this.iqla);
     }
   }
 
