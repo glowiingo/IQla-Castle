@@ -22,7 +22,7 @@ class mapOverlay_scene extends Phaser.Scene {
     // toggle map on tab
     this.tabPress = this.input.keyboard.addKey('TAB');
     this.tabPress.on('down', () => {
-      showMap ==! showMap;
+      showMap =! showMap;
       showMap ? this.mapShow() : this.mapHide();
     });
   }
