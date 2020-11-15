@@ -13,7 +13,10 @@ class voting_scene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('votePortrait', '../../assets/votingScene/VotePortrait.png');
+    this.load.image(
+      'votePortrait',
+      '../../assets/votingScene/VotePortrait.png'
+    );
     this.load.image('chatButton', '../../assets/votingScene/chatButton.png');
   }
 
@@ -43,7 +46,7 @@ class voting_scene extends Phaser.Scene {
     this.chatButton.setScale(0.25);
     this.chatButton.tintFill = false;
     this.chatButton
-      .on('pointerdown', () => this.scene.get("chat_scene").toggleVisible())
+      .on('pointerdown', () => this.scene.get('chat_scene').toggleVisible())
       .on('pointerover', () => this.chatButton.setTint(0x00FF00))
       .on('pointerout', () => this.chatButton.clearTint());
     
@@ -86,7 +89,7 @@ class voting_scene extends Phaser.Scene {
       this.scene.setVisible(true);
     } else {
       this.scene.setVisible(false);
-      this.scene.get("chat_scene").hide();
+      this.scene.get('chat_scene').hide();
       // reset the voting scene when closed
       this.voted = false;
       for (let i = 0; i < this.playerPortraits.length; i++) {
