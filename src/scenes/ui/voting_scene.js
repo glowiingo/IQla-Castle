@@ -13,14 +13,10 @@ class voting_scene extends Phaser.Scene {
   }
 
   preload() {
-<<<<<<< HEAD
-    this.load.image('votePortrait', '../../assets/votingScene/VotePortrait.png');
-=======
     this.load.image(
       'votePortrait',
       '../../assets/votingScene/VotePortrait.png'
     );
->>>>>>> back_end
     this.load.image('chatButton', '../../assets/votingScene/chatButton.png');
   }
 

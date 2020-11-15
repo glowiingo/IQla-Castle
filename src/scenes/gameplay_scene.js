@@ -132,22 +132,12 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by William (Front End)
   gameOver(team) {
-<<<<<<< HEAD
-    this.scene.stop("playerUI_scene");
-    this.scene.stop("mapOverlay_scene");
-    this.scene.stop("showPositionPlayer_scene");
-    this.scene.stop("voting_scene");
-    this.scene.stop("chat_scene");
-
-    this.scene.start('temp_game_end_scene', team + " win")
-=======
     this.scene.stop('playerUI_scene');
     this.scene.stop('mapOverlay_scene');
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
     this.scene.start('temp_game_end_scene', team + ' win')
->>>>>>> back_end
   }
 
   vote(votedFor) {
