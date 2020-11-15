@@ -42,6 +42,5 @@ class showPositionPlayer_scene extends Phaser.Scene {
       this.dot.x = (x/10) + 145;
       this.dot.y = (y/10) + 145;
     }
-    
   }
 }
