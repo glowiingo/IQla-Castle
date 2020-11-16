@@ -1,8 +1,9 @@
+// THIS FILE WILL BE REMOVED IF UNUSED
 // Worked on by: Lewis
 
 class create_game_scene extends Phaser.Scene {
     constructor() {
-        super("create_game_scene");
+        super('create_game_scene');
     }
 
     init() {
@@ -12,9 +13,9 @@ class create_game_scene extends Phaser.Scene {
 
     preload() {
         // load audio and images into memory
-        this.load.html("nameForm", "../../assets/domEle/text-input.html");
-        this.load.image("goBackImage", "../../assets/go-back-icon.png");
-        this.load.image("okImage", "../../assets/check-icon.png");
+        this.load.html('nameForm', '../../assets/domEle/text-input.html');
+        this.load.image('goBackImage', '../../assets/go-back-icon.png');
+        this.load.image('okImage', '../../assets/check-icon.png');
     }
 
     create() {
@@ -26,20 +27,20 @@ class create_game_scene extends Phaser.Scene {
         const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
 
         this.add
-            .text(screenCenterX, screenCenterY - 150, "What is your name?", {
-                font: "55px Ariel",
-                fill: "yellow",
+            .text(screenCenterX, screenCenterY - 150, 'What is your name?', {
+                font: '55px Ariel',
+                fill: 'yellow',
             })
             .setOrigin(0.5);
 
         // ------------------------- NAME INPUT BOX ------------------------- //
-        const inputField = this.add.dom(0, 0).createFromCache("nameForm");
+        const inputField = this.add.dom(0, 0).createFromCache('nameForm');
 
         inputField.x = screenCenterX;
         inputField.y = screenCenterY;
 
-        this.nameInputBox = inputField.getChildByName("inputField");
-        this.nameInputBox.placeholder = "Enter Name";
+        this.nameInputBox = inputField.getChildByName('inputField');
+        this.nameInputBox.placeholder = 'Enter Name';
 
         // ------------------------- ICONS ------------------------- //
         this.goBackIcon = new ImageButton(
@@ -48,7 +49,7 @@ class create_game_scene extends Phaser.Scene {
             screenY - 5,
             0,
             1,
-            "goBackImage",
+            'goBackImage',
             () => this.goBackClicked()
         );
 
@@ -58,7 +59,7 @@ class create_game_scene extends Phaser.Scene {
             screenY - 10,
             1,
             1,
-            "okImage",
+            'okImage',
             () => this.okClicked()
         );
 
@@ -67,16 +68,16 @@ class create_game_scene extends Phaser.Scene {
     }
 
     goBackClicked() {
-        this.scene.start("title_screen_scene");
+        this.scene.start('title_screen_scene');
     }
 
     /**
-     * TODO: Add some type of error notification to user. For example, if user input is "", a text message pop up and says
-     *       "Name (or room id) cannot be empty."
+     * TODO: Add some type of error notification to user. For example, if user input is '', a text message pop up and says
+     *       'Name (or room id) cannot be empty.'
      */
     okClicked() {
-        if (this.nameInputBox.value != "") {
-            console.log("ok clicked, Hello " + this.nameInputBox.value);
+        if (this.nameInputBox.value != '') {
+            console.log('ok clicked, Hello ' + this.nameInputBox.value);
         } else {
             // Do nothing
         }
