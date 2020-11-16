@@ -18,8 +18,7 @@ class endGame_scene extends Phaser.Scene {
     preload() {
       // load audio and images into memory
     this.load.image('play_again_image', '../../assets/play_again.png');
-    this.load.image('end_game_image', '../../assets/end_game_picture.png');
-
+    
     }
   
     create() {
@@ -27,8 +26,6 @@ class endGame_scene extends Phaser.Scene {
     const screenY = this.cameras.main.height;
     const screenCenterX = this.cameras.main.worldView.x + screenX / 2;
     const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
-    // added end game picture
-    this.add.image(screenCenterX, screenCenterY,'end_game_image')
     // added text "victory"
     this.victory = this.add
       .text(screenCenterX, screenCenterY - 150, 'Victory', {
