@@ -137,7 +137,7 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
-    this.scene.start('temp_game_end_scene', team + ' win')
+    this.scene.start('endGame_scene', team + ' win')
   }
 
   vote(votedFor) {
