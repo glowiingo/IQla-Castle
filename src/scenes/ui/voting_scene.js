@@ -18,6 +18,7 @@ class voting_scene extends Phaser.Scene {
       '../../assets/votingScene/VotePortrait.png'
     );
     this.load.image('chatButton', '../../assets/votingScene/chatButton.png');
+    this.load.image('skip', '../../assets/votingScene/Skip.png');
   }
 
   create() {
@@ -52,6 +53,17 @@ class voting_scene extends Phaser.Scene {
     
     // Display the portraits of the players.
     this.displayPortraits();
+
+    this.skip = this.add.image(0, 0, 'skip');
+    this.skip.setOrigin(0,0)
+        
+    this.skip.setInteractive();
+
+    this.input.on('pointerdown',() => {
+      this.vote(null);
+      this.voted = true;
+    }); 
+    
   } 
 
   displayPortraits() {
