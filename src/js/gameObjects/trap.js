@@ -43,7 +43,7 @@ class Trap extends Phaser.GameObjects.Sprite {
                 let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
                 this.kill(killList);
                 this.destroy();
-            }, 0.5)
+            }, 500)
         }
     }
     displayDestroyTrap() {
