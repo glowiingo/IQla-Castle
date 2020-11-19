@@ -47,8 +47,11 @@ class Trap extends Phaser.GameObjects.Sprite {
         }
     }
     displayDestroyTrap() {
-        this.trapZone.destroy();
-        this.destroy();
+        this.setVisible(true);
+        setTimeout(()=> {
+            this.trapZone.destroy();
+            this.destroy();
+        })
     }
 
     kill(sprites) {
