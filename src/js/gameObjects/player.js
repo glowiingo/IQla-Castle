@@ -18,7 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.speed = speed;
     this.alive = true;
     this.iqla = false;
-    this.trap
+    this.trap = 1;
     this.playerName = playerName;
 
     // Worked on by: Anna, Evano

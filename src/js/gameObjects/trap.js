@@ -10,28 +10,6 @@ class Trap extends Phaser.GameObjects.Sprite {
         this.setTrap();
         this.trapTriggered = false;
     }
-    /**
-     * detector fo the trap
-     */
-    // in_trap_radius() {
-    //     let touching = this.trapZone.body.touching;
-        
-    //     if (touching.none) {
-    //         this.scene.player.clearTint();
-    //         this.trapZone.emit('leavezone');
-    //     }
-    //     else if (!touching.none) {
-    //         this.scene.player.setTint(0x00ffff);
-    //         this.trapZone.emit('enterzone');
-    //     }
-    //     // else if(inZone) {
-    //     //     this.scene.player1.setTint(0x00ffff);
-    //     //     this.trapZone.emit('inzone');
-    //     //     console.log('inzone');
-    //     // }
-    
-    //     this.trapZone.body.debugBodyColor = this.trapZone.body.touching.none ? 0x00ffff : 0xffff00;
-    // }
 
     //putting down the trap on the scene
     setTrap() {
@@ -46,6 +24,7 @@ class Trap extends Phaser.GameObjects.Sprite {
         if (!this.iqla) {
             this.setVisible(false);
         }
+        
         //Biggest problem in converting to server side is here as overlap doesn't work if velocity is zero
         setTimeout(() => {
             this.scene.physics.add.overlap(this.trapZone, this.playerGroup, this.activateTrap, null, this)
@@ -60,12 +39,16 @@ class Trap extends Phaser.GameObjects.Sprite {
             this.setVisible(true);
             setTimeout(()=>{
                 this.trapZone.destroy();
+                let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
+                this.kill(killList);
                 this.destroy();
-            })
-            this.trapZone.destroy();
-            let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
-            this.kill(killList);
+            }, 0.5)
+            
         }
+    }
+    displayDestroyTrap() {
+        this.trapZone.destroy();
+        this.destroy();
     }
 
     kill(sprites) {
@@ -82,7 +65,6 @@ class Trap extends Phaser.GameObjects.Sprite {
                 this.scene.registry.values.sceneData.serverConnection.kill(sprite.id);
             }
         }
-        this.destroy();
     }
     
     createDeadBody(x, y) {
