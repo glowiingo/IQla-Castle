@@ -81,6 +81,9 @@ class Room {
       let votedPlayerID = this.findTheMajority(this.votedList);
       console.log('majority voted for: ', votedPlayerID);
       this.votedList = [];
+      if (votedPlayerID == null) {
+        return null;
+      }
       this.playerEliminated(votedPlayerID);
       return votedPlayerID;
     }
