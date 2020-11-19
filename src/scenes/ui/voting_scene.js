@@ -54,9 +54,9 @@ class voting_scene extends Phaser.Scene {
     // Display the portraits of the players.
     this.displayPortraits();
 
-    this.skip = this.add.image(0, 0, 'skip');
-    this.skip.setOrigin(0,0)
-        
+    this.skip = this.add.image(this.screenX - 100, 50, 'skip');
+    this.skip.setOrigin(0,0);
+    this.skip.setScale(0.2);
     this.skip.setInteractive();
 
     this.input.on('pointerdown',() => {
@@ -165,7 +165,7 @@ class Portrait {
     this.spr.setInteractive();
     this.spr
       .on('pointerover', () => {
-        if (this.disabled) {
+        if (this.disabled || this.game.voted) {
           return;
         }
 
@@ -176,7 +176,7 @@ class Portrait {
       })
 
       .on('pointerdown', () => {
-        if (this.disabled) {
+        if (this.disabled || this.game.voted) {
           return;
         }
 
