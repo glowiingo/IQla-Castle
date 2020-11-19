@@ -24,6 +24,7 @@ class gameplay_scene extends Phaser.Scene {
     this.otherPlayers = this.physics.add.group();
     this.otherPlayerTags = []
     this.interactables = this.physics.add.group();
+    this.deadbodies = [];
   }
 
   preload() {

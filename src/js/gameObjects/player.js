@@ -34,7 +34,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       right: Phaser.Input.Keyboard.KeyCodes.D,
       place_trap: Phaser.Input.Keyboard.KeyCodes.E
     });
-    this.deadbodies = [];
   }
 
   /**
@@ -119,13 +118,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     dead_image.setScale(0.5);
     dead_image.setDepth(30);
     dead_image.setInteractive();
-    this.deadbodies.push(dead_image);
+    this.scene.deadbodies.push(dead_image);
   }
 
   //worked on by Mike
   report() {
-    for (let i = 0; i < this.deadbodies.length; i++) {
-      let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.deadbodies[i].x, this.deadbodies[i].y);
+    for (let i = 0; i < this.scene.deadbodies.length; i++) {
+      let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.scene.deadbodies[i].x, this.scene.deadbodies[i].y);
       if (c < 60) {
         console.log('FOUND A DEADBODY!');
         break;
