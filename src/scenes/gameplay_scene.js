@@ -80,7 +80,7 @@ class gameplay_scene extends Phaser.Scene {
       loop: true,
       delay: 0
     }
-    this.bgmusic.play(musicConfig);
+    // this.bgmusic.play(musicConfig);
 
     // Worked on by: Flemming, William
     let map = this.make.tilemap({

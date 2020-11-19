@@ -230,7 +230,9 @@ class playerUI_scene extends Phaser.Scene {
   report() {
     //worked on by Mike
     let gameplay = this.scene.get('gameplay_scene');
+    let vote = this.scene.get('voting_scene');
     gameplay.player.report();
+    vote.toggleVisible();
   }
 
   showMap() {
