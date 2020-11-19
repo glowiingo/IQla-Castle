@@ -11,7 +11,7 @@ class gameplay_scene extends Phaser.Scene {
       key: 'gameplay_scene',
     });
   }
-
+  
   // Worked on by: Gloria Ngo
   init(data) {
     // initialize and prepare data
@@ -107,6 +107,9 @@ class gameplay_scene extends Phaser.Scene {
     // loop that runs constantly
     // -- game logic mainly in this area
     if (this.player && !this.scene.get('chat_scene').showChat) {
+      if (!this.player.alive && this.player.col.world != null) {
+        this.player.col.destroy();
+      }
       this.player.playerMovement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
@@ -167,7 +170,7 @@ class gameplay_scene extends Phaser.Scene {
     this.player.body.height = 64;
     this.player.body.width = 64;
 
-    this.physics.add.collider(this.player, this.wallsLayer);
+    this.player.col = this.physics.add.collider(this.player, this.wallsLayer);
     this.cameras.main.startFollow(this.player, true, 1, 1);
 
     this.playerNameText = this.add.text(
