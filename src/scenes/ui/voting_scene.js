@@ -13,8 +13,12 @@ class voting_scene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('votePortrait', '../../assets/votingScene/VotePortrait.png');
+    this.load.image(
+      'votePortrait',
+      '../../assets/votingScene/VotePortrait.png'
+    );
     this.load.image('chatButton', '../../assets/votingScene/chatButton.png');
+    this.load.image('skip', '../../assets/votingScene/Skip.png');
   }
 
   create() {
@@ -43,12 +47,23 @@ class voting_scene extends Phaser.Scene {
     this.chatButton.setScale(0.25);
     this.chatButton.tintFill = false;
     this.chatButton
-      .on('pointerdown', () => this.scene.get("chat_scene").toggleVisible())
+      .on('pointerdown', () => this.scene.get('chat_scene').toggleVisible())
       .on('pointerover', () => this.chatButton.setTint(0x00FF00))
       .on('pointerout', () => this.chatButton.clearTint());
     
     // Display the portraits of the players.
     this.displayPortraits();
+
+    this.skip = this.add.image(this.screenX - 100, 50, 'skip');
+    this.skip.setOrigin(0,0);
+    this.skip.setScale(0.2);
+    this.skip.setInteractive();
+
+    this.input.on('pointerdown',() => {
+      this.vote(null);
+      this.voted = true;
+    }); 
+    
   } 
 
   displayPortraits() {
@@ -86,7 +101,7 @@ class voting_scene extends Phaser.Scene {
       this.scene.setVisible(true);
     } else {
       this.scene.setVisible(false);
-      this.scene.get("chat_scene").hide();
+      this.scene.get('chat_scene').hide();
       // reset the voting scene when closed
       this.voted = false;
       for (let i = 0; i < this.playerPortraits.length; i++) {
@@ -150,7 +165,7 @@ class Portrait {
     this.spr.setInteractive();
     this.spr
       .on('pointerover', () => {
-        if (this.disabled) {
+        if (this.disabled || this.game.voted) {
           return;
         }
 
@@ -161,7 +176,7 @@ class Portrait {
       })
 
       .on('pointerdown', () => {
-        if (this.disabled) {
+        if (this.disabled || this.game.voted) {
           return;
         }
 

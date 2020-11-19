@@ -2,7 +2,7 @@
 
 class temp_game_end_scene extends Phaser.Scene {
   constructor() {
-    super("temp_game_end_scene");
+    super('temp_game_end_scene');
     
   }
 
@@ -21,8 +21,8 @@ class temp_game_end_scene extends Phaser.Scene {
 
     this.add
       .text(screenCenterX, screenCenterY - 150, this.text, {
-        font: "55px Ariel",
-        fill: "yellow",
+        font: '55px Ariel',
+        fill: 'yellow',
       })
       .setOrigin(0.5);
   }

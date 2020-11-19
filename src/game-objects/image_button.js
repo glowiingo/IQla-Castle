@@ -5,10 +5,10 @@ class ImageButton extends Phaser.GameObjects.Image {
     super(scene, x, y, img);
 
     this.setInteractive({ useHandCursor: true })
-      // .on("pointerover", () => this.enterButtonHoverState())
-      // .on("pointerout", () => this.enterButtonRestState())
-      // .on("pointerdown", () => this.enterButtonActiveState())
-      .on("pointerup", () => {
+      // .on('pointerover', () => this.enterButtonHoverState())
+      // .on('pointerout', () => this.enterButtonRestState())
+      // .on('pointerdown', () => this.enterButtonActiveState())
+      .on('pointerup', () => {
         // this.enterButtonHoverState();
         callback();
       })
@@ -16,14 +16,14 @@ class ImageButton extends Phaser.GameObjects.Image {
   }
 
   // enterButtonHoverState() {
-  //     this.setStyle({ fill: "#E94B3CFF" });
+  //     this.setStyle({ fill: '#E94B3CFF' });
   // }
 
   // enterButtonRestState() {
-  //     this.setStyle({ fill: "yellow" });
+  //     this.setStyle({ fill: 'yellow' });
   // }
 
   // enterButtonActiveState() {
-  //     this.setStyle({ fill: "red" });
+  //     this.setStyle({ fill: 'red' });
   // }
 }

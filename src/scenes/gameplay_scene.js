@@ -11,7 +11,7 @@ class gameplay_scene extends Phaser.Scene {
       key: 'gameplay_scene',
     });
   }
-
+  
   // Worked on by: Gloria Ngo
   init(data) {
     // initialize and prepare data
@@ -22,17 +22,22 @@ class gameplay_scene extends Phaser.Scene {
     console.log(this.registry.values.sceneData);
     this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
-    this.otherPlayerTags = [];
+    this.otherPlayerTags = []
+    this.interactables = this.physics.add.group();
   }
   // Worked on by: Brian
   preload() {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
     this.load.spritesheet(
-      'haachama',
-      '../../assets/player/PlayerWalkCycle.png',
-      { frameWidth: 128, frameHeight: 128, endFrame: 7 }
-    );
+      'haachama', 
+      '../../assets/player/PlayerWalkCycle.png', 
+      {
+        frameWidth: 128,
+        frameHeight: 128,
+        endFrame: 7
+      });
+    this.load.image('trap', '../../assets/medzombie.png');
 
     this.load.tilemapTiledJSON(
       'map',
@@ -41,21 +46,25 @@ class gameplay_scene extends Phaser.Scene {
     this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
+    this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
   }
 
   create() {
     // add objects into the game
     console.log('gameplay_scene');
 
-    this.scene.launch("playerUI_scene");
-    this.scene.launch("mapOverlay_scene");
-    this.scene.launch("showPositionPlayer_scene");
-    this.scene.launch("voting_scene");
-    this.scene.launch("chat_scene");
+    this.scene.launch('playerUI_scene');
+    this.scene.launch('mapOverlay_scene');
+    this.scene.launch('showPositionPlayer_scene');
+    this.scene.launch('voting_scene');
+    this.scene.launch('chat_scene');
 
     let config = {
       key: 'WalkCycle',
-      frames: this.anims.generateFrameNumbers('haachama', { start: 0, end: 7 }),
+      frames: this.anims.generateFrameNumbers('haachama', {
+        start: 0,
+        end: 7
+      }),
       frameRate: 8,
       repeat: -1,
     };
@@ -70,18 +79,24 @@ class gameplay_scene extends Phaser.Scene {
       detune: 0,
       seek: 0,
       loop: true,
-      delay: 0,
-    };
+      delay: 0
+    }
     this.bgmusic.play(musicConfig);
 
     // Worked on by: Flemming, William
-    let map = this.make.tilemap({ key: 'map' });
-    let tileset = map.addTilesetImage('updated_tiles', 'tiles');
+    let map = this.make.tilemap({
+      key: 'map'
+    });
+    let tileset = map.addTilesetImage('updated_tiles', 'tiles')
     map.createStaticLayer('Background', tileset);
     map.createStaticLayer('Ground', tileset);
 
     this.wallsLayer = map.createStaticLayer('Walls', tileset);
-    this.wallsLayer.setCollisionByProperty({ collides: true });
+    this.wallsLayer.setCollisionByProperty({
+      collides: true
+    });
+
+    this.addInteractables();
 
     // Worked on by: Evano
     //Start networking & create player once networking is connected
@@ -92,8 +107,11 @@ class gameplay_scene extends Phaser.Scene {
   update() {
     // loop that runs constantly
     // -- game logic mainly in this area
-    if(this.player && !this.scene.get("chat_scene").showChat){
-      this.player.player_movement();
+    if (this.player && !this.scene.get('chat_scene').showChat) {
+      if (!this.player.alive && this.player.col.world != null) {
+        this.player.col.destroy();
+      }
+      this.player.playerMovement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
         .get('showPositionPlayer_scene')
@@ -118,13 +136,12 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by William (Front End)
   gameOver(team) {
-    this.scene.stop("playerUI_scene");
-    this.scene.stop("mapOverlay_scene");
-    this.scene.stop("showPositionPlayer_scene");
-    this.scene.stop("voting_scene");
-    this.scene.stop("chat_scene");
-
-    this.scene.start('temp_game_end_scene', team + " win")
+    this.scene.stop('playerUI_scene');
+    this.scene.stop('mapOverlay_scene');
+    this.scene.stop('showPositionPlayer_scene');
+    this.scene.stop('voting_scene');
+    this.scene.stop('chat_scene');
+    this.scene.start('endGame_scene', team + ' win')
   }
 
   vote(votedFor) {
@@ -154,7 +171,7 @@ class gameplay_scene extends Phaser.Scene {
     this.player.body.height = 64;
     this.player.body.width = 64;
 
-    this.physics.add.collider(this.player, this.wallsLayer);
+    this.player.col = this.physics.add.collider(this.player, this.wallsLayer);
     this.cameras.main.startFollow(this.player, true, 1, 1);
 
     this.playerNameText = this.add.text(
@@ -169,25 +186,50 @@ class gameplay_scene extends Phaser.Scene {
     return this.player;
   }
 
-    addOtherPlayer(playerInfo) {
-        const otherPlayer = new Player({
-          scene:this, 
-          x: playerInfo.x, 
-          y: playerInfo.y, 
-          sprite:'haachama'
-      }, playerInfo.playerId, playerInfo.playerName, 300);
-      
-        //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
+  addOtherPlayer(playerInfo) {
+    const otherPlayer = new Player({
+      scene: this,
+      x: playerInfo.x,
+      y: playerInfo.y,
+      sprite: 'haachama'
+    }, playerInfo.playerId, playerInfo.playerName, 300);
 
-        this.scene.get('voting_scene').players.push(otherPlayer);
-        this.scene.get('voting_scene').displayPortraits();
+    //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
 
-        this.add.existing(otherPlayer).setScale(1);
-        this.otherPlayers.add(otherPlayer);
-        this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
-          font: "32px Ariel",
-          fill: "yellow",
-        }));
-        return otherPlayer;
-    }
+    this.scene.get('voting_scene').players.push(otherPlayer);
+    this.scene.get('voting_scene').displayPortraits();
+
+    this.add.existing(otherPlayer).setScale(1);
+    this.otherPlayers.add(otherPlayer);
+    this.otherPlayerTags.push(this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
+      font: '32px Ariel',
+      fill: 'yellow',
+    }));
+    return otherPlayer;
+  }
+
+  addInteractables() {
+    // Worked on by: Alexis
+
+    this.bookshelfMinigameObj = new MapObject({
+      scene: this,
+      x: 1200,
+      y: 115,
+      sprite: 'bookshelfMinigame',
+      triggeredScene: 'book_click_minigame',
+      isMinigameObj: true,
+    });
+    this.add.existing(this.bookshelfMinigameObj).setScale(0.1);
+    this.physics.add.existing(this.bookshelfMinigameObj);
+
+    // ------------ Add MapObjects to a physics group ------------ //
+    this.interactables.add(this.bookshelfMinigameObj);
+  }
+
+  triggerScene(pauseKey, launchKey, launchData) {
+    // Worked on by: Alexis
+    this.scene.pause();
+    this.scene.pause(pauseKey);
+    this.scene.launch(launchKey, launchData);
+  }
 }
