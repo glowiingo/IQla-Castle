@@ -53,6 +53,8 @@ class gameplay_scene extends Phaser.Scene {
     // add objects into the game
     console.log('gameplay_scene');
 
+    this.gameStart = false;
+
     this.scene.launch('playerUI_scene');
     this.scene.launch('mapOverlay_scene');
     this.scene.launch('showPositionPlayer_scene');
