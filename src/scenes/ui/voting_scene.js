@@ -59,7 +59,7 @@ class voting_scene extends Phaser.Scene {
     this.skip.setScale(0.2);
     this.skip.setInteractive();
 
-    this.input.on('pointerdown',() => {
+    this.skip.on('pointerdown',() => {
       this.vote(null);
       this.voted = true;
     }); 
