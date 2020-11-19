@@ -35,6 +35,7 @@ class Trap extends Phaser.GameObjects.Sprite {
      */
     activateTrap() {
         if (!this.trapTriggered) {
+            this.trapTriggered = true;
             console.log('triggered');
             this.setVisible(true);
             setTimeout(()=>{
@@ -43,7 +44,6 @@ class Trap extends Phaser.GameObjects.Sprite {
                 this.kill(killList);
                 this.destroy();
             }, 0.5)
-            
         }
     }
     displayDestroyTrap() {
