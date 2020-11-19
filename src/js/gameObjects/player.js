@@ -49,8 +49,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
   }
 
+  /**
+   * Toggles the MovementDisabled instance variable of Player Object.
+   * 
+   * Worked on by Bisht & Nav. 
+   */
   toggleMovementDisabled(){
-    console.log("hey nav");
     if (this.movementDisabled) {
       this.movementDisabled = false;
     }
@@ -79,7 +83,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.setVelocityY(0);
     }
-    //console.log(this);
     if (this.key.left.isDown && !this.movementDisabled) {
       this.setVelocityX(-this.speed);
       this.flipX = false;

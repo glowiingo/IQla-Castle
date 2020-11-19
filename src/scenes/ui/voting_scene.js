@@ -86,7 +86,8 @@ class voting_scene extends Phaser.Scene {
     this.showVote = !this.showVote;
     if (this.showVote) {
       this.scene.setVisible(true);
-      this.scene.get('gameplay_scene').player.toggleMovementDisabled();
+      this.scene.get('gameplay_scene').player.toggleMovementDisabled(); // Disables Movement of player when meeting is called.
+      this.scene.get('gameplay_scene').player.sendToStartPos(); // is supposed to send all players to spawn.
     } else {
       this.scene.setVisible(false);
       this.scene.get('chat_scene').hide();
