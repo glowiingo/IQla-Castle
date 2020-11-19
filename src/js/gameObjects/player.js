@@ -19,6 +19,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.alive = true;
     this.iqla = false;
     this.playerName = playerName;
+    this.movementDisabled = false;
 
     // Worked on by: Anna, Evano
     this.isWalking = false;
@@ -48,6 +49,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
   }
 
+  toggleMovementDisabled(){
+    console.log("hey nav");
+    if (this.movementDisabled) {
+      this.movementDisabled = false;
+    }
+    else{
+      this.movementDisabled = true;
+    }
+  }
+
   //worked on by Kiwon and John
   playerMovement() {
 
@@ -61,18 +72,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.trap_placed = true;
     }
 
-    if (this.key.up.isDown) {
+    if (this.key.up.isDown && !this.movementDisabled) {
       this.setVelocityY(-this.speed);
-    } else if (this.key.down.isDown) {
+    } else if (this.key.down.isDown && !this.movementDisabled) {
       this.setVelocityY(this.speed);
     } else {
       this.setVelocityY(0);
     }
     //console.log(this);
-    if (this.key.left.isDown) {
+    if (this.key.left.isDown && !this.movementDisabled) {
       this.setVelocityX(-this.speed);
       this.flipX = false;
-    } else if (this.key.right.isDown) {
+    } else if (this.key.right.isDown && !this.movementDisabled) {
       this.setVelocityX(this.speed);
       this.flipX = true;
     } else {

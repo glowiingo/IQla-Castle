@@ -70,7 +70,6 @@ class voting_scene extends Phaser.Scene {
           this.players[i].playerName.substring(0,12), this.players[i].id, this);
         portrait.draw();
       }
-
       this.playerPortraits.push(portrait);
     }
 
@@ -87,6 +86,7 @@ class voting_scene extends Phaser.Scene {
     this.showVote = !this.showVote;
     if (this.showVote) {
       this.scene.setVisible(true);
+      this.scene.get('gameplay_scene').player.toggleMovementDisabled();
     } else {
       this.scene.setVisible(false);
       this.scene.get('chat_scene').hide();
