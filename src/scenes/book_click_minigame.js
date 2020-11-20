@@ -71,7 +71,7 @@ class book_click_minigame extends Phaser.Scene {
     this.background.getBottomCenter(this.bottomCentreCoords);
 
     // ---------- Paper Note ---------- //
-    const paperNoteWidth = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().width * BG_IMG_SCALE + 75;
+    const paperNoteWidth = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().width * 3;
     const paperNoteHeight = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().height * 2;
     const paperNoteImg = this.add.image(this.bottomRightCoords.x, this.bottomRightCoords.y, PAPER_NOTE_KEY);
     paperNoteImg.setOrigin(1, 1);
@@ -182,7 +182,7 @@ class book_click_minigame extends Phaser.Scene {
 
     // Worked on by: Alexis
     // ---------- Text Positions  ---------- //
-    let xPadding = 75;
+    let xPadding = 60;
     let yPadding = 50;
     let xPosition = this.paperNoteTopLeftCoords.x + xPadding;
     let yPosition = this.paperNoteTopLeftCoords.y + yPadding;
