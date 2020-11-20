@@ -16,16 +16,16 @@ class trap_making_minigame extends Phaser.Scene {
 
     preload() {
       // load media into memory
-      this.load.image('trap_making_background', '../../assets/shrek2.jpg');
-      this.load.image('skullItem', '../../assets/DeadCharacter.png');
-      this.load.image('candleItem', '../../assets/cornTrumpItem.png');
-      this.load.image('candleSlot', '../../assets/cornTrumpSlot.png');
-      this.load.image('potionItem', '../../assets/haachamachama112.png');
+      this.load.image('trap_making_background', '../../assets/minigames/backgrounds/bgTrapMaker.png');
+      this.load.image('skullItem', '../../assets/minigames/items/skull.png');
+      this.load.image('candleItem', '../../assets/minigames/items/candle.png');
+      this.load.image('candleSlot', '../../assets/minigames/items/candle.png');
+      this.load.image('potionItem', '../../assets/minigames/items/bottle.png');
   
-      this.load.audio('wrong', '../../assets/wrong.mp3');
-      this.load.audio('wow', '../../assets/wow.mp3');
+      this.load.audio('wrong', '../../assets/audio/wrong.mp3');
+      this.load.audio('wow', '../../assets/audio/wow.mp3');
   
-      this.load.video('omgwow', '../../assets/omgwow.mp4');
+      this.load.video('omgwow', '../../assets/video/omgwow.mp4');
     }
 
     create() {

@@ -1,7 +1,7 @@
-// Worked on by: Charles Huang
+// Worked on by: Charles Huang, Alexis Mendiola
 const NUM_OF_MICE = 3;
-const MOUSE_SCALE = 0.1;
-const MIN_DUR = 200; // minimun amount of time in ms for a mouse to travel from A to B
+const MOUSE_SCALE = 1;
+const MIN_DUR = 400; // minimun amount of time in ms for a mouse to travel from A to B
 const MAX_DUR = 600; // maximum amount of time in ms for a mouse to travel from A to B
 
 class mouse_click_minigame extends Phaser.Scene {
@@ -16,12 +16,12 @@ class mouse_click_minigame extends Phaser.Scene {
 
   preload() {
     // Load media into memory.
-    this.load.image('mouse_click_background', '../../assets/shrek.jpg');
-    this.load.image('mouse', '../../assets/mouse.png');
+    this.load.image('mouse_click_background', '../../assets/minigames/backgrounds/bgTable.png');
+    this.load.image('mouse', '../../assets/minigames/items/ratCurledTail.png');
 
-    this.load.audio('nyes', '../../assets/nyes.mp3');
+    this.load.audio('nyes', '../../assets/audio/nyes.mp3');
 
-    this.load.video('recorder', '../../assets/recorder.mp4');
+    this.load.video('recorder', '../../assets/video/recorder.mp4');
   }
 
   create(data) {

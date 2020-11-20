@@ -1,5 +1,4 @@
 /**
- * Created by Charles Huang.
  * Worked on by Charles Huang & Alexis C. Mendiola.
  * 
  * This scene is used to start and end minigame scenes. When creating a minigame, please
@@ -37,7 +36,7 @@ class minigame_scene_manager extends Phaser.Scene {
 
     // Worked on by: Charles
     this.scene.launch(key, {width: this.minigameWidth, height: this.minigameHeight});
-    this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x123456);
+    this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x151515);
     
     // Worked on by: Alexis
     let exitButt = this.add.image(0, 0, 'exitButt');

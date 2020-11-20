@@ -1,13 +1,14 @@
+// Worked on by: Alexis C. Mendiola
+
+const BG_IMG_SCALE = 3.5;
 const IMAGE_SCALE = 0.45;
-const BG_COLOUR = '0x5d8a54';
-const BOOKSHELF_KEY = 'bookshelf';
 const BG_IMG_KEY = 'bookClickBg';
 const PAPER_NOTE_KEY = 'paperNote';
-const BOOK0_KEY = 'Haachama';
-const BOOK1_KEY = 'Big Brain Peanut';
-const BOOK2_KEY = 'Ghast Villager';
-const BOOK3_KEY = 'Hell Ya Brother';
-const BOOK4_KEY = 'Nicholas Cage';
+const BOOK0_KEY = 'Hamlet';
+const BOOK1_KEY = 'Dracula';
+const BOOK2_KEY = 'Escaping Castles 101, 5th Edition';
+const BOOK3_KEY = 'Necronomicon';
+const BOOK4_KEY = 'College Thesaurus, 2nd Edition';
 
 class book_click_minigame extends Phaser.Scene {
   constructor() {
@@ -28,31 +29,39 @@ class book_click_minigame extends Phaser.Scene {
 
   preload() {
     // Worked on by: Alexis
-    this.load.image(BG_IMG_KEY, '../assets/transparentBg.png');
-    this.load.image(BOOKSHELF_KEY, '../assets/bookshelf.png');
-    this.load.image(PAPER_NOTE_KEY, '../assets/paperNote.png');
+    this.load.image(BG_IMG_KEY, '../assets/minigames/backgrounds/bgBookshelf.png');
+    this.load.image(PAPER_NOTE_KEY, '../assets/minigames/items/paper.png');
 
     // ---------- Pre-load Book Images ---------- //
-    this.load.image(BOOK0_KEY, '../../assets/haachamachama112.png');
-    this.load.image(BOOK1_KEY, '../../assets/bigBrainPeanut.png');
-    this.load.image(BOOK2_KEY, '../../assets/ghastVillager.jpg');
-    this.load.image(BOOK3_KEY, '../../assets/hellYaBrother.jpg');
-    this.load.image(BOOK4_KEY, '../../assets/nicolasCage.jpg');
+    this.load.image(BOOK0_KEY, '../../assets/minigames/items/book1.png');
+    this.load.image(BOOK1_KEY, '../../assets/minigames/items/book2.png');
+    this.load.image(BOOK2_KEY, '../../assets/minigames/items/book3.png');
+    this.load.image(BOOK3_KEY, '../../assets/minigames/items/book4.png');
+    this.load.image(BOOK4_KEY, '../../assets/minigames/items/book5.png');
 
     // ---------- Pre-load Audio ---------- //
-    this.load.audio('no', '../../assets/no.mp3');
-    this.load.audio('yes', '../../assets/yes.mp3');
-    this.load.audio('ok', '../../assets/ok.mp3');
+    this.load.audio('no', '../../assets/audio/no.mp3');
+    this.load.audio('yes', '../../assets/audio/yes.mp3');
+    this.load.audio('ok', '../../assets/audio/ok.mp3');
 
     // ---------- Pre-load Video ---------- //
-    this.load.video('bravo', '../../assets/bravowow.mp4');
+    this.load.video('bravo', '../../assets/video/bravowow.mp4');
   }
 
   create(data) {
     // Worked on by: Alexis
     // ---------- Background Image ---------- //
+    this.addBackgroundImages(data);
+    this.addBooks();
+  }
+
+  /**
+   * Position the bookshelf and note paper images that are in the scene's background.
+   * @param {JSON} data - contains the width and height information for the background.
+   */
+  addBackgroundImages(data) {
+    // Worked on by: Alexis
     this.background = this.add.image(this.cameras.default.width / 2, this.cameras.default.height / 2, BG_IMG_KEY);
-    this.background.setTint(BG_COLOUR);
     this.background.displayWidth = data.width;
     this.background.displayHeight = data.height;
 
@@ -61,30 +70,10 @@ class book_click_minigame extends Phaser.Scene {
     this.background.getCenter(this.centreCoords);
     this.background.getBottomCenter(this.bottomCentreCoords);
 
-    this.addBackgroundImages();
-    this.addBooks();
-  }
-
-  /**
-   * Position the bookshelf and note paper images that are in the scene's background.
-   * @param {JSON} data - contains the width and height information for the background.
-   */
-  addBackgroundImages() {
-    // Worked on by: Alexis
-    // ---------- Bookshelf ---------- //
-    const bookshelfWidth = this.scene.scene.textures.get(BOOKSHELF_KEY).getSourceImage().width * IMAGE_SCALE;
-    const bookshelfHeight = this.scene.scene.textures.get(BOOKSHELF_KEY).getSourceImage().height * IMAGE_SCALE;
-    const bookshelfImg = this.add.image(this.centreCoords.x, this.bottomCentreCoords.y, BOOKSHELF_KEY);
-    bookshelfImg.setScale(IMAGE_SCALE);
-    bookshelfImg.setOrigin(0.5, 1);
-    bookshelfImg.displayWidth = bookshelfWidth;
-    bookshelfImg.displayHeight = bookshelfHeight;
-
     // ---------- Paper Note ---------- //
-    const paperNoteWidth = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().width * IMAGE_SCALE;
-    const paperNoteHeight = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().height * IMAGE_SCALE;
+    const paperNoteWidth = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().width * BG_IMG_SCALE + 75;
+    const paperNoteHeight = this.scene.scene.textures.get(PAPER_NOTE_KEY).getSourceImage().height * 2;
     const paperNoteImg = this.add.image(this.bottomRightCoords.x, this.bottomRightCoords.y, PAPER_NOTE_KEY);
-    paperNoteImg.setScale(IMAGE_SCALE);
     paperNoteImg.setOrigin(1, 1);
     paperNoteImg.displayWidth = paperNoteWidth;
     paperNoteImg.displayHeight = paperNoteHeight;
@@ -116,16 +105,21 @@ class book_click_minigame extends Phaser.Scene {
     const booksNeeded = 2;
     let numArr = [];
     let bookKeyArray = minigame_scene_manager.shuffleArray([BOOK0_KEY, BOOK1_KEY, BOOK2_KEY, BOOK3_KEY, BOOK4_KEY]);
-    const topShelfY = this.centreCoords.y - 62;
+    const topShelfY = this.centreCoords.y - 80;
+    const bottomShelfY = this.bottomCentreCoords.y - 20;
 
     let books = this.physics.add.group();
-    let book0 = this.add.image(245, topShelfY, bookKeyArray[0]);
-    let book1 = this.add.image(300, topShelfY, bookKeyArray[1]);
+
+    // Books on Top Shelf:
+    let book0 = this.add.image(200, topShelfY, bookKeyArray[0]);
+    let book1 = this.add.image(252, topShelfY, bookKeyArray[1]);
     let book2 = this.add.image(this.centreCoords.x + bookWidth, topShelfY + bookWidth, bookKeyArray[2]);
-    book2.setRotation(-1.5708); // Rotate -90 degrees
-    let book3 = this.add.image(215, this.bottomCentreCoords.y, bookKeyArray[3]);
+    book2.setRotation(1.5708); // Rotate 90 degrees
+
+    // Books on Bottom Shelf:
+    let book3 = this.add.image(175, bottomShelfY, bookKeyArray[3]);
     book3.setOrigin(0, 1);
-    let book4 = this.add.image(328, this.bottomCentreCoords.y, bookKeyArray[4]);
+    let book4 = this.add.image(288, bottomShelfY, bookKeyArray[4]);
     book4.setOrigin(0, 1);
     book4.setRotation(-0.436332); // Rotate -25 degrees
 
@@ -188,13 +182,14 @@ class book_click_minigame extends Phaser.Scene {
 
     // Worked on by: Alexis
     // ---------- Text Positions  ---------- //
-    let padding = 20;
-    let xPosition = this.paperNoteTopLeftCoords.x + padding;
-    let yPosition = this.paperNoteTopLeftCoords.y + padding;
+    let xPadding = 75;
+    let yPadding = 50;
+    let xPosition = this.paperNoteTopLeftCoords.x + xPadding;
+    let yPosition = this.paperNoteTopLeftCoords.y + yPadding;
     const yDistance = 40;
     numArr.forEach((num) => {
       this.add.text(xPosition, yPosition, books.children.entries[num].getData('title'), {
-        font: '20px Arial',
+        font: '14px Arial',
         fill: 'black',
       });
       yPosition += yDistance;
