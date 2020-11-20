@@ -42,7 +42,6 @@ class Trap extends Phaser.GameObjects.Sprite {
                 this.trapZone.destroy();
                 let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
                 this.kill(killList);
-                this.destroy();
             }, 500)
         }
     }
@@ -68,6 +67,7 @@ class Trap extends Phaser.GameObjects.Sprite {
                 this.scene.registry.values.sceneData.serverConnection.kill(sprite.id);
             }
         }
+        this.destroy();
     }
     
     createDeadBody(x, y) {
