@@ -1,6 +1,5 @@
 // Worked on by: Charles Huang, Alexis Mendiola
 const NUM_OF_MICE = 3;
-const MOUSE_SCALE = 1;
 const MIN_DUR = 400; // minimun amount of time in ms for a mouse to travel from A to B
 const MAX_DUR = 600; // maximum amount of time in ms for a mouse to travel from A to B
 
@@ -10,8 +9,13 @@ class mouse_click_minigame extends Phaser.Scene {
   }
 
   init() {
-    // initialize and prepare data
-    // constants, configurations, etc.
+    // coordinates of the sides of a table and its size.
+    this.tableLeft = 180;
+    this.tableRight = 625;
+    this.tableTop = 130;
+    this.tableBottom = 455;
+    this.tableWidth = (this.tableRight - this.tableLeft);
+    this.tableHeight = (this.tableBottom - this.tableTop);
   }
 
   preload() {
@@ -32,22 +36,22 @@ class mouse_click_minigame extends Phaser.Scene {
     minigame_scene_manager.setBackground('mouse_click_minigame', 'mouse_click_background');
 
     // setScale does not affect image width/height so separate variables are created
-    let mouseWidth = this.scene.scene.textures.get('mouse').getSourceImage().width * MOUSE_SCALE;
-    let mouseHeight = this.scene.scene.textures.get('mouse').getSourceImage().height * MOUSE_SCALE;
+    let mouseWidth = this.scene.scene.textures.get('mouse').getSourceImage().width;
+    let mouseHeight = this.scene.scene.textures.get('mouse').getSourceImage().height;
     let mice = [];
 
     for (let i = 0; i < NUM_OF_MICE; i++) {
-      let randX = this.getRandomX(data.width, mouseWidth);
-      let randY = this.getRandomY(data.height, mouseHeight);
-      mice.push(this.add.image(randX, randY, 'mouse').setScale(MOUSE_SCALE));
+      let randX = Math.random() * this.tableWidth + this.tableLeft;
+      let randY = Math.random() * this.tableHeight + this.tableTop;
+      mice.push(this.add.image(randX, randY, 'mouse',));
     }
 
-    // add animation and interactive functionality for each mouse
+    //add animation and interactive functionality for each mouse
     mice.forEach((mouse) => {
       mouse.setInteractive();
       // remove mouse if clicked on
       mouse.on('pointerdown', () => {
-        tween.stop();
+        //tween.stop();
         mouse.setVisible(false);
         mice.splice(mice.indexOf(mouse), 1);
 
@@ -59,8 +63,8 @@ class mouse_click_minigame extends Phaser.Scene {
       });
 
       // move mouse to random coordinates on the board at random speeds.
-      mouse.nextX = this.getRandomX(data.width, mouseWidth);
-      mouse.nextY = this.getRandomY(data.height, mouseHeight);
+      mouse.nextX = Math.random() * this.tableWidth + this.tableLeft;
+      mouse.nextY = Math.random() * this.tableHeight + this.tableTop;
       mouse.rotation = this.getRadians(mouse.x, mouse.y, mouse.nextX, mouse.nextY);
       let tween = this.tweens.add({
         targets: mouse,
@@ -69,8 +73,8 @@ class mouse_click_minigame extends Phaser.Scene {
         duration: MIN_DUR + Math.random() * (MAX_DUR - MIN_DUR),
         repeat: -1,
         onEnd: () => {
-          mouse.nextX = this.getRandomX(data.width, mouseWidth);
-          mouse.nextY = this.getRandomY(data.height, mouseHeight);
+          mouse.nextX = Math.random() * this.tableWidth + this.tableLeft;
+          mouse.nextY = Math.random() * this.tableHeight + this.tableTop;
           mouse.rotation = this.getRadians(mouse.x, mouse.y, mouse.nextX, mouse.nextY);
 
           tween.updateTo('x', mouse.nextX, true);
@@ -82,27 +86,6 @@ class mouse_click_minigame extends Phaser.Scene {
   }
 
   update() {}
-
-  /**
-   * Returns a random float that falls within the minigame board. This
-   * assumes the board is centered on the main game canvas.
-   *
-   * Parameter object_size is used to account for the image's anchor point
-   * being at its center (this function will not accurately work otherwise).
-   * IE: If this function is given a board size of 3 and object size of 1 on
-   * a game of size 5, it will return a random float between 2.5 and 3.5 (exclusive).
-   * @param {*} board_size size of the board in width or height
-   * @param {*} object_size size of an object on the board in width or height.
-   */
-  getRandomX(board_size, object_size) {
-    let min = (this.game.config.width - board_size) / 2 + object_size / 2;
-    return Math.random() * (board_size - object_size) + min;
-  }
-
-  getRandomY(board_size, object_size) {
-    let min = (this.game.config.height - board_size) / 2 + object_size / 2;
-    return Math.random() * (board_size - object_size) + min;
-  }
 
   // atan2() takes in y param first and returns randians relative to
   // the horizontal plane pointing right from (0, 0) hence the additional
@@ -131,5 +114,25 @@ class mouse_click_minigame extends Phaser.Scene {
       // After the audio has finished playing, call the 'won' function.
       minigame_scene_manager.minigameWon('mouse_click_minigame');
     });
+  }
+  /**
+   * ========== DEPRECATED (i think) ==========
+   * Returns a random float that falls within the minigame board. This
+   * assumes the board is centered on the main game canvas.
+   *
+   * Parameter object_size is used to account for the image's anchor point
+   * being at its center (this function will not accurately work otherwise).
+   * IE: If this function is given a board size of 3 and object size of 1 on
+   * a game of size 5, it will return a random float between 2.5 and 3.5 (exclusive).
+   * @param {*} board_size size of the board in width or height
+   * @param {*} object_size size of an object on the board in width or height.
+   */
+  getRandomX(board_size, object_size) {
+    let min = (this.game.config.width - board_size) / 2 + object_size / 2;
+    return Math.random() * (board_size - object_size) + min;
+  }
+  getRandomY(board_size, object_size) {
+    let min = (this.game.config.height - board_size) / 2 + object_size / 2;
+    return Math.random() * (board_size - object_size) + min;
   }
 }
