@@ -9,6 +9,7 @@ class Room {
     this.victoryHandler = victoryHandler;
     this.taskCount = 0;
     this.votedList = [];
+    this.deadCount = 0;
   }
   addPlayer(player) {
     this.players[player.playerId] = player;
@@ -53,6 +54,7 @@ class Room {
     } else {
       this.vampireCount--;
     }
+    this.deadCount += 1;
     if (this.vampireCount == 0) {
       this.victoryHandler('detectives');
     } else if (this.vampireCount >= this.detectiveCount) {
@@ -77,7 +79,7 @@ class Room {
   }
 
   voteCompleted() {
-    if (Object.keys(this.players).length === this.votedList.length) {
+    if (Object.keys(this.players).length === this.votedList.length + this.deadCount) {
       let votedPlayerID = this.findTheMajority(this.votedList);
       console.log('majority voted for: ', votedPlayerID);
       this.votedList = [];

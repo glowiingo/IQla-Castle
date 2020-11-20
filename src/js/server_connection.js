@@ -54,7 +54,7 @@ class ServerConnection {
       } else {
         sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
-        
+
         // delete player from voting_scene player array
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
       }
@@ -72,6 +72,7 @@ class ServerConnection {
         sceneData.player.alive = false;
         alert('you died');
       } else {
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(playerId);
         sceneData.otherPlayers[playerId].setActive(false).setVisible(false);;
       }
 
