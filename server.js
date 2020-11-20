@@ -93,9 +93,9 @@ io.on('connection', function (socket) {
 
     //
 
-    // // when a player places a trap
-    socket.on('trapPlace', function () {
-      io.in(roomName).emit('trapPlaced', rooms[roomName].getPlayer(socket.id));
+    // when a player places a trap
+    socket.on('trapPlace', function (playerId) {
+      socket.broadcast.to(roomName).emit('trapPlaced', playerId);
     });
 
     socket.on('trapTrigger', function () {
@@ -139,7 +139,6 @@ io.on('connection', function (socket) {
         io.in(roomName).emit('voted', complete);
       }
     });
-
   })
 });
 

@@ -1,4 +1,4 @@
-//Worked on Kiwon
+// Worked on by: Kiwon
 
 class Trap extends Phaser.GameObjects.Sprite {
     constructor (config, playerGroup) {
@@ -30,6 +30,7 @@ class Trap extends Phaser.GameObjects.Sprite {
             this.scene.physics.add.overlap(this.trapZone, this.playerGroup, this.activateTrap, null, this)
         }, 5000); //default 5 seconds
     }
+
     /**
      * activates once the trap is stepped on
      */
@@ -46,6 +47,7 @@ class Trap extends Phaser.GameObjects.Sprite {
             }, 500)
         }
     }
+
     displayDestroyTrap() {
         this.setVisible(true);
         setTimeout(()=> {
@@ -66,6 +68,7 @@ class Trap extends Phaser.GameObjects.Sprite {
                 this.createDeadBody(sprite.x, sprite.y);
                 console.log(sprite.id);
                 this.scene.registry.values.sceneData.serverConnection.kill(sprite.id);
+                this.scene.registry.values.sceneData.serverConnection.trapTriggered(sprite.id);
             }
         }
     }

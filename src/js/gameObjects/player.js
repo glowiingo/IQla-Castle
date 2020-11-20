@@ -53,12 +53,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   playerMovement() {
 
     if (this.trap && this.key.place_trap.isDown) {
-      console.log('placed');
-      this.trap = new Trap({
-        scene: this.scene,
-        x: this.x,
-        y: this.y
-      }, this);
+      this.scene.sceneData.serverConnection.trapPlace();
+      this.playerTrap();
       this.trap = this.trap - 1;
     }
 
@@ -94,6 +90,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
     // print x y of player position to send to network team and update
     // console.log(this.x, this.y);
+  }
+
+  // Worked on by: Kiwon, Kian, Evano
+  playerTrap() {
+    console.log('placed');
+    this.trap = new Trap({
+    scene: this.scene,
+    x: this.x,
+    y: this.y
+    }, this);
   }
 
   // Worked on by: Anna

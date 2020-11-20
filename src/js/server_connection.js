@@ -73,9 +73,8 @@ class ServerConnection {
 
     // Worked on by: Kian
     this.socket.on('trapPlaced', function (playerId) {
-      // HOW DOES THE TRAP GET PLACED HERE?
+      sceneData.otherPlayers[playerId].playerTrap();
     });
-
 
     //Worked on by: Jayce
     this.socket.on('receive message', function (msg) {
@@ -92,6 +91,11 @@ class ServerConnection {
     } else {
       this.socket.emit('stopPlayerMovement', player.id);
     }
+  }
+
+  // Worked on by: Evano, Kian
+  trapPlace() {
+    this.socket.emit('trapPlace', this.socket.id);
   }
 
   updatePos(player) {
