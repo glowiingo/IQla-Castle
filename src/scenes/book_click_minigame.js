@@ -13,15 +13,24 @@ class book_click_minigame extends Phaser.Scene {
     super('book_click_minigame');
   }
 
-  init() {
+  /**
+   * Initialize and prepare data.
+   * @param {JSON} data = {
+   *   name: SCENE_NAME,
+   *   dimensions: { width: SCENE_WIDTH, height: SCENE_HEIGHT},
+   *   interactable: MAP_OBJECT
+   * }
+   */
+  init(data) {
     // Worked on by: Alexis
-    this.sceneKey = 'book_click_minigame';
+    this.key = data.name;
+    this.interactable = data.interactable;
     this.background; // The background image to be used for relative positioning.
+
     // Objects used for storing the background image's x,y coordinates:
     this.bottomRightCoords = {};
     this.bottomCentreCoords = {};
     this.centreCoords = {};
-
     this.paperNoteTopLeftCoords = {};
   }
 
@@ -49,19 +58,19 @@ class book_click_minigame extends Phaser.Scene {
   create(data) {
     // Worked on by: Alexis
     // ---------- Background Image ---------- //
-    this.addBackgroundImages(data);
+    this.addBackgroundImages(data.dimensions);
     this.addBooks();
   }
 
   /**
    * Position the bookshelf and note paper images that are in the scene's background.
-   * @param {JSON} data - contains the width and height information for the background.
+   * @param {JSON} dimensions - contains the width and height information for the background.
    */
-  addBackgroundImages(data) {
+  addBackgroundImages(dimensions) {
     // Worked on by: Alexis
     this.background = this.add.image(this.cameras.default.width / 2, this.cameras.default.height / 2, BG_IMG_KEY);
-    this.background.displayWidth = data.width;
-    this.background.displayHeight = data.height;
+    this.background.displayWidth = dimensions.width;
+    this.background.displayHeight = dimensions.height;
 
     // Get x,y coordinates for each corner of the background image.
     this.background.getBottomRight(this.bottomRightCoords);
@@ -86,18 +95,11 @@ class book_click_minigame extends Phaser.Scene {
 
     // Worked on by: Charles
     // ---------- Audio ---------- //
-    let no = this.sound.add('no');
-    let yes = this.sound.add('yes');
     let ok = this.sound.add('ok');
+    let no = this.sound.add('no');
     no.setVolume(0.4);
-    yes.setVolume(0.4);
+    ok.setVolume(0.4);
 
-    // Worked on by: Alexis
-    yes.on('complete', () => {
-      // When the yes audio plays, the win condition has been satisfied.
-      // After the yes audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon(this.sceneKey);
-    });
 
     // ---------- Book Images ---------- //
     const booksNeeded = 2;
@@ -211,7 +213,7 @@ class book_click_minigame extends Phaser.Scene {
     bravo.on('complete', () => {
       // When the audio plays, the win condition has been satisfied.
       // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon('book_click_minigame');
+      minigame_scene_manager.minigameWon(this.key, this.interactable);
     });
   }
 }

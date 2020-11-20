@@ -29,6 +29,9 @@ class MapObject extends Phaser.Physics.Arcade.Sprite {
    * @param {boolean} isIqla 
    */
   canInteract(isIqla) {
+    if (this.isIqlaInteractable === null) { // If interactable is neutral.
+      return true;
+    }
     return isIqla && this.isIqlaInteractable || !isIqla && !this.isIqlaInteractable;
   }
 }

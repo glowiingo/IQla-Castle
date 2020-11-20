@@ -8,12 +8,20 @@ class trap_making_minigame extends Phaser.Scene {
       super('trap_making_minigame');
     }
 
+    /**
+     * Initialize and prepare data.
+     * @param {JSON} data = {
+     *   name: SCENE_NAME,
+     *   dimensions: { width: SCENE_WIDTH, height: SCENE_HEIGHT},
+     *   interactable: MAP_OBJECT
+     * }
+     */
     init(data) {
-      // initialize and prepare data
-      // constants, configurations, etc.
-      this.boardWidth = data.width;
-      this.boardHeight = data.height;
+      this.boardWidth = data.dimensions.width;
+      this.boardHeight = data.dimensions.height;
       this.correctPlacementCount = 0;
+      this.interactable = data.interactable;
+      this.key = data.name;
     }
 
     preload() {
@@ -34,7 +42,7 @@ class trap_making_minigame extends Phaser.Scene {
 
     create() {
       // Worked on by: Charles
-      minigame_scene_manager.setBackground('trap_making_minigame', 'trap_making_background');
+      minigame_scene_manager.setBackground(this.key, 'trap_making_background');
   
       let wrong = this.sound.add('wrong');
       let wow = this.sound.add('wow');
@@ -140,7 +148,7 @@ class trap_making_minigame extends Phaser.Scene {
     omgwow.on('complete', () => {
       // When the audio plays, the win condition has been satisfied.
       // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon('trap_making_minigame');
+      minigame_scene_manager.minigameWon(this.key, this.interactable);
     });
   }
 }

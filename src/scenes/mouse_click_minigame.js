@@ -1,4 +1,4 @@
-// Worked on by: Charles Huang, Alexis Mendiola
+// Worked on by: Charles Huang, Alexis C. Mendiola
 const NUM_OF_MICE = 3;
 const MIN_DUR = 400; // minimun amount of time in ms for a mouse to travel from A to B
 const MAX_DUR = 600; // maximum amount of time in ms for a mouse to travel from A to B
@@ -8,14 +8,25 @@ class mouse_click_minigame extends Phaser.Scene {
     super('mouse_click_minigame');
   }
 
-  init() {
+  /**
+   * Initialize and prepare data.
+   * @param {JSON} data = {
+   *   name: SCENE_NAME,
+   *   dimensions: { width: SCENE_WIDTH, height: SCENE_HEIGHT},
+   *   interactable: MAP_OBJECT
+   * }
+   */
+  init(data) {
+    this.key = data.name;
+    this.interactable = data.interactable;
+
     // coordinates of the sides of a table and its size.
     this.tableLeft = 180;
     this.tableRight = 625;
     this.tableTop = 130;
     this.tableBottom = 455;
-    this.tableWidth = (this.tableRight - this.tableLeft);
-    this.tableHeight = (this.tableBottom - this.tableTop);
+    this.tableWidth = this.tableRight - this.tableLeft;
+    this.tableHeight = this.tableBottom - this.tableTop;
   }
 
   preload() {
@@ -28,22 +39,19 @@ class mouse_click_minigame extends Phaser.Scene {
     this.load.video('recorder', '../../assets/video/recorder.mp4');
   }
 
-  create(data) {
+  create() {
     // sound effect of someone saying 'n-yes'
     let nyes = this.sound.add('nyes');
     nyes.setVolume(0.4);
 
-    minigame_scene_manager.setBackground('mouse_click_minigame', 'mouse_click_background');
+    minigame_scene_manager.setBackground(this.key, 'mouse_click_background');
 
-    // setScale does not affect image width/height so separate variables are created
-    let mouseWidth = this.scene.scene.textures.get('mouse').getSourceImage().width;
-    let mouseHeight = this.scene.scene.textures.get('mouse').getSourceImage().height;
     let mice = [];
 
     for (let i = 0; i < NUM_OF_MICE; i++) {
       let randX = Math.random() * this.tableWidth + this.tableLeft;
       let randY = Math.random() * this.tableHeight + this.tableTop;
-      mice.push(this.add.image(randX, randY, 'mouse',));
+      mice.push(this.add.image(randX, randY, 'mouse'));
     }
 
     //add animation and interactive functionality for each mouse
@@ -112,7 +120,7 @@ class mouse_click_minigame extends Phaser.Scene {
     recorder.on('complete', () => {
       // When the audio plays, the win condition has been satisfied.
       // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon('mouse_click_minigame');
+      minigame_scene_manager.minigameWon(this.key, this.interactable);
     });
   }
   /**

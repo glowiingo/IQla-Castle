@@ -63,7 +63,7 @@ class mainmenu_scene extends Phaser.Scene {
     this.trap_making_minigame_text.setInteractive();
     this.trap_making_minigame_text.on('pointerdown', () => {
       this.scene.pause();
-      this.scene.launch('minigame_scene_manager', 'trap_making_minigame');
+      this.scene.launch('minigame_scene_manager', {name: 'trap_making_minigame'});
     });
 
     this.mouse_click_text = this.add.text(20, 180, 'Kill Scene', {font: '25px Arial', fill: 'yellow'});

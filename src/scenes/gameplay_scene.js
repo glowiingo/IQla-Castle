@@ -48,6 +48,7 @@ class gameplay_scene extends Phaser.Scene {
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
     this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
     this.load.image('trapMakingMinigame', '../../assets/shelfAndTable.png');
+    this.load.image('mouseClickMinigame', '../../assets/kiwonface.png');
   }
 
   create() {
@@ -208,13 +209,16 @@ class gameplay_scene extends Phaser.Scene {
     return otherPlayer;
   }
 
+  /**
+   * Add MapObjects to the gameplay scene, each with its own minigame attached.
+   */
   addInteractables() {
     // Worked on by: Alexis
 
     this.bookshelfMinigameObj = new MapObject({
       scene: this,
-      x: 1200,
-      y: 115,
+      x: 3350,
+      y: 928,
       sprite: 'bookshelfMinigame',
       triggeredScene: 'book_click_minigame',
       isMinigameObj: true,
@@ -225,8 +229,8 @@ class gameplay_scene extends Phaser.Scene {
 
     this.trapMinigameObj = new MapObject({
       scene: this,
-      x: 1400,
-      y: 115,
+      x: 3500,
+      y: 928,
       sprite: 'trapMakingMinigame',
       triggeredScene: 'trap_making_minigame',
       isMinigameObj: true,
@@ -235,9 +239,22 @@ class gameplay_scene extends Phaser.Scene {
     this.add.existing(this.trapMinigameObj);
     this.physics.add.existing(this.trapMinigameObj);
 
+    this.mouseMinigameObj = new MapObject({
+      scene: this,
+      x: 643,
+      y: 1685,
+      sprite: 'mouseClickMinigame',
+      triggeredScene: 'mouse_click_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: null
+    });
+    this.add.existing(this.mouseMinigameObj).setScale(0.5);
+    this.physics.add.existing(this.mouseMinigameObj);
+
     // ------------ Add MapObjects to a physics group ------------ //
     this.interactables.add(this.bookshelfMinigameObj);
     this.interactables.add(this.trapMinigameObj);
+    this.interactables.add(this.mouseMinigameObj);
   }
 
   triggerScene(pauseKey, launchKey, launchData) {

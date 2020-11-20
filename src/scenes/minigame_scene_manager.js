@@ -32,10 +32,18 @@ class minigame_scene_manager extends Phaser.Scene {
     // Worked on by: Alexis
     // Ensure the launched scene rendered above all of the others:
     this.scene.bringToTop();
-    this.scene.bringToTop(key);
+    this.scene.bringToTop(key.name);
 
-    // Worked on by: Charles
-    this.scene.launch(key, {width: this.minigameWidth, height: this.minigameHeight});
+    // Worked on by: Charles & Alexis
+    const data = {
+      name: key.name,
+      interactable: key.interactable,
+      dimensions: {
+        width: this.minigameWidth,
+        height: this.minigameHeight
+      }
+    }
+    this.scene.launch(key.name, data);
     this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x151515);
     
     // Worked on by: Alexis
@@ -46,7 +54,7 @@ class minigame_scene_manager extends Phaser.Scene {
     exitButt.setY((game.config.height - this.backgroundHeight) / 2 + exitButt.displayHeight / 2 + this.buttPadding);
     exitButt.setInteractive();
     exitButt.on('pointerdown', () => {
-        minigame_scene_manager.end(key);
+        minigame_scene_manager.end(key.name);
     });
 
     // Worked on by: Charles
@@ -56,7 +64,7 @@ class minigame_scene_manager extends Phaser.Scene {
       let xBorder = this.game.config.width / 2 - this.backgroundWidth / 2;
       let yBorder = this.game.config.height / 2 - this.backgroundHeight / 2;
       if (xPos < xBorder || xPos > xBorder + this.backgroundWidth || yPos < yBorder || yPos > yBorder + this.backgroundHeight) {
-        minigame_scene_manager.end(key);
+        minigame_scene_manager.end(key.name);
       }
   });
   }
@@ -75,12 +83,13 @@ class minigame_scene_manager extends Phaser.Scene {
     game.scene.stop(key);
   }
 
-  static minigameWon(key) {
+  static minigameWon(key, interactable) {
     // Worked on by: Alexis
 
     // TODO:
     // Logic for notifying server to update taskbar after minigame completion.
     console.log('Minigame completed.');
+    interactable.setActive(false);
     minigame_scene_manager.end(key);
   }
 
