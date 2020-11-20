@@ -33,9 +33,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     });
-    
   }
-  
+
   removeCaptures() {
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
@@ -98,6 +97,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   getPlayerName() {
     return this.playerName;
+  }
+
+  startDeathSequence() {
+    this.play("DeathCycle");
   }
 
   //worked on by Mike
