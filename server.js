@@ -98,10 +98,10 @@ io.on('connection', function (socket) {
       io.in(roomName).emit('trapPlaced', rooms[roomName].getPlayer(socket.id));
     });
 
-    // socket.on('trapTrigger', function () {
-    //   io.in(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
-    // });
-    //
+    socket.on('trapTrigger', function () {
+      io.in(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
+    });
+
 
     socket.on('taskComplete', function () {
       io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));

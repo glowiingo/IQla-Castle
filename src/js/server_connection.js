@@ -122,11 +122,6 @@ class ServerConnection {
     this.socket.emit('taskComplete');
   }
 
-  trapPlaced() {
-    this.socket.emit('trapPlace'); // doesn't seem to be working
-  }
-
-
   trapTriggered() {
     this.socket.emit('activateTrap');
   }
