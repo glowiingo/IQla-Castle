@@ -223,10 +223,13 @@ class playerUI_scene extends Phaser.Scene {
     let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
 
     if (interactable) {
-        gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
+      gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), {
+        data: interactable.getLaunchData(),
+        interactable: interactable
+      });
     }
   }
-   
+  
   report() {
     //worked on by Mike
     let gameplay = this.scene.get('gameplay_scene');

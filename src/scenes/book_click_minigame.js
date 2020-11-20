@@ -1,7 +1,5 @@
-// Worked on by: Alexis C. Mendiola
+// Worked on by: Alexis C. Mendiola, Charles Huang
 
-const BG_IMG_SCALE = 3.5;
-const IMAGE_SCALE = 0.45;
 const BG_IMG_KEY = 'bookClickBg';
 const PAPER_NOTE_KEY = 'paperNote';
 const BOOK0_KEY = 'Hamlet';

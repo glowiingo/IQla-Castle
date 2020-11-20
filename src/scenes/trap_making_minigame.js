@@ -1,3 +1,5 @@
+// Worked on by: Charles Huang, Alexis C. Mendiola
+
 const ITEM_SCALE = 1;
 const ACCURACY = 10; // how far off the placement can be in any direction in pixels
 
@@ -31,6 +33,7 @@ class trap_making_minigame extends Phaser.Scene {
     }
 
     create() {
+      // Worked on by: Charles
       minigame_scene_manager.setBackground('trap_making_minigame', 'trap_making_background');
   
       let wrong = this.sound.add('wrong');
@@ -38,7 +41,8 @@ class trap_making_minigame extends Phaser.Scene {
   
       wrong.setVolume(3);
       wow.setVolume(1.5);
-  
+      
+      // Worked on by: Alexis, Charles
       let yItemPosArr = minigame_scene_manager.shuffleArray([350, 350, 480]);
       let xSlotPosArr = minigame_scene_manager.shuffleArray([500, 550, 625]);
       let ySlotPosArr = minigame_scene_manager.shuffleArray([450, 455, 460]);
@@ -46,6 +50,7 @@ class trap_making_minigame extends Phaser.Scene {
       this.createItemSlotPair('candleItem', 'candleSlot', 230, yItemPosArr[1], xSlotPosArr[1], ySlotPosArr[1]);
       this.createItemSlotPair('potionItem', 'potionSlot', 300, yItemPosArr[2], xSlotPosArr[2], ySlotPosArr[2]);
   
+      // Worked on by: Charles
       // pointer param is needed for drag to work
       this.input.on('drag', (pointer, object, nextX, nextY) => {
         let outerBorderX = (game.config.width - this.boardWidth) / 2;
@@ -101,6 +106,7 @@ class trap_making_minigame extends Phaser.Scene {
    * @param {*} slotY slot's y position
    */
   createItemSlotPair(item_name, slot_name, itemX, itemY, slotX, slotY) {
+    // Worked on by: Charles
     let item = this.add.image(itemX, itemY, item_name);
     item.setScale(ITEM_SCALE);
     item.setDepth(1);
@@ -117,6 +123,7 @@ class trap_making_minigame extends Phaser.Scene {
   }
 
   playVideo() {
+    // Worked on by: Charles
     let omgwow = this.add.video(400, 300, 'omgwow');
     omgwow.setVolume(0.5);
     omgwow.alpha = 0.5;

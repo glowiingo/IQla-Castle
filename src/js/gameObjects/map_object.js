@@ -7,6 +7,7 @@ class MapObject extends Phaser.Physics.Arcade.Sprite {
     this.y = config.y;
     this.isMinigameObj = config.isMinigameObj;
     this.triggeredScene = config.triggeredScene;
+    this.isIqlaInteractable = config.isIqlaInteractable;
   }
 
   /**
@@ -21,5 +22,13 @@ class MapObject extends Phaser.Physics.Arcade.Sprite {
    */
   getLaunchData() {
     return (this.isMinigameObj) ? this.triggeredScene : null;
+  }
+
+  /**
+   * Return true if player type and interactable type match.
+   * @param {boolean} isIqla 
+   */
+  canInteract(isIqla) {
+    return isIqla && this.isIqlaInteractable || !isIqla && !this.isIqlaInteractable;
   }
 }

@@ -28,9 +28,9 @@ class gameplay_scene extends Phaser.Scene {
 
   preload() {
     // load audio and images into memory
-    // this.load.image('haachama', '../../assets/player/Player.png');
+    // this.load.image('player', '../../assets/player/Player.png');
     this.load.spritesheet(
-      'haachama', 
+      'player', 
       '../../assets/player/PlayerWalkCycle.png', 
       {
         frameWidth: 128,
@@ -47,6 +47,7 @@ class gameplay_scene extends Phaser.Scene {
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
     this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
+    this.load.image('trapMakingMinigame', '../../assets/shelfAndTable.png');
   }
 
   create() {
@@ -61,7 +62,7 @@ class gameplay_scene extends Phaser.Scene {
 
     let config = {
       key: 'WalkCycle',
-      frames: this.anims.generateFrameNumbers('haachama', {
+      frames: this.anims.generateFrameNumbers('player', {
         start: 0,
         end: 7
       }),
@@ -155,7 +156,7 @@ class gameplay_scene extends Phaser.Scene {
         scene: this,
         x: playerInfo.x,
         y: playerInfo.y,
-        sprite: 'haachama',
+        sprite: 'player',
       },
       playerInfo.playerId,
       playerInfo.playerName,
@@ -190,7 +191,7 @@ class gameplay_scene extends Phaser.Scene {
       scene: this,
       x: playerInfo.x,
       y: playerInfo.y,
-      sprite: 'haachama'
+      sprite: 'player'
     }, playerInfo.playerId, playerInfo.playerName, 300);
 
     //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
@@ -217,12 +218,26 @@ class gameplay_scene extends Phaser.Scene {
       sprite: 'bookshelfMinigame',
       triggeredScene: 'book_click_minigame',
       isMinigameObj: true,
+      isIqlaInteractable: false
     });
-    this.add.existing(this.bookshelfMinigameObj).setScale(0.1);
+    this.add.existing(this.bookshelfMinigameObj).setScale(0.9);
     this.physics.add.existing(this.bookshelfMinigameObj);
+
+    this.trapMinigameObj = new MapObject({
+      scene: this,
+      x: 1400,
+      y: 115,
+      sprite: 'trapMakingMinigame',
+      triggeredScene: 'trap_making_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: true
+    });
+    this.add.existing(this.trapMinigameObj);
+    this.physics.add.existing(this.trapMinigameObj);
 
     // ------------ Add MapObjects to a physics group ------------ //
     this.interactables.add(this.bookshelfMinigameObj);
+    this.interactables.add(this.trapMinigameObj);
   }
 
   triggerScene(pauseKey, launchKey, launchData) {
