@@ -58,19 +58,19 @@ class endGame_scene extends Phaser.Scene {
     );
 
     //added play again button
-    this.playAgainButton = new ImageButton(
-      this,
-      screenX - 5,
-      screenY - 5,
-      1,
-      1,
-      'play_again_image',
-      () => this.playAgainClicked()
-    );
+    // this.playAgainButton = new ImageButton(
+    //   this,
+    //   screenX - 5,
+    //   screenY - 5,
+    //   1,
+    //   1,
+    //   'play_again_image',
+    //   () => this.playAgainClicked()
+    // );
 
     this.playAgainButton.setScale(0.45);
     this.add.existing(this.returnButton);
-    this.add.existing(this.playAgainButton);
+    //this.add.existing(this.playAgainButton);
     this.hideDefeat();
     this.hideVictory();
   }
@@ -92,12 +92,13 @@ class endGame_scene extends Phaser.Scene {
   }
   // click button return to mainmenu_scene
   returnClicked() {
-    this.scene.start('title_screen_scene');
+    location.reload();
   }
   // click button return to the game
-  playAgainClicked() {
-    this.scene.start('join_game_scene');
-  }
+  // playAgainClicked() {
+  //   this.scene.stop('gameplay_scene');
+  //   this.scene.start('join_game_scene');
+  // }
 
   update() {
     // loop that runs constantly
