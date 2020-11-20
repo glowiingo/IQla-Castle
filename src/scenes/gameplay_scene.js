@@ -138,11 +138,18 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by William (Front End)
   gameOver(team) {
+
+    // hide the chat if on
+    document.getElementById('textbox').style.display = 'none';
+    document.getElementById('chatbox').style.display = 'none';
+
+    // destroy other scenes
     this.scene.stop('playerUI_scene');
     this.scene.stop('mapOverlay_scene');
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
+    
     this.scene.start('endGame_scene', team + ' win')
   }
 

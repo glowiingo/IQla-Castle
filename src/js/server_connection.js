@@ -49,9 +49,14 @@ class ServerConnection {
       if (sceneData.serverConnection.socket.id === voteId) {
         sceneData.player.setActive(false).setVisible(false);
         sceneData.player.alive = false;
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
         alert('you were voted for');
       } else {
-        sceneData.otherPlayers[voteId].setActive(false).setVisible(false);;
+        sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
+        
+        // delete player from voting_scene player array
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
       }
       // console.log(voteId, ' was voted for');
     });
