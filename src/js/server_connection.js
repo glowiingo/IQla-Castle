@@ -69,8 +69,14 @@ class ServerConnection {
       } else {
         sceneData.otherPlayers[playerId].setActive(false).setVisible(false);;
       }
-
     });
+
+    // Worked on by: Kian
+    this.socket.on('trapPlaced', function (playerId) {
+      // HOW DOES THE TRAP GET PLACED HERE?
+    });
+
+
     //Worked on by: Jayce
     this.socket.on('receive message', function (msg) {
       sceneData.gamePlayScene.scene.get('chat_scene').receiveMsg(msg.name, msg.text);
@@ -113,6 +119,17 @@ class ServerConnection {
 
   //Worked on by: Kian
   taskCompleted() {
-    this.socket.emit('taskComplete')
+    this.socket.emit('taskComplete');
   }
+
+  trapPlaced() {
+    this.socket.emit('trapPlace'); // doesn't seem to be working
+  }
+
+
+  trapTriggered() {
+    this.socket.emit('activateTrap');
+  }
+
+
 }

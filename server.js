@@ -92,20 +92,17 @@ io.on('connection', function (socket) {
     // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
 
     //
+
     // // when a player places a trap
-    // socket.on('trapPlace', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('trapPlaced', rooms[roomName].getPlayer(socket.id));
-    // // broadcast for position of trap placed?
-    //
-    //
+    socket.on('trapPlace', function () {
+      io.in(roomName).emit('trapPlaced', rooms[roomName].getPlayer(socket.id));
+    });
+
     // socket.on('trapTrigger', function () {
-    //
+    //   io.in(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
     // });
-    // socket.broadcast.to(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
     //
-    //
+
     socket.on('taskComplete', function () {
       io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
       rooms[roomName].taskComplete(socket.id);

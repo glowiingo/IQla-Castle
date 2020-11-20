@@ -7,12 +7,12 @@ class Trap extends Phaser.GameObjects.Sprite {
         this.x = config.x;
         this.y = config.y;
         this.playerGroup = playerGroup;
-        this.setTrap();
+        this.trapPlace();
         this.trapTriggered = false;
     }
 
     //putting down the trap on the scene
-    setTrap() {
+    trapPlace() {
         this.scene.add.existing(this).setScale(1);
 
         this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayWidth);
