@@ -122,7 +122,7 @@ class voting_scene extends Phaser.Scene {
    * This function toggles the voting scene on/off on call.
    */
   toggleVisible() {
-    if (!this.scene.get('gameplay_scene').gameStart) {
+    if (!this.scene.get('gameplay_scene').gameStart || this.scene.get('gameplay_scene').sceneData.player.alive == false) {
       return;
     }
 

@@ -73,7 +73,7 @@ class ServerConnection {
         alert('you died');
       } else {
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(playerId);
-        sceneData.otherPlayers[playerId].setActive(false).setVisible(false);;
+        sceneData.otherPlayers[playerId].setActive(false).setVisible(false);
       }
 
     });
