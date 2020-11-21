@@ -92,7 +92,7 @@ class minigame_scene_manager extends Phaser.Scene {
     // Worked on by: Alexis
     game.registry.values.sceneData.serverConnection.taskCompleted(); // God Evano - Update server.
     interactable.setActive(false); // Prevent interactable from being used again.
-    if (key === 'trap_making_minigame' && !player.trap) {
+    if (key === 'trap_making_minigame' && !player.hasTrap) {
       player.setTrapVariable(true);
     }
     minigame_scene_manager.end(key); // End the minigame scene.
