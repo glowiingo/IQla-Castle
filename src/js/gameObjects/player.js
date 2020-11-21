@@ -1,4 +1,4 @@
-//Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike
+//Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike, Alexis
 
 //const player = require('../player');
 
@@ -161,11 +161,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   */
   interact(interactables) {
     // Worked on by: Alexis
+    const DIST_FROM_OBJ = (this.iqla) ? 100 : 50;
+
     for (let i = 0; i < interactables.length; i++) {
       let pos = Phaser.Math.Distance.Chebyshev(this.x, this.y, interactables[i].x, interactables[i].y);
-      if (interactables[i].active && pos < 60) {
-        interactables[i].setActive(false); // Bugged.
-        // Above line needs to be done only after the minigame is completed.
+
+      if (interactables[i].active && interactables[i].canInteract(this.iqla) && pos < DIST_FROM_OBJ) {
         return interactables[i];
       }
     }

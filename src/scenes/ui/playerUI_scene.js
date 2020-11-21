@@ -216,20 +216,27 @@ class playerUI_scene extends Phaser.Scene {
 
     let gameplay = this.scene.get('gameplay_scene');
     gameplay.player.kill(gameplay.otherPlayers.getChildren());
-    this.registry.values.sceneData.serverConnection.taskCompleted();
   }
 
+  /**
+   * Called when the "Use" button is pressed on the PlayerUI_Scene.
+   * Get a group of interactable MapObjects from the gameplay scene,
+   * interact with the one closest to the player, and then trigger the 
+   * corresponding scene.
+   */
   use() {
     // Worked on by: Alexis
-    console.log('use');
     let gameplay = this.scene.get('gameplay_scene');
     let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
 
     if (interactable) {
-        gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
+      gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), {
+        name: interactable.getLaunchData(),
+        interactable: interactable
+      });
     }
   }
-   
+  
   report() {
     //worked on by Mike
     let gameplay = this.scene.get('gameplay_scene');
