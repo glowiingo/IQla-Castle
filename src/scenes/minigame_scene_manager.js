@@ -1,6 +1,5 @@
 /**
- * Created by Charles Huang.
- * Worked on by Charles Huang & Alexis C. Mendiola.
+ * Worked on by Charles Huang, Alexis C. Mendiola, Evano Hirabe
  * 
  * This scene is used to start and end minigame scenes. When creating a minigame, please
  * follow SCALE_SIZE for minigame dimensions. The minigame scene will also be layered on
@@ -33,11 +32,20 @@ class minigame_scene_manager extends Phaser.Scene {
     // Worked on by: Alexis
     // Ensure the launched scene rendered above all of the others:
     this.scene.bringToTop();
-    this.scene.bringToTop(key);
+    this.scene.bringToTop(key.name);
 
-    // Worked on by: Charles
-    this.scene.launch(key, {width: this.minigameWidth, height: this.minigameHeight});
-    this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x123456);
+    // Worked on by: Charles & Alexis
+    const data = {
+      name: key.name,
+      interactable: key.interactable,
+      dimensions: {
+        width: this.minigameWidth,
+        height: this.minigameHeight
+      },
+      player: key.player
+    }
+    this.scene.launch(key.name, data);
+    this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x151515);
     
     // Worked on by: Alexis
     let exitButt = this.add.image(0, 0, 'exitButt');
@@ -47,7 +55,7 @@ class minigame_scene_manager extends Phaser.Scene {
     exitButt.setY((game.config.height - this.backgroundHeight) / 2 + exitButt.displayHeight / 2 + this.buttPadding);
     exitButt.setInteractive();
     exitButt.on('pointerdown', () => {
-        minigame_scene_manager.end(key);
+        minigame_scene_manager.end(key.name);
     });
 
     // Worked on by: Charles
@@ -57,7 +65,7 @@ class minigame_scene_manager extends Phaser.Scene {
       let xBorder = this.game.config.width / 2 - this.backgroundWidth / 2;
       let yBorder = this.game.config.height / 2 - this.backgroundHeight / 2;
       if (xPos < xBorder || xPos > xBorder + this.backgroundWidth || yPos < yBorder || yPos > yBorder + this.backgroundHeight) {
-        minigame_scene_manager.end(key);
+        minigame_scene_manager.end(key.name);
       }
   });
   }
@@ -69,20 +77,25 @@ class minigame_scene_manager extends Phaser.Scene {
    * Worked on by: Charles
    */
   static end(key) {
-    game.scene.wake('mainmenu_scene');
     game.scene.wake('playerUI_scene');
     game.scene.wake('gameplay_scene');
     game.scene.stop('minigame_scene_manager');
     game.scene.stop(key);
   }
 
-  static minigameWon(key) {
+  /**
+   * Minigame is completed, update taskbar. Set map object active state to false.
+   * @param {string} key - the name of the scene to end
+   * @param {MapObject} interactable - the MapObject to set to inactive
+   */
+  static minigameWon(key, interactable, player) {
     // Worked on by: Alexis
-
-    // TODO:
-    // Logic for notifying server to update taskbar after minigame completion.
-    console.log('Minigame completed.');
-    minigame_scene_manager.end(key);
+    game.registry.values.sceneData.serverConnection.taskCompleted(); // God Evano - Update server.
+    interactable.setActive(false); // Prevent interactable from being used again.
+    if (key === 'trap_making_minigame' && !player.hasTrap) {
+      player.setTrapVariable(true);
+    }
+    minigame_scene_manager.end(key); // End the minigame scene.
   }
 
   static setBackground(scene_key, background_key){
