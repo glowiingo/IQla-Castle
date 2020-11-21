@@ -108,6 +108,7 @@ class gameplay_scene extends Phaser.Scene {
     // -- game logic mainly in this area
     if (this.player && !this.scene.get('chat_scene').showChat) {
       this.player.playerMovement();
+      this.player.canPlaceTrap();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
         .get('showPositionPlayer_scene')
@@ -156,7 +157,8 @@ class gameplay_scene extends Phaser.Scene {
       },
       playerInfo.playerId,
       playerInfo.playerName,
-      300
+      300,
+      this.otherplayers
     );
 
     this.add.existing(this.player).setScale(1);
