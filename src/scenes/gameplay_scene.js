@@ -265,18 +265,6 @@ class gameplay_scene extends Phaser.Scene {
     this.add.existing(this.studyTrapObj).setScale(2);
     this.physics.add.existing(this.studyTrapObj);
 
-    this.barnTrapObj = new MapObject({
-      scene: this,
-      x: 4200,
-      y: 96,
-      sprite: 'trapMakingMinigame',
-      triggeredScene: 'trap_making_minigame',
-      isMinigameObj: true,
-      isIqlaInteractable: true,
-    });
-    this.add.existing(this.barnTrapObj).setScale(2);
-    this.physics.add.existing(this.barnTrapObj);
-
     // ------------------------ Neutral MapObjects ------------------------ //
     this.kitchenMouseObj = new MapObject({
       scene: this,
@@ -306,7 +294,6 @@ class gameplay_scene extends Phaser.Scene {
     this.interactables.add(this.studyBookshelfObj);
     this.interactables.add(this.storageBookshelfObj);
     this.interactables.add(this.studyTrapObj);
-    this.interactables.add(this.barnTrapObj);
     this.interactables.add(this.kitchenMouseObj);
     this.interactables.add(this.garageMouseObj);
   }
