@@ -18,6 +18,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.speed = speed;
     this.alive = true;
     this.iqla = false;
+    this.trap = true;
+    this.hadTrap = false;
     this.playerName = playerName;
 
     // Worked on by: Anna, Evano
@@ -51,14 +53,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   //worked on by Kiwon and John
   playerMovement() {
 
-    if (!this.trap_placed && this.key.place_trap.isDown) {
+    if (this.iqla && this.trap && this.key.place_trap.isDown) {
       console.log('placed');
       this.trap = new Trap({
         scene: this.scene,
         x: this.x,
         y: this.y
       }, this);
-      this.trap_placed = true;
+      this.trap = false;
+      this.hadTrap = true;
     }
 
     if (this.key.up.isDown) {

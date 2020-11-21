@@ -37,7 +37,7 @@ class gameplay_scene extends Phaser.Scene {
         frameHeight: 128,
         endFrame: 7
       });
-    this.load.image('trap', '../../assets/medzombie.png');
+    this.load.image('trap', '../../assets/Trap.png');
 
     this.load.tilemapTiledJSON(
       'map',
