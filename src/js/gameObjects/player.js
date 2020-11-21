@@ -10,16 +10,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // this.scene.add.existing(this).setScale(1);
     // this.scene.physics.add.existing(this);
     // this.setCollideWorldBounds(true);
-
+    
     if (config.iqla) {
       this.iqla = iqla;
-    }
+    } 
+
     this.id = id;
     this.speed = speed;
     this.alive = true;
-    this.iqla = false;
-    this.trap = true;
-    this.hadTrap = false;
+    this.trap = false;
     this.playerName = playerName;
 
     // Worked on by: Anna, Evano
@@ -61,7 +60,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         y: this.y
       }, this);
       this.trap = false;
-      this.hadTrap = true;
     }
 
     if (this.key.up.isDown) {
@@ -198,5 +196,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   sendToStartPos() {
     this.x = this.spawnX;
     this.y = this.spawnY;
+  }
+
+  // worked on by Charles 1000000000% all him let's go
+  setTrapVariable(bool) {
+    this.trap = bool;
   }
 }

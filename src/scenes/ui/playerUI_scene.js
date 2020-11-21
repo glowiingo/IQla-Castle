@@ -232,7 +232,8 @@ class playerUI_scene extends Phaser.Scene {
     if (interactable) {
       gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), {
         name: interactable.getLaunchData(),
-        interactable: interactable
+        interactable: interactable,
+        player: gameplay.player
       });
     }
   }
