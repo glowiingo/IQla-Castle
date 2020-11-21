@@ -11,7 +11,7 @@ class gameplay_scene extends Phaser.Scene {
       key: 'gameplay_scene',
     });
   }
-
+  
   // Worked on by: Gloria Ngo
   init(data) {
     // initialize and prepare data
@@ -26,7 +26,7 @@ class gameplay_scene extends Phaser.Scene {
     this.interactables = this.physics.add.group();
     this.deadbodies = [];
   }
-
+  // Worked on by: Brian
   preload() {
     // load audio and images into memory
     // this.load.image('haachama', '../../assets/player/Player.png');
@@ -54,6 +54,8 @@ class gameplay_scene extends Phaser.Scene {
     // add objects into the game
     console.log('gameplay_scene');
 
+    this.gameStart = false;
+
     this.scene.launch('playerUI_scene');
     this.scene.launch('mapOverlay_scene');
     this.scene.launch('showPositionPlayer_scene');
@@ -72,10 +74,11 @@ class gameplay_scene extends Phaser.Scene {
     this.anims.create(config);
 
     this.bgmusic = this.sound.add('BGM');
+    // BGM settings.
     let musicConfig = {
       mute: false,
-      volume: 0.5,
-      rate: 1,
+      volume: 0.3,
+      rate: 0.9,
       detune: 0,
       seek: 0,
       loop: true,
@@ -108,6 +111,9 @@ class gameplay_scene extends Phaser.Scene {
     // loop that runs constantly
     // -- game logic mainly in this area
     if (this.player && !this.scene.get('chat_scene').showChat) {
+      if (!this.player.alive && this.player.col.world != null) {
+        this.player.col.destroy();
+      }
       this.player.playerMovement();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
@@ -133,12 +139,19 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by William (Front End)
   gameOver(team) {
+
+    // hide the chat if on
+    document.getElementById('textbox').style.display = 'none';
+    document.getElementById('chatbox').style.display = 'none';
+
+    // destroy other scenes
     this.scene.stop('playerUI_scene');
     this.scene.stop('mapOverlay_scene');
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
-    this.scene.start('temp_game_end_scene', team + ' win')
+    
+    this.scene.start('endGame_scene', team + ' win')
   }
 
   vote(votedFor) {
@@ -168,7 +181,7 @@ class gameplay_scene extends Phaser.Scene {
     this.player.body.height = 64;
     this.player.body.width = 64;
 
-    this.physics.add.collider(this.player, this.wallsLayer);
+    this.player.col = this.physics.add.collider(this.player, this.wallsLayer);
     this.cameras.main.startFollow(this.player, true, 1, 1);
 
     this.playerNameText = this.add.text(

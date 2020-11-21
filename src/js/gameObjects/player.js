@@ -146,6 +146,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
           this.createDeadBody(sprite[i].x, sprite[i].y);
           console.log('I killed someone', sprite[i].id);
           this.scene.registry.values.sceneData.serverConnection.kill(sprite[i].id);
+          this.scene.registry.values.sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(sprite[i].id);
           break;
         }
       }
