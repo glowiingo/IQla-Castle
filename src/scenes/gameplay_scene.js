@@ -48,7 +48,7 @@ class gameplay_scene extends Phaser.Scene {
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
     this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
     this.load.image('trapMakingMinigame', '../../assets/shelfAndTable.png');
-    this.load.image('mouseClickMinigame', '../../assets/kiwonface.png');
+    this.load.image('mouseClickMinigame', '../../assets/ratTable.png');
   }
 
   create() {
@@ -214,47 +214,89 @@ class gameplay_scene extends Phaser.Scene {
    */
   addInteractables() {
     // Worked on by: Alexis
-
-    this.bookshelfMinigameObj = new MapObject({
+    // ------------------------ Detective MapObjects ------------------------ //
+    this.studyBookshelfObj = new MapObject({
       scene: this,
       x: 3350,
       y: 928,
       sprite: 'bookshelfMinigame',
       triggeredScene: 'book_click_minigame',
       isMinigameObj: true,
-      isIqlaInteractable: false
+      isIqlaInteractable: false,
     });
-    this.add.existing(this.bookshelfMinigameObj).setScale(0.9);
-    this.physics.add.existing(this.bookshelfMinigameObj);
+    this.add.existing(this.studyBookshelfObj).setScale(2);
+    this.physics.add.existing(this.studyBookshelfObj);
 
-    this.trapMinigameObj = new MapObject({
+    // ------------------------ Detective MapObjects ------------------------ //
+    this.storageBookshelfObj = new MapObject({
+      scene: this,
+      x: 3070,
+      y: 2720,
+      sprite: 'bookshelfMinigame',
+      triggeredScene: 'book_click_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: false,
+    });
+    this.add.existing(this.storageBookshelfObj).setScale(2);
+    this.physics.add.existing(this.storageBookshelfObj);
+
+    // ------------------------ IQLa MapObjects ------------------------ //
+    this.studyTrapObj = new MapObject({
       scene: this,
       x: 3500,
       y: 928,
       sprite: 'trapMakingMinigame',
       triggeredScene: 'trap_making_minigame',
       isMinigameObj: true,
-      isIqlaInteractable: true
+      isIqlaInteractable: true,
     });
-    this.add.existing(this.trapMinigameObj);
-    this.physics.add.existing(this.trapMinigameObj);
+    this.add.existing(this.studyTrapObj).setScale(2);
+    this.physics.add.existing(this.studyTrapObj);
 
-    this.mouseMinigameObj = new MapObject({
+    this.barnTrapObj = new MapObject({
+      scene: this,
+      x: 4200,
+      y: 96,
+      sprite: 'trapMakingMinigame',
+      triggeredScene: 'trap_making_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: true,
+    });
+    this.add.existing(this.barnTrapObj).setScale(2);
+    this.physics.add.existing(this.barnTrapObj);
+
+    // ------------------------ Neutral MapObjects ------------------------ //
+    this.kitchenMouseObj = new MapObject({
       scene: this,
       x: 643,
       y: 1685,
       sprite: 'mouseClickMinigame',
       triggeredScene: 'mouse_click_minigame',
       isMinigameObj: true,
-      isIqlaInteractable: null
+      isIqlaInteractable: null,
     });
-    this.add.existing(this.mouseMinigameObj).setScale(0.5);
-    this.physics.add.existing(this.mouseMinigameObj);
+    this.add.existing(this.kitchenMouseObj).setScale(2);
+    this.physics.add.existing(this.kitchenMouseObj);
+
+    this.garageMouseObj = new MapObject({
+      scene: this,
+      x: 146,
+      y: 480,
+      sprite: 'mouseClickMinigame',
+      triggeredScene: 'mouse_click_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: null,
+    });
+    this.add.existing(this.garageMouseObj).setScale(2);
+    this.physics.add.existing(this.garageMouseObj);
 
     // ------------ Add MapObjects to a physics group ------------ //
-    this.interactables.add(this.bookshelfMinigameObj);
-    this.interactables.add(this.trapMinigameObj);
-    this.interactables.add(this.mouseMinigameObj);
+    this.interactables.add(this.studyBookshelfObj);
+    this.interactables.add(this.storageBookshelfObj);
+    this.interactables.add(this.studyTrapObj);
+    this.interactables.add(this.barnTrapObj);
+    this.interactables.add(this.kitchenMouseObj);
+    this.interactables.add(this.garageMouseObj);
   }
 
   triggerScene(pauseKey, launchKey, launchData) {
