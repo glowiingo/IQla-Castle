@@ -9,7 +9,7 @@ class trap_gameplay_scene extends Phaser.Scene {
 
   constructor() {
     super('trap_gameplay_scene');
-
+    
   }
 
   init() {
