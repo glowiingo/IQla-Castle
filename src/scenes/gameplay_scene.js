@@ -217,7 +217,7 @@ class gameplay_scene extends Phaser.Scene {
     // ------------------------ Detective MapObjects ------------------------ //
     this.studyBookshelfObj = new MapObject({
       scene: this,
-      x: 3350,
+      x: 3400,
       y: 928,
       sprite: 'bookshelfMinigame',
       triggeredScene: 'book_click_minigame',

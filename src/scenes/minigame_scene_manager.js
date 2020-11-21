@@ -1,5 +1,5 @@
 /**
- * Worked on by Charles Huang & Alexis C. Mendiola.
+ * Worked on by Charles Huang, Alexis C. Mendiola, Evano Hirabe
  * 
  * This scene is used to start and end minigame scenes. When creating a minigame, please
  * follow SCALE_SIZE for minigame dimensions. The minigame scene will also be layered on
@@ -83,14 +83,16 @@ class minigame_scene_manager extends Phaser.Scene {
     game.scene.stop(key);
   }
 
+  /**
+   * Minigame is completed, update taskbar. Set map object active state to false.
+   * @param {string} key - the name of the scene to end
+   * @param {MapObject} interactable - the MapObject to set to inactive
+   */
   static minigameWon(key, interactable) {
     // Worked on by: Alexis
-
-    // TODO:
-    // Logic for notifying server to update taskbar after minigame completion.
-    console.log('Minigame completed.');
-    interactable.setActive(false);
-    minigame_scene_manager.end(key);
+    game.registry.values.sceneData.serverConnection.taskCompleted(); // God Evano - Update server.
+    interactable.setActive(false); // Prevent interactable from being used again.
+    minigame_scene_manager.end(key); // End the minigame scene.
   }
 
   static setBackground(scene_key, background_key){

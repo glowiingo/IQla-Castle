@@ -213,7 +213,6 @@ class playerUI_scene extends Phaser.Scene {
 
     let gameplay = this.scene.get('gameplay_scene');
     gameplay.player.kill(gameplay.otherPlayers.getChildren());
-    this.registry.values.sceneData.serverConnection.taskCompleted();
   }
 
   /**
