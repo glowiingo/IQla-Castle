@@ -38,9 +38,9 @@ class Trap extends Phaser.GameObjects.Sprite {
         if (!this.trapTriggered) {
             this.trapTriggered = true;
             console.log('triggered');
-            let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
             this.setVisible(true);
             setTimeout(()=>{
+                let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
                 this.trapZone.destroy();
                 this.kill(killList);
             }, 500)

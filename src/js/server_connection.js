@@ -76,6 +76,10 @@ class ServerConnection {
       sceneData.otherPlayers[playerId].playerTrap();
     });
 
+    this.socket.on('trapDisappear', function(playerId) {
+      sceneData.otherPlayers[playerId].removePlayerTrap();
+    });
+
     //Worked on by: Jayce
     this.socket.on('receive message', function (msg) {
       sceneData.gamePlayScene.scene.get('chat_scene').receiveMsg(msg.name, msg.text);
@@ -120,15 +124,16 @@ class ServerConnection {
     this.socket.emit('send message', name, text);
   }
 
-
   //Worked on by: Kian
   taskCompleted() {
     this.socket.emit('taskComplete');
   }
 
+  // not working yet
   trapTriggered() {
     this.socket.emit('activateTrap');
   }
+
 
 
 }

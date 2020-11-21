@@ -103,6 +103,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }, this);
   }
 
+  removePlayerTrap() {
+    if (this.trap)
+      this.trap.displayDestroyTrap();
+  }
+
   // Worked on by: Anna
   playerWalkAnimStart() {
     if (!this.isWalking) {
