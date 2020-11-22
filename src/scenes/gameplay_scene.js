@@ -235,6 +235,7 @@ class gameplay_scene extends Phaser.Scene {
       triggeredScene: 'book_click_minigame',
       isMinigameObj: true,
       isIqlaInteractable: false,
+      taskId: 1
     });
     this.add.existing(this.studyBookshelfObj).setScale(2);
     this.physics.add.existing(this.studyBookshelfObj);
@@ -248,6 +249,7 @@ class gameplay_scene extends Phaser.Scene {
       triggeredScene: 'book_click_minigame',
       isMinigameObj: true,
       isIqlaInteractable: false,
+      taskId: 3
     });
     this.add.existing(this.storageBookshelfObj).setScale(2);
     this.physics.add.existing(this.storageBookshelfObj);
@@ -261,6 +263,7 @@ class gameplay_scene extends Phaser.Scene {
       triggeredScene: 'trap_making_minigame',
       isMinigameObj: true,
       isIqlaInteractable: true,
+      taskId: 1
     });
     this.add.existing(this.studyTrapObj).setScale(2);
     this.physics.add.existing(this.studyTrapObj);
@@ -274,6 +277,7 @@ class gameplay_scene extends Phaser.Scene {
       triggeredScene: 'mouse_click_minigame',
       isMinigameObj: true,
       isIqlaInteractable: null,
+      taskId: 2
     });
     this.add.existing(this.kitchenMouseObj).setScale(2);
     this.physics.add.existing(this.kitchenMouseObj);
@@ -286,6 +290,7 @@ class gameplay_scene extends Phaser.Scene {
       triggeredScene: 'mouse_click_minigame',
       isMinigameObj: true,
       isIqlaInteractable: null,
+      taskId: 0
     });
     this.add.existing(this.garageMouseObj).setScale(2);
     this.physics.add.existing(this.garageMouseObj);
