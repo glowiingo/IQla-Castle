@@ -22,7 +22,6 @@ class trap_making_minigame extends Phaser.Scene {
       this.correctPlacementCount = 0;
       this.interactable = data.interactable;
       this.key = data.name;
-      this.player = data.player;
     }
 
     preload() {
@@ -149,7 +148,7 @@ class trap_making_minigame extends Phaser.Scene {
     omgwow.on('complete', () => {
       // When the audio plays, the win condition has been satisfied.
       // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon(this.key, this.interactable, this.player);
+      minigame_scene_manager.minigameWon(this.key, this.interactable);
     });
   }
 }
