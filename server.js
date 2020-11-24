@@ -135,6 +135,10 @@ io.on('connection', function (socket) {
         io.in(roomName).emit('voted', complete);
       }
     });
+    socket.on('bingo', function () {
+      console.log("Vote is called to start")
+      io.in(roomName).emit('voteStarted');
+    });
   })
 });
 
