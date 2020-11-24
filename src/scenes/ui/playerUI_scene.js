@@ -28,6 +28,7 @@ class playerUI_scene extends Phaser.Scene {
     });
 
     this.isStartGame = false;
+    //Add two sprites in the same location in the top right of the screen.
     // instantiate a progress bar in the top right corner of game screen, similar to the kill button
     // note: add ProgressBar.increase(1) into each mini-game
     // this.progressBar = this.add.sprite(0, 0, 'progress');
@@ -37,7 +38,9 @@ class playerUI_scene extends Phaser.Scene {
     this.tBar = this.add
       .sprite(game.config.width - 504, 0, 'TaskBar')
       .setOrigin(0, 0);
+    //The bar starts empty at the beginning fo the game.
     this.fill = 0;
+    //Init the empty crop.
     
     //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
     //this.txt.setColor('#000000');
@@ -54,11 +57,38 @@ class playerUI_scene extends Phaser.Scene {
       this.resize();
     });
 
-    this.taskStringArr = [
-      'Clean the bathroom',
-      'Stand in the storage room for 10 seconds',
-      'Do the dishes in the kitchen',
-      'Close the closet door',
+    this.detectiveTasks = [
+      {
+        id: 0,
+        desc: 'Exterminate mice in the garage',
+      },
+      {
+        id: 1,
+        desc: 'Research ways to beat the IQLa in the Study',
+      },
+      {
+        id: 2,
+        desc: 'Exterminate mice in the kitchen',
+      },
+      {
+        id: 3,
+        desc: 'MORE research with books in the Storage room'
+      }
+    ];
+
+    this.iqlaTasks = [
+      {
+        id: 0,
+        desc: 'Exterminate mice in the garage',
+      },
+      {
+        id: 1,
+        desc: 'Go to the study and create a deadly trap',
+      },
+      {
+        id: 2,
+        desc: 'Exterminate mice in the kitchen',
+      }
     ];
 
     this.btnOriginScale = 0.35;
@@ -88,11 +118,7 @@ class playerUI_scene extends Phaser.Scene {
       this.renderDetectiveUI();
     }
 
-    this.renderTaskList(this.taskStringArr);
-
-    // Domo for how to show task complete.
-    this.taskList[1].setColor('#8D8D8D');
-    this.taskList[3].setColor('#8D8D8D');
+    this.renderTaskList((this.isIqla) ? this.iqlaTasks : this.detectiveTasks);
   }
 
   renderTaskList(arr) {
@@ -123,7 +149,7 @@ class playerUI_scene extends Phaser.Scene {
 
     for (let i = 0; i < arr.length; i++) {
       this.taskList[i] = this.add
-          .text(x, y, arr[i], style)
+          .text(x, y, arr[i].desc, style)
           .setOrigin(0, 0);
 
       this.taskList[i].wordWrap = true;
@@ -213,20 +239,27 @@ class playerUI_scene extends Phaser.Scene {
 
     let gameplay = this.scene.get('gameplay_scene');
     gameplay.player.kill(gameplay.otherPlayers.getChildren());
-    this.registry.values.sceneData.serverConnection.taskCompleted();
   }
 
+  /**
+   * Called when the "Use" button is pressed on the PlayerUI_Scene.
+   * Get a group of interactable MapObjects from the gameplay scene,
+   * interact with the one closest to the player, and then trigger the 
+   * corresponding scene.
+   */
   use() {
     // Worked on by: Alexis
-    console.log('use');
     let gameplay = this.scene.get('gameplay_scene');
     let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
 
     if (interactable) {
-        gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
+      gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), {
+        name: interactable.getLaunchData(),
+        interactable: interactable
+      });
     }
   }
-   
+  
   report() {
     //worked on by Mike
     let gameplay = this.scene.get('gameplay_scene');
@@ -266,7 +299,10 @@ class playerUI_scene extends Phaser.Scene {
     }
   }
 
-  //Sets the progress bar size by adding a positive or negative amount as *perc*
+  /**
+   * Adds an amount to the bars value then crops the top image appropriately. 
+   * @param perc An amount to add to the bars value of 0-504, can be negative to lower the bar. 
+   */
   setBar(perc) {
     this.fill += perc;
     this.tBar.setCrop(0, 0, this.fill, 84);

@@ -18,12 +18,14 @@ class voting_scene extends Phaser.Scene {
       '../../assets/votingScene/VotePortrait.png'
     );
     this.load.image('chatButton', '../../assets/votingScene/chatButton.png');
+    this.load.image('skip', '../../assets/votingScene/Skip.png');
   }
 
   create() {
     this.showVote = false;
     this.scene.setVisible(false);
     this.voted = false;
+    this.canClick = false;
 
     this.screenX = this.cameras.main.width;
     this.screenY = this.cameras.main.height;
@@ -52,7 +54,40 @@ class voting_scene extends Phaser.Scene {
     
     // Display the portraits of the players.
     this.displayPortraits();
+
+    this.skip = this.add.image(this.screenX - 100, 50, 'skip');
+    this.skip.setOrigin(0,0);
+    this.skip.setScale(0.2);
+    this.skip.setInteractive();
+
+    this.skip.on('pointerdown',() => {
+      if (this.voted) {
+        return;
+      }
+
+      this.vote(null);
+      this.voted = true;
+      this.votedText = this.add.text(this.screenX / 12, 50, 'You skipped vote', {
+        font: '55px Ariel',
+        fill: 'green',
+      });
+    }); 
+    
   } 
+
+  removePlayerById(id) {
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.players[i].id === id) {
+        this.players.splice(i,1);
+        break;
+      }
+    }
+    for (let i = 0; i < this.playerPortraits.length; i++) {
+      this.playerPortraits[i].destroy();
+    }
+    this.playerPortraits = [];
+    this.displayPortraits();
+  }
 
   displayPortraits() {
     for (let i = 0; i < this.players.length; i++) {
@@ -83,13 +118,25 @@ class voting_scene extends Phaser.Scene {
     this.scene.get('gameplay_scene').vote(votedFor);
   }
 
+  /**
+   * This function toggles the voting scene on/off on call.
+   */
   toggleVisible() {
+    if (!this.scene.get('gameplay_scene').gameStart || this.scene.get('gameplay_scene').sceneData.player.alive == false) {
+      return;
+    }
+
+    // toggle the visibility and ability to click in the voting scene
+
     this.showVote = !this.showVote;
     if (this.showVote) {
+      this.canClick = true;
       this.scene.setVisible(true);
     } else {
+      this.canClick = false;
       this.scene.setVisible(false);
       this.scene.get('chat_scene').hide();
+
       // reset the voting scene when closed
       this.voted = false;
       for (let i = 0; i < this.playerPortraits.length; i++) {
@@ -132,6 +179,11 @@ class Portrait {
     this.disabled = false;
   }
 
+  destroy() {
+    this.spr.destroy();
+    this.nametag.destroy();
+  }
+
   updateColor(ms) {
     switch (ms) {
       case mouseStatus.none:
@@ -153,7 +205,7 @@ class Portrait {
     this.spr.setInteractive();
     this.spr
       .on('pointerover', () => {
-        if (this.disabled) {
+        if (this.disabled || this.game.voted) {
           return;
         }
 
@@ -164,7 +216,8 @@ class Portrait {
       })
 
       .on('pointerdown', () => {
-        if (this.disabled) {
+        // conditions that prevent voting
+        if (this.disabled || this.game.voted || !this.game.canClick) {
           return;
         }
 

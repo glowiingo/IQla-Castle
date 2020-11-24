@@ -49,9 +49,14 @@ class ServerConnection {
       if (sceneData.serverConnection.socket.id === voteId) {
         sceneData.player.setActive(false).setVisible(false);
         sceneData.player.alive = false;
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
         alert('you were voted for');
       } else {
-        sceneData.otherPlayers[voteId].setActive(false).setVisible(false);;
+        sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
+
+        // delete player from voting_scene player array
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
       }
       // console.log(voteId, ' was voted for');
     });
@@ -67,10 +72,20 @@ class ServerConnection {
         sceneData.player.alive = false;
         alert('you died');
       } else {
-        sceneData.otherPlayers[playerId].setActive(false).setVisible(false);;
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(playerId);
+        sceneData.otherPlayers[playerId].setActive(false).setVisible(false);
       }
-
     });
+
+    // Worked on by: Kian
+    this.socket.on('trapPlaced', function (playerId) {
+      sceneData.otherPlayers[playerId].playerTrap();
+    });
+
+    this.socket.on('trapDisappear', function(playerId) {
+      sceneData.otherPlayers[playerId].removePlayerTrap();
+    });
+
     //Worked on by: Jayce
     this.socket.on('receive message', function (msg) {
       sceneData.gamePlayScene.scene.get('chat_scene').receiveMsg(msg.name, msg.text);
@@ -86,6 +101,11 @@ class ServerConnection {
     } else {
       this.socket.emit('stopPlayerMovement', player.id);
     }
+  }
+
+  // Worked on by: Evano, Kian
+  trapPlace() {
+    this.socket.emit('trapPlace', this.socket.id);
   }
 
   updatePos(player) {
@@ -110,9 +130,16 @@ class ServerConnection {
     this.socket.emit('send message', name, text);
   }
 
-
   //Worked on by: Kian
   taskCompleted() {
-    this.socket.emit('taskComplete')
+    this.socket.emit('taskComplete');
   }
+
+  // not working yet
+  trapTriggered() {
+    this.socket.emit('activateTrap');
+  }
+
+
+
 }

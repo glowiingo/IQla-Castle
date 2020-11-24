@@ -11,7 +11,7 @@ class gameplay_scene extends Phaser.Scene {
       key: 'gameplay_scene',
     });
   }
-
+  
   // Worked on by: Gloria Ngo
   init(data) {
     // initialize and prepare data
@@ -26,19 +26,19 @@ class gameplay_scene extends Phaser.Scene {
     this.interactables = this.physics.add.group();
     this.deadbodies = [];
   }
-
+  // Worked on by: Brian
   preload() {
     // load audio and images into memory
-    // this.load.image('haachama', '../../assets/player/Player.png');
+    // this.load.image('player', '../../assets/player/Player.png');
     this.load.spritesheet(
-      'haachama', 
+      'player', 
       '../../assets/player/PlayerWalkCycle.png', 
       {
         frameWidth: 128,
         frameHeight: 128,
         endFrame: 7
       });
-    this.load.image('trap', '../../assets/medzombie.png');
+    this.load.image('trap', '../../assets/Trap.png');
 
     this.load.tilemapTiledJSON(
       'map',
@@ -48,11 +48,15 @@ class gameplay_scene extends Phaser.Scene {
     this.load.image('deadbody', 'assets/deadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
     this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
+    this.load.image('trapMakingMinigame', '../../assets/shelfAndTable.png');
+    this.load.image('mouseClickMinigame', '../../assets/ratTable.png');
   }
 
   create() {
     // add objects into the game
     console.log('gameplay_scene');
+
+    this.gameStart = false;
 
     this.scene.launch('playerUI_scene');
     this.scene.launch('mapOverlay_scene');
@@ -62,7 +66,7 @@ class gameplay_scene extends Phaser.Scene {
 
     let config = {
       key: 'WalkCycle',
-      frames: this.anims.generateFrameNumbers('haachama', {
+      frames: this.anims.generateFrameNumbers('player', {
         start: 0,
         end: 7
       }),
@@ -72,10 +76,11 @@ class gameplay_scene extends Phaser.Scene {
     this.anims.create(config);
 
     this.bgmusic = this.sound.add('BGM');
+    // BGM settings.
     let musicConfig = {
       mute: false,
-      volume: 0.5,
-      rate: 1,
+      volume: 0.3,
+      rate: 0.9,
       detune: 0,
       seek: 0,
       loop: true,
@@ -108,7 +113,11 @@ class gameplay_scene extends Phaser.Scene {
     // loop that runs constantly
     // -- game logic mainly in this area
     if (this.player && !this.scene.get('chat_scene').showChat) {
+      if (!this.player.alive && this.player.col.world != null) {
+        this.player.col.destroy();
+      }
       this.player.playerMovement();
+      this.player.canPlaceTrap();
       this.sceneData.serverConnection.movement(this.player);
       this.scene
         .get('showPositionPlayer_scene')
@@ -133,12 +142,19 @@ class gameplay_scene extends Phaser.Scene {
 
   // Worked on by William (Front End)
   gameOver(team) {
+
+    // hide the chat if on
+    document.getElementById('textbox').style.display = 'none';
+    document.getElementById('chatbox').style.display = 'none';
+
+    // destroy other scenes
     this.scene.stop('playerUI_scene');
     this.scene.stop('mapOverlay_scene');
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
-    this.scene.start('temp_game_end_scene', team + ' win')
+    
+    this.scene.start('endGame_scene', team + ' win')
   }
 
   vote(votedFor) {
@@ -153,11 +169,12 @@ class gameplay_scene extends Phaser.Scene {
         scene: this,
         x: playerInfo.x,
         y: playerInfo.y,
-        sprite: 'haachama',
+        sprite: 'player',
       },
       playerInfo.playerId,
       playerInfo.playerName,
-      300
+      300,
+      this.otherplayers
     );
 
     this.add.existing(this.player).setScale(1);
@@ -168,7 +185,7 @@ class gameplay_scene extends Phaser.Scene {
     this.player.body.height = 64;
     this.player.body.width = 64;
 
-    this.physics.add.collider(this.player, this.wallsLayer);
+    this.player.col = this.physics.add.collider(this.player, this.wallsLayer);
     this.cameras.main.startFollow(this.player, true, 1, 1);
 
     this.playerNameText = this.add.text(
@@ -188,7 +205,7 @@ class gameplay_scene extends Phaser.Scene {
       scene: this,
       x: playerInfo.x,
       y: playerInfo.y,
-      sprite: 'haachama'
+      sprite: 'player'
     }, playerInfo.playerId, playerInfo.playerName, 300);
 
     //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
@@ -205,22 +222,86 @@ class gameplay_scene extends Phaser.Scene {
     return otherPlayer;
   }
 
+  /**
+   * Add MapObjects to the gameplay scene, each with its own minigame attached.
+   */
   addInteractables() {
     // Worked on by: Alexis
-
-    this.bookshelfMinigameObj = new MapObject({
+    // ------------------------ Detective MapObjects ------------------------ //
+    this.studyBookshelfObj = new MapObject({
       scene: this,
-      x: 1200,
-      y: 115,
+      x: 3400,
+      y: 928,
       sprite: 'bookshelfMinigame',
       triggeredScene: 'book_click_minigame',
       isMinigameObj: true,
+      isIqlaInteractable: false,
+      taskId: 1
     });
-    this.add.existing(this.bookshelfMinigameObj).setScale(0.1);
-    this.physics.add.existing(this.bookshelfMinigameObj);
+    this.add.existing(this.studyBookshelfObj).setScale(2);
+    this.physics.add.existing(this.studyBookshelfObj);
+
+    // ------------------------ Detective MapObjects ------------------------ //
+    this.storageBookshelfObj = new MapObject({
+      scene: this,
+      x: 3070,
+      y: 2720,
+      sprite: 'bookshelfMinigame',
+      triggeredScene: 'book_click_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: false,
+      taskId: 3
+    });
+    this.add.existing(this.storageBookshelfObj).setScale(2);
+    this.physics.add.existing(this.storageBookshelfObj);
+
+    // ------------------------ IQLa MapObjects ------------------------ //
+    this.studyTrapObj = new MapObject({
+      scene: this,
+      x: 3500,
+      y: 928,
+      sprite: 'trapMakingMinigame',
+      triggeredScene: 'trap_making_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: true,
+      taskId: 1
+    });
+    this.add.existing(this.studyTrapObj).setScale(2);
+    this.physics.add.existing(this.studyTrapObj);
+
+    // ------------------------ Neutral MapObjects ------------------------ //
+    this.kitchenMouseObj = new MapObject({
+      scene: this,
+      x: 643,
+      y: 1685,
+      sprite: 'mouseClickMinigame',
+      triggeredScene: 'mouse_click_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: null,
+      taskId: 2
+    });
+    this.add.existing(this.kitchenMouseObj).setScale(2);
+    this.physics.add.existing(this.kitchenMouseObj);
+
+    this.garageMouseObj = new MapObject({
+      scene: this,
+      x: 146,
+      y: 480,
+      sprite: 'mouseClickMinigame',
+      triggeredScene: 'mouse_click_minigame',
+      isMinigameObj: true,
+      isIqlaInteractable: null,
+      taskId: 0
+    });
+    this.add.existing(this.garageMouseObj).setScale(2);
+    this.physics.add.existing(this.garageMouseObj);
 
     // ------------ Add MapObjects to a physics group ------------ //
-    this.interactables.add(this.bookshelfMinigameObj);
+    this.interactables.add(this.studyBookshelfObj);
+    this.interactables.add(this.storageBookshelfObj);
+    this.interactables.add(this.studyTrapObj);
+    this.interactables.add(this.kitchenMouseObj);
+    this.interactables.add(this.garageMouseObj);
   }
 
   triggerScene(pauseKey, launchKey, launchData) {
