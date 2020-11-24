@@ -261,11 +261,11 @@ class playerUI_scene extends Phaser.Scene {
   }
   
   report() {
-    //worked on by Mike
+    //worked on by Mike and Evano
     let gameplay = this.scene.get('gameplay_scene');
-    let vote = this.scene.get('voting_scene');
-    gameplay.player.report();
-    vote.toggleVisible();
+    if(gameplay.player.report()){
+      this.registry.values.sceneData.serverConnection.callVote();
+    }
   }
 
   showMap() {

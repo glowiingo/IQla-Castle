@@ -136,15 +136,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.deadbodies.push(dead_image);
   }
 
-  //worked on by Mike
+  //worked on by Mike and Evano
   report() {
+    console.log("Checking for local dead bodies")
     for (let i = 0; i < this.scene.deadbodies.length; i++) {
       let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.scene.deadbodies[i].x, this.scene.deadbodies[i].y);
+      console.log("Distance to nearest dead body", c);
       if (c < 60) {
         console.log('FOUND A DEADBODY!');
-        break;
+        return true;
       }
     }
+    return false;
   }
 
   //worked on by Mike

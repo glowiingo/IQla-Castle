@@ -48,8 +48,8 @@ class ServerConnection {
     this.socket.on('voted', function (voteId) {
       if (sceneData.serverConnection.socket.id === voteId) {
         sceneData.player.setActive(false).setVisible(false);
-        sceneData.player.alive = false;
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
+        sceneData.player.alive = false;
         alert('you were voted for');
       } else {
         sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
@@ -58,8 +58,10 @@ class ServerConnection {
         // delete player from voting_scene player array
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
       }
-      // console.log(voteId, ' was voted for');
     });
+    this.socket.on('voteStarted', function(){
+      sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible();
+    })
     this.socket.on('taskCompleted', function (voteId) {
       sceneData.gamePlayScene.scene.manager.getScene('playerUI_scene').setBar(Math.floor(504 * 0.1));
     });
@@ -70,10 +72,12 @@ class ServerConnection {
       if (sceneData.serverConnection.socket.id === playerId) {
         sceneData.player.setActive(false).setVisible(false);
         sceneData.player.alive = false;
+        sceneData.player.createDeadBody(sceneData.player.x, sceneData.player.y);
         alert('you died');
       } else {
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(playerId);
         sceneData.otherPlayers[playerId].setActive(false).setVisible(false);
+        sceneData.otherPlayers[playerId].createDeadBody(sceneData.otherPlayers[playerId].x, sceneData.otherPlayers[playerId].y);
       }
     });
 
@@ -114,6 +118,11 @@ class ServerConnection {
 
   kill(playerId) {
     this.socket.emit('kill', playerId);
+  }
+
+  callVote(){
+    console.log("Vote is called to start")
+    this.socket.emit('bingo');
   }
 
   vote(playerId) {
