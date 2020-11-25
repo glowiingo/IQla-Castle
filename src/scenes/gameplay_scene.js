@@ -70,10 +70,11 @@ class gameplay_scene extends Phaser.Scene {
     };
     this.anims.create(config);
 
+    //Worked on by Brian
     this.bgmusic = this.sound.add('BGM');
     let musicConfig = {
       mute: false,
-      volume: 0.5,
+      volume: 0.3,
       rate: 1,
       detune: 0,
       seek: 0,
