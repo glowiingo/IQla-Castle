@@ -125,4 +125,29 @@ class trap_making_minigame extends Phaser.Scene {
     let slot = this.add.image(slotX, slotY, slot_name);
     slot.setDisplaySize(item.displayWidth + ACCURACY * 1.75, item.displayHeight + ACCURACY * 1.75);
   }
+<<<<<<< HEAD
+=======
+
+  playVideo() {
+    // Worked on by: Charles
+    let omgwow = this.add.video(400, 300, 'omgwow');
+    omgwow.setVolume(0.5);
+    omgwow.alpha = 0.5;
+    omgwow.setDepth(2);
+    omgwow.play();
+
+    this.tweens.add({
+      targets: omgwow,
+      scale: 3,
+      duration: omgwow.getDuration() * 1000,
+      repeat: 0,
+    });
+
+    omgwow.on('complete', () => {
+      // When the audio plays, the win condition has been satisfied.
+      // After the audio has finished playing, call the 'won' function.
+      minigame_scene_manager.minigameWon(this.key, this.interactable);
+    });
+  }
+>>>>>>> develop
 }
