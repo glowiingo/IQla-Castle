@@ -102,6 +102,7 @@ class gameplay_scene extends Phaser.Scene {
     this.wallsLayer.setCollisionByProperty({
       collides: true,
     });
+    map.createStaticLayer('Props', tileset);
 
     this.addInteractables();
 
@@ -131,10 +132,10 @@ class gameplay_scene extends Phaser.Scene {
     // worked on by William
     for (let i = 0; i < this.otherPlayerTags.length; i++) {
       try {
-        this.otherPlayerTags[i].x =
-          this.otherPlayers.children.entries[i].x - 32;
-        this.otherPlayerTags[i].y =
-          this.otherPlayers.children.entries[i].y - 100;
+        if (this.otherPlayers.children.entries[i].alive && this.otherPlayers.children.entries[i].active) {
+          this.otherPlayerTags[i].x = this.otherPlayers.children.entries[i].x - 32;
+          this.otherPlayerTags[i].y = this.otherPlayers.children.entries[i].y - 100;
+        }
       } catch (e) {
         delete this.otherPlayerTags[i];
         delete this.otherPlayers.children.entries[i];
@@ -236,6 +237,8 @@ class gameplay_scene extends Phaser.Scene {
         fill: 'yellow',
       })
     );
+
+    console.log(this.otherPlayerTags);
 
     return otherPlayer;
   }
