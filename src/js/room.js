@@ -10,6 +10,7 @@ class Room {
     this.taskCount = 0;
     this.voteResult = [];
     this.votedPlayers = [];
+    this.deadCount = 0;
   }
   addPlayer(player) {
     this.players[player.playerId] = player;
@@ -54,6 +55,7 @@ class Room {
     } else {
       this.vampireCount--;
     }
+    this.deadCount += 1;
     if (this.vampireCount == 0) {
       this.victoryHandler('detectives');
     } else if (this.vampireCount >= this.detectiveCount) {
@@ -80,12 +82,12 @@ class Room {
 
   // Add timer into the if statement   e.g  && timer === 0;
   voteCompleted() {
-    if (Object.keys(this.players).length === this.voteResult.length) {
+    if (Object.keys(this.players).length === this.voteResult.length + this.deadCount) {
       let votedPlayerID = this.findTheMajority(this.voteResult);
-      console.log(this.votedPlayers)  // you can check who voted and who didn't
       console.log('majority voted for: ', votedPlayerID);
-      this.voteResult = [];
-      this.votedPlayers = [];
+      if (votedPlayerID == null) {
+        return null;
+      }
       this.playerEliminated(votedPlayerID);
       return votedPlayerID;
     }

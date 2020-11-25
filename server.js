@@ -76,36 +76,29 @@ io.on('connection', function (socket) {
 
 
     // Worked on by: Kian Darakhshan
-    // Sockets to be added once functionality is made:
 
     // when a player kills, update the victim's player data
     socket.on('kill', function (victimID) {
       socket.broadcast.to(roomName).emit('killed', victimID);
       rooms[roomName].playerEliminated(victimID);
     });
-    // 
-    //
-    // // when a player initiates a vote event for all other players
-    // socket.on('startVote', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
 
-    //
-    // // when a player places a trap
-    // socket.on('trapPlace', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('trapPlaced', rooms[roomName].getPlayer(socket.id));
-    // // broadcast for position of trap placed?
-    //
-    //
-    // socket.on('trapTrigger', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
-    //
-    //
+    // when a player places a trap
+    socket.on('trapPlace', function (playerId) {
+      socket.broadcast.to(roomName).emit('trapPlaced', playerId);
+    });
+
+    // NOT WORKING YET
+    socket.on('trapDisappear', function (playerId) {
+      socket.broadcast.emit('trapDisappeared', rooms[roomName].getPlayer(socket.id));
+    })
+
+    // NOT WORKING YET NOT WORKING YET NOT WORKING YET NOT WORKING YET
+    // when player activates a trap by walking by it
+    socket.on('trapTrigger', function () {
+      io.in(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
+    });
+
     socket.on('taskComplete', function () {
       io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
       rooms[roomName].taskComplete(socket.id);
@@ -142,7 +135,10 @@ io.on('connection', function (socket) {
         io.in(roomName).emit('voted', complete);
       }
     });
-
+    socket.on('voteStart', function () {
+      console.log("Vote is called to start")
+      io.in(roomName).emit('voteStarted');
+    });
   })
 });
 
