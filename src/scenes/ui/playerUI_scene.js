@@ -41,7 +41,7 @@ class playerUI_scene extends Phaser.Scene {
     //The bar starts empty at the beginning fo the game.
     this.fill = 0;
     //Init the empty crop.
-    
+
     //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
     //this.txt.setColor('#000000');
     //this.txt.setFontSize(40);
@@ -49,10 +49,9 @@ class playerUI_scene extends Phaser.Scene {
     //The bar ranges from 0-504 set bar adds an amount to it
     this.setBar(0);
 
-    this.startBtn
-      .on('pointerdown', () =>
-        this.registry.values.sceneData.alertGameStart()
-      );
+    this.startBtn.on('pointerdown', () =>
+      this.registry.values.sceneData.alertGameStart()
+    );
     window.addEventListener('resize', () => {
       this.resize();
     });
@@ -121,13 +120,11 @@ class playerUI_scene extends Phaser.Scene {
     let x = taskListBoxX + 20;
     let y = taskListBoxY + 20;
     const style = {
-      font: '13px'
+      font: '13px',
     };
 
     for (let i = 0; i < arr.length; i++) {
-      this.taskList[i] = this.add
-          .text(x, y, arr[i], style)
-          .setOrigin(0, 0);
+      this.taskList[i] = this.add.text(x, y, arr[i], style).setOrigin(0, 0);
 
       this.taskList[i].wordWrap = true;
       this.taskList[i].setWordWrapWidth(taskListBoxWidth * 0.9);
@@ -179,8 +176,6 @@ class playerUI_scene extends Phaser.Scene {
     this.mapButton.on('pointerdown', () => this.showMap());
   }
 
-
-
   /**
    * Renders the kill button object then calls renderDetectiveUI()
    */
@@ -209,7 +204,6 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   kill() {
-    
     // this.killButton.setTint(0x2b2a2a);
     // this.time.delayedCall(2000, this.enablePress, [], this);
     this.canKill = false;
@@ -223,13 +217,19 @@ class playerUI_scene extends Phaser.Scene {
     // Worked on by: Alexis
     console.log('use');
     let gameplay = this.scene.get('gameplay_scene');
-    let interactable = gameplay.player.interact(gameplay.interactables.getChildren());
+    let interactable = gameplay.player.interact(
+      gameplay.interactables.getChildren()
+    );
 
     if (interactable) {
-        gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), interactable.getLaunchData());
+      gameplay.triggerScene(
+        'playerUI_scene',
+        interactable.getLaunchKey(),
+        interactable.getLaunchData()
+      );
     }
   }
-   
+
   report() {
     //worked on by Mike
     let gameplay = this.scene.get('gameplay_scene');
@@ -268,8 +268,8 @@ class playerUI_scene extends Phaser.Scene {
   }
 
   /**
-   * Adds an amount to the bars value then crops the top image appropriately. 
-   * @param perc An amount to add to the bars value of 0-504, can be negative to lower the bar. 
+   * Adds an amount to the bars value then crops the top image appropriately.
+   * @param perc An amount to add to the bars value of 0-504, can be negative to lower the bar.
    */
   setBar(perc) {
     this.fill += perc;
