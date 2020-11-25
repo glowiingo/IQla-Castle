@@ -33,23 +33,19 @@ class trap_making_minigame extends Phaser.Scene {
       this.load.image('candleSlot', '../../assets/minigames/items/candleSlot.png');
       this.load.image('potionItem', '../../assets/minigames/items/bottle.png');
       this.load.image('potionSlot', '../../assets/minigames/items/bottleSlot.png');
-      this.load.image('finishedTrap', '../../assets/minigames/items/trap.png');
   
-      this.load.audio('wrong', '../../assets/audio/wrong.mp3');
-      this.load.audio('wow', '../../assets/audio/wow.mp3');
+      this.load.audio('incorrect', '../../assets/audio/incorrect2.mp3');
+      this.load.audio('correct', '../../assets/audio/correct_placement.mp3');
   
-      this.load.video('omgwow', '../../assets/video/omgwow.mp4');
     }
 
     create() {
       // Worked on by: Charles
       minigame_scene_manager.setBackground(this.key, 'trap_making_background');
   
-      let wrong = this.sound.add('wrong');
-      let wow = this.sound.add('wow');
-  
-      wrong.setVolume(3);
-      wow.setVolume(1.5);
+      let incorrect = this.sound.add('incorrect');
+      let correct = this.sound.add('correct');
+      correct.setVolume(0.5);
       
       // Worked on by: Alexis, Charles
       let yItemPosArr = minigame_scene_manager.shuffleArray([350, 350, 480]);
@@ -88,16 +84,15 @@ class trap_making_minigame extends Phaser.Scene {
           object.x = object.targetX;
           object.y = object.targetY;
           object.disableInteractive();
+          correct.play();
           if (++this.correctPlacementCount === yItemPosArr.length) {
-            this.playVideo();
-          } else {
-            wow.play();
-          }
+            minigame_scene_manager.minigameWon(this.key, this.interactable);
+          } 
         } else {
             // fail, send image back to original location
             object.x = object.initialX;
             object.y = object.initialY;
-            wrong.play();
+            incorrect.play();
         }
       });
     }
@@ -129,28 +124,5 @@ class trap_making_minigame extends Phaser.Scene {
 
     let slot = this.add.image(slotX, slotY, slot_name);
     slot.setDisplaySize(item.displayWidth + ACCURACY * 1.75, item.displayHeight + ACCURACY * 1.75);
-  }
-
-  playVideo() {
-    // Worked on by: Charles
-    let trap = this.add.image(400, 300, 'finishedTrap');
-    omgwow.setDepth(2);
-
-    this.tweens.add({
-      targets: trap,
-      scale: 3,
-      duration: 1000,
-      repeat: 0,
-      onEnd: () => {
-        console.log("hi");
-        minigame_scene_manager.minigameWon(this.key, this.interactable, this.player);
-      }
-    });
-
-    // omgwow.on('complete', () => {
-    //   // When the audio plays, the win condition has been satisfied.
-    //   // After the audio has finished playing, call the 'won' function.
-    //   minigame_scene_manager.minigameWon(this.key, this.interactable, this.player);
-    // });
   }
 }

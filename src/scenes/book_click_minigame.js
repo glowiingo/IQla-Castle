@@ -47,12 +47,8 @@ class book_click_minigame extends Phaser.Scene {
     this.load.image(BOOK4_KEY, '../../assets/minigames/items/book5.png');
 
     // ---------- Pre-load Audio ---------- //
-    this.load.audio('no', '../../assets/audio/no.mp3');
-    this.load.audio('yes', '../../assets/audio/yes.mp3');
-    this.load.audio('ok', '../../assets/audio/ok.mp3');
-
-    // ---------- Pre-load Video ---------- //
-    this.load.video('bravo', '../../assets/video/bravowow.mp4');
+    this.load.audio('incorrect', '../../assets/audio/incorrect.mp3');
+    this.load.audio('correct', '../../assets/audio/correct.mp3');
   }
 
   create(data) {
@@ -95,10 +91,8 @@ class book_click_minigame extends Phaser.Scene {
 
     // Worked on by: Charles
     // ---------- Audio ---------- //
-    let ok = this.sound.add('ok');
-    let no = this.sound.add('no');
-    no.setVolume(0.4);
-    ok.setVolume(0.4);
+    let correct = this.sound.add('correct');
+    let incorrect = this.sound.add('incorrect');
 
 
     // ---------- Book Images ---------- //
@@ -161,14 +155,12 @@ class book_click_minigame extends Phaser.Scene {
         if (idx >= 0) {
           book.disableInteractive();
           numArr.splice(idx, 1);
-          no.stop();
+          correct.play();
           if (numArr.length === 0) {
-            this.playVideo();
-          } else {
-            ok.play();
+            minigame_scene_manager.minigameWon(this.key, this.interactable);
           }
         } else if (numArr.length !== 0) {
-          no.play();
+          incorrect.play();
         }
       });
     });
@@ -193,27 +185,6 @@ class book_click_minigame extends Phaser.Scene {
         fill: 'black',
       });
       yPosition += yDistance;
-    });
-  }
-
-  playVideo() {
-    let bravo = this.add.video(400, 300, 'bravo');
-    bravo.setVolume(0.8);
-    bravo.alpha = 0.5;
-    bravo.setDepth(2);
-    bravo.play();
-
-    this.tweens.add({
-      targets: bravo,
-      scale: 4,
-      duration: bravo.getDuration() * 1000,
-      repeat: 0,
-    });
-
-    bravo.on('complete', () => {
-      // When the audio plays, the win condition has been satisfied.
-      // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon(this.key, this.interactable);
     });
   }
 }
