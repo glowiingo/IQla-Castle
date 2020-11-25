@@ -18,7 +18,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.id = id;
     this.speed = speed;
     this.alive = true;
-    this.trap = false;
+    this.hasTrap = false;
+    this.trap = null;
     this.playerName = playerName;
 
     // Worked on by: Anna, Evano
@@ -51,17 +52,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   //worked on by Kiwon and John
   playerMovement() {
-
-    if (this.iqla && this.trap && this.key.place_trap.isDown) {
-      console.log('placed');
-      this.trap = new Trap({
-        scene: this.scene,
-        x: this.x,
-        y: this.y
-      }, this);
-      this.trap = false;
-    }
-
     if (this.key.up.isDown) {
       this.setVelocityY(-this.speed);
     } else if (this.key.down.isDown) {
@@ -94,6 +84,30 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
     // print x y of player position to send to network team and update
     // console.log(this.x, this.y);
+  }
+
+  //trap placement condition checker
+  canPlaceTrap() {
+    if (this.hasTrap && this.iqla && this.key.place_trap.isDown) {
+      this.scene.sceneData.serverConnection.trapPlace();
+      this.playerTrap();
+      this.hasTrap = false;
+    }
+  }
+
+  // Worked on by: Kiwon, Kian, Evano
+  playerTrap() {
+    this.trap = new Trap({
+    scene: this.scene,
+    x: this.x,
+    y: this.y
+    }, this);
+  }
+
+  removePlayerTrap() {
+    if (this.trap) {
+      this.trap.displayDestroyTrap();
+    }
   }
 
   // Worked on by: Anna
@@ -162,7 +176,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   */
   interact(interactables) {
     // Worked on by: Alexis
-    const DIST_FROM_OBJ = (this.iqla) ? 100 : 50;
+    const DIST_FROM_OBJ = (this.iqla) ? 115 : 50;
 
     for (let i = 0; i < interactables.length; i++) {
       let pos = Phaser.Math.Distance.Chebyshev(this.x, this.y, interactables[i].x, interactables[i].y);
@@ -200,6 +214,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   // worked on by Charles 1000000000% all him let's go
   setTrapVariable(bool) {
-    this.trap = bool;
+    this.hasTrap = bool;
   }
 }

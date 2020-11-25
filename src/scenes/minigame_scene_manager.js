@@ -41,8 +41,7 @@ class minigame_scene_manager extends Phaser.Scene {
       dimensions: {
         width: this.minigameWidth,
         height: this.minigameHeight
-      },
-      player: key.player
+      }
     }
     this.scene.launch(key.name, data);
     this.add.rectangle(game.config.width / 2, game.config.height  / 2, this.backgroundWidth, this.backgroundHeight, 0x151515);
@@ -88,13 +87,19 @@ class minigame_scene_manager extends Phaser.Scene {
    * @param {string} key - the name of the scene to end
    * @param {MapObject} interactable - the MapObject to set to inactive
    */
-  static minigameWon(key, interactable, player) {
+  static minigameWon(key, interactable) {
     // Worked on by: Alexis
+    const uiScene = game.scene.getScene('playerUI_scene');
+    const gameplay = game.scene.getScene('gameplay_scene');
+
+    uiScene.taskList[interactable.getTaskListId()].setColor('#8D8D8D'); // Fade colour of text in task list.
     game.registry.values.sceneData.serverConnection.taskCompleted(); // God Evano - Update server.
     interactable.setActive(false); // Prevent interactable from being used again.
-    if (key === 'trap_making_minigame' && !player.trap) {
-      player.setTrapVariable(true);
+
+    if (key === 'trap_making_minigame' && !gameplay.player.hasTrap) {
+      gameplay.player.setTrapVariable(true);
     }
+
     minigame_scene_manager.end(key); // End the minigame scene.
   }
 

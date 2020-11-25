@@ -22,7 +22,6 @@ class trap_making_minigame extends Phaser.Scene {
       this.correctPlacementCount = 0;
       this.interactable = data.interactable;
       this.key = data.name;
-      this.player = data.player;
     }
 
     preload() {
