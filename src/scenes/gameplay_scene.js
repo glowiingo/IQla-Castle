@@ -92,6 +92,7 @@ class gameplay_scene extends Phaser.Scene {
       key: 'map',
     });
     let tileset = map.addTilesetImage('updated_tiles', 'tiles');
+    map.createStaticLayer('Background2', tileset);
     map.createStaticLayer('Background', tileset);
     map.createStaticLayer('Ground', tileset);
 
