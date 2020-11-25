@@ -43,6 +43,7 @@ class ServerConnection {
       );
       sceneData.otherPlayers[playerInfo.playerId].flipX = playerInfo.flipX;
       sceneData.otherPlayers[playerInfo.playerId].playerWalkAnimStart();
+      sceneData.otherPlayers[playerInfo.playerId].updateNametagLocation();
     });
     this.socket.on('gameStart', function (roleData) {
       sceneData.startGame(roleData);
@@ -59,6 +60,7 @@ class ServerConnection {
         alert('you were voted for');
       } else {
         sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
+        sceneData.otherPlayers[voteId].alive = false;
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
 
         // delete player from voting_scene player array
@@ -90,7 +92,9 @@ class ServerConnection {
         sceneData.gamePlayScene.scene.manager
           .getScene('voting_scene')
           .removePlayerById(playerId);
+        
         sceneData.otherPlayers[playerId].setActive(false).setVisible(false);
+        sceneData.otherPlayers[playerId].alive = false;
         sceneData.otherPlayers[playerId].createDeadBody(sceneData.otherPlayers[playerId].x, sceneData.otherPlayers[playerId].y);
       }
     });
