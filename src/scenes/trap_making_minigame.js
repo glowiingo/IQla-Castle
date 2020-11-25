@@ -34,6 +34,7 @@ class trap_making_minigame extends Phaser.Scene {
       this.load.image('candleSlot', '../../assets/minigames/items/candleSlot.png');
       this.load.image('potionItem', '../../assets/minigames/items/bottle.png');
       this.load.image('potionSlot', '../../assets/minigames/items/bottleSlot.png');
+      this.load.image('finishedTrap', '../../assets/minigames/items/trap.png');
   
       this.load.audio('wrong', '../../assets/audio/wrong.mp3');
       this.load.audio('wow', '../../assets/audio/wow.mp3');
@@ -133,23 +134,24 @@ class trap_making_minigame extends Phaser.Scene {
 
   playVideo() {
     // Worked on by: Charles
-    let omgwow = this.add.video(400, 300, 'omgwow');
-    omgwow.setVolume(0.5);
-    omgwow.alpha = 0.5;
+    let trap = this.add.image(400, 300, 'finishedTrap');
     omgwow.setDepth(2);
-    omgwow.play();
 
     this.tweens.add({
-      targets: omgwow,
+      targets: trap,
       scale: 3,
-      duration: omgwow.getDuration() * 1000,
+      duration: 1000,
       repeat: 0,
+      onEnd: () => {
+        console.log("hi");
+        minigame_scene_manager.minigameWon(this.key, this.interactable, this.player);
+      }
     });
 
-    omgwow.on('complete', () => {
-      // When the audio plays, the win condition has been satisfied.
-      // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon(this.key, this.interactable, this.player);
-    });
+    // omgwow.on('complete', () => {
+    //   // When the audio plays, the win condition has been satisfied.
+    //   // After the audio has finished playing, call the 'won' function.
+    //   minigame_scene_manager.minigameWon(this.key, this.interactable, this.player);
+    // });
   }
 }
