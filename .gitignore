@@ -104,8 +104,12 @@ dist
 .tern-port
 
 # MAC OS
+*.DS_Store
 */.DS_Store
 
 # VSCode
 .vs/*
 .vscode/*
+
+# IntelliJ
+.idea/*

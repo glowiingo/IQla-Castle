@@ -51,6 +51,7 @@ class ServerConnection {
     this.socket.on('voted', function (voteId) {
       if (sceneData.serverConnection.socket.id === voteId) {
         sceneData.player.setActive(false).setVisible(false);
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
         sceneData.player.alive = false;
         sceneData.gamePlayScene.scene.manager
           .getScene('voting_scene')
@@ -58,17 +59,15 @@ class ServerConnection {
         alert('you were voted for');
       } else {
         sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
-        sceneData.gamePlayScene.scene.manager
-          .getScene('voting_scene')
-          .toggleVisible();
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
 
         // delete player from voting_scene player array
-        sceneData.gamePlayScene.scene.manager
-          .getScene('voting_scene')
-          .removePlayerById(voteId);
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
       }
-      // console.log(voteId, ' was voted for');
     });
+    this.socket.on('voteStarted', function(){
+      sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible();
+    })
     this.socket.on('taskCompleted', function (voteId) {
       sceneData.gamePlayScene.scene.manager
         .getScene('playerUI_scene')
@@ -85,15 +84,26 @@ class ServerConnection {
         await sceneData.gamePlayScene.scene.manager
           .getScene('gameplay_scene')
           .playerDeathAnim();
-
+        sceneData.player.createDeadBody(sceneData.player.x, sceneData.player.y);
         alert('you died');
       } else {
         sceneData.gamePlayScene.scene.manager
           .getScene('voting_scene')
           .removePlayerById(playerId);
         sceneData.otherPlayers[playerId].setActive(false).setVisible(false);
+        sceneData.otherPlayers[playerId].createDeadBody(sceneData.otherPlayers[playerId].x, sceneData.otherPlayers[playerId].y);
       }
     });
+
+    // Worked on by: Kian
+    this.socket.on('trapPlaced', function (playerId) {
+      sceneData.otherPlayers[playerId].playerTrap();
+    });
+
+    this.socket.on('trapDisappear', function(playerId) {
+      sceneData.otherPlayers[playerId].removePlayerTrap();
+    });
+
     //Worked on by: Jayce
     this.socket.on('receive message', function (msg) {
       sceneData.gamePlayScene.scene
@@ -120,6 +130,11 @@ class ServerConnection {
     }
   }
 
+  // Worked on by: Evano, Kian
+  trapPlace() {
+    this.socket.emit('trapPlace', this.socket.id);
+  }
+
   updatePos(player) {
     this.socket.emit('playerMovement', {
       x: player.x,
@@ -130,6 +145,11 @@ class ServerConnection {
 
   kill(playerId) {
     this.socket.emit('kill', playerId);
+  }
+
+  callVote(){
+    console.log("Vote is called to start")
+    this.socket.emit('bingo');
   }
 
   vote(playerId) {
@@ -150,4 +170,10 @@ class ServerConnection {
   taskCompleted() {
     this.socket.emit('taskComplete');
   }
+
+  // not working yet
+  trapTriggered() {
+    this.socket.emit('activateTrap');
+  }
+
 }

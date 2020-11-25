@@ -41,7 +41,7 @@ class playerUI_scene extends Phaser.Scene {
     //The bar starts empty at the beginning fo the game.
     this.fill = 0;
     //Init the empty crop.
-
+    
     //this.txt = this.add.text((game.config.width - 200), 10, 'Tasks');
     //this.txt.setColor('#000000');
     //this.txt.setFontSize(40);
@@ -56,11 +56,38 @@ class playerUI_scene extends Phaser.Scene {
       this.resize();
     });
 
-    this.taskStringArr = [
-      'Clean the bathroom',
-      'Stand in the storage room for 10 seconds',
-      'Do the dishes in the kitchen',
-      'Close the closet door',
+    this.detectiveTasks = [
+      {
+        id: 0,
+        desc: 'Exterminate mice in the garage',
+      },
+      {
+        id: 1,
+        desc: 'Research ways to beat the IQLa in the Study',
+      },
+      {
+        id: 2,
+        desc: 'Exterminate mice in the kitchen',
+      },
+      {
+        id: 3,
+        desc: 'MORE research with books in the Storage room'
+      }
+    ];
+
+    this.iqlaTasks = [
+      {
+        id: 0,
+        desc: 'Exterminate mice in the garage',
+      },
+      {
+        id: 1,
+        desc: 'Go to the study and create a deadly trap',
+      },
+      {
+        id: 2,
+        desc: 'Exterminate mice in the kitchen',
+      }
     ];
 
     this.btnOriginScale = 0.35;
@@ -90,11 +117,7 @@ class playerUI_scene extends Phaser.Scene {
       this.renderDetectiveUI();
     }
 
-    this.renderTaskList(this.taskStringArr);
-
-    // Domo for how to show task complete.
-    this.taskList[1].setColor('#8D8D8D');
-    this.taskList[3].setColor('#8D8D8D');
+    this.renderTaskList((this.isIqla) ? this.iqlaTasks : this.detectiveTasks);
   }
 
   renderTaskList(arr) {
@@ -124,7 +147,9 @@ class playerUI_scene extends Phaser.Scene {
     };
 
     for (let i = 0; i < arr.length; i++) {
-      this.taskList[i] = this.add.text(x, y, arr[i], style).setOrigin(0, 0);
+      this.taskList[i] = this.add
+          .text(x, y, arr[i].desc, style)
+          .setOrigin(0, 0);
 
       this.taskList[i].wordWrap = true;
       this.taskList[i].setWordWrapWidth(taskListBoxWidth * 0.9);
@@ -210,30 +235,35 @@ class playerUI_scene extends Phaser.Scene {
 
     let gameplay = this.scene.get('gameplay_scene');
     gameplay.player.kill(gameplay.otherPlayers.getChildren());
-    this.registry.values.sceneData.serverConnection.taskCompleted();
   }
 
+  /**
+   * Called when the "Use" button is pressed on the PlayerUI_Scene.
+   * Get a group of interactable MapObjects from the gameplay scene,
+   * interact with the one closest to the player, and then trigger the 
+   * corresponding scene.
+   */
   use() {
     // Worked on by: Alexis
-    console.log('use');
     let gameplay = this.scene.get('gameplay_scene');
     let interactable = gameplay.player.interact(
       gameplay.interactables.getChildren()
     );
 
     if (interactable) {
-      gameplay.triggerScene(
-        'playerUI_scene',
-        interactable.getLaunchKey(),
-        interactable.getLaunchData()
-      );
+      gameplay.triggerScene('playerUI_scene', interactable.getLaunchKey(), {
+        name: interactable.getLaunchData(),
+        interactable: interactable
+      });
     }
   }
-
+  
   report() {
-    //worked on by Mike
+    //worked on by Mike and Evano
     let gameplay = this.scene.get('gameplay_scene');
-    gameplay.player.report();
+    if(gameplay.player.report()){
+      this.registry.values.sceneData.serverConnection.callVote();
+    }
   }
 
   showMap() {
