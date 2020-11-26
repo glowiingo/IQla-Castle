@@ -21,6 +21,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.hasTrap = false;
     this.trap = null;
     this.playerName = playerName;
+    this.movementDisabled = false;
 
     // Worked on by: Anna, Evano
     this.isWalking = false;
@@ -36,6 +37,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       right: Phaser.Input.Keyboard.KeyCodes.D,
       place_trap: Phaser.Input.Keyboard.KeyCodes.E
     });
+
+    this.nametag = this.scene.add.text(this.x - 32, this.y - 100, this.playerName, {
+      font: '32px Ariel',
+      fill: 'yellow',
+    });
   }
 
   /**
@@ -49,20 +55,34 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
   }
 
+  /**
+   * Toggles the MovementDisabled instance variable of Player Object.
+   * 
+   * Worked on by Bisht & Nav. 
+   */
+  toggleMovementDisabled(){
+    if (this.movementDisabled) {
+      this.movementDisabled = false;
+    }
+    else{
+      this.movementDisabled = true;
+    }
+    console.log("toggle movement", this.movementDisabled);
+  }
+
   //worked on by Kiwon and John
   playerMovement() {
-    if (this.key.up.isDown) {
+    if (this.key.up.isDown && !this.movementDisabled) {
       this.setVelocityY(-this.speed);
-    } else if (this.key.down.isDown) {
+    } else if (this.key.down.isDown && !this.movementDisabled) {
       this.setVelocityY(this.speed);
     } else {
       this.setVelocityY(0);
     }
-    //console.log(this);
-    if (this.key.left.isDown) {
+    if (this.key.left.isDown && !this.movementDisabled) {
       this.setVelocityX(-this.speed);
       this.flipX = false;
-    } else if (this.key.right.isDown) {
+    } else if (this.key.right.isDown && !this.movementDisabled) {
       this.setVelocityX(this.speed);
       this.flipX = true;
     } else {
@@ -81,8 +101,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.playerWalkAnimStop();
     }
-    // print x y of player position to send to network team and update
-    // console.log(this.x, this.y);
+
+    this.updateNametagLocation();
+    
+  }
+
+  updateNametagLocation() {
+    if (this.alive) {
+      this.nametag.x = this.x - 32;
+      this.nametag.y = this.y - 100;
+    }
   }
 
   //trap placement condition checker

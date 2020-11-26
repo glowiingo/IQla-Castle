@@ -8,7 +8,8 @@ class Room {
     this.vampireCount = 0;
     this.victoryHandler = victoryHandler;
     this.taskCount = 0;
-    this.votedList = [];
+    this.voteResult = [];
+    this.votedPlayers = [];
     this.deadCount = 0;
   }
   addPlayer(player) {
@@ -73,16 +74,17 @@ class Room {
   }
 
   // Worked on by: Jayce
-  vote(playerId) {
-    console.log('Vote for', playerId);
-    this.votedList.push(playerId);
+  vote(votedFor, votedFrom) {
+    console.log(`${votedFrom} voted for ${votedFor}`);
+    this.voteResult.push(votedFor);
+    this.votedPlayers.push(votedFrom);
   }
 
+  // Add timer into the if statement   e.g  && timer === 0;
   voteCompleted() {
-    if (Object.keys(this.players).length === this.votedList.length + this.deadCount) {
-      let votedPlayerID = this.findTheMajority(this.votedList);
+    if (Object.keys(this.players).length === this.voteResult.length + this.deadCount) {
+      let votedPlayerID = this.findTheMajority(this.voteResult);
       console.log('majority voted for: ', votedPlayerID);
-      this.votedList = [];
       if (votedPlayerID == null) {
         return null;
       }
@@ -92,13 +94,13 @@ class Room {
     return null;
   }
 
-  findTheMajority(voteList) {
-    if (voteList.length == 0)
+  findTheMajority(voteResult) {
+    if (voteResult.length == 0)
       return null;
     let modeMap = {};
-    let majority = voteList[0], maxCount = 1;
-    for (let i = 0; i < voteList.length; i++) {
-      let el = voteList[i];
+    let majority = voteResult[0], maxCount = 1;
+    for (let i = 0; i < voteResult.length; i++) {
+      let el = voteResult[i];
       if (modeMap[el] == null)
         modeMap[el] = 1;
       else

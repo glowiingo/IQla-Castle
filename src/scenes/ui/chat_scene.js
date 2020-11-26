@@ -53,7 +53,6 @@ class chat_scene extends Phaser.Scene {
   }
 
   toggleVisible() {
-    this.scene.get('gameplay_scene').player.removeCaptures();
     // stop player from getting stuck in a walk animation
     this.scene.get('gameplay_scene').player.setVelocityX(0);
     this.scene.get('gameplay_scene').player.setVelocityY(0);

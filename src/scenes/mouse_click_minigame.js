@@ -34,15 +34,12 @@ class mouse_click_minigame extends Phaser.Scene {
     this.load.image('mouse_click_background', '../../assets/minigames/backgrounds/bgTable.png');
     this.load.image('mouse', '../../assets/minigames/items/ratCurledTail.png');
 
-    this.load.audio('nyes', '../../assets/audio/nyes.mp3');
-
-    this.load.video('recorder', '../../assets/video/recorder.mp4');
+    this.load.audio('squish', '../../assets/audio/squish.mp3');
   }
 
   create() {
-    // sound effect of someone saying 'n-yes'
-    let nyes = this.sound.add('nyes');
-    nyes.setVolume(0.4);
+    let squish = this.sound.add('squish');
+    squish.setVolume(0.75);
 
     minigame_scene_manager.setBackground(this.key, 'mouse_click_background');
 
@@ -59,14 +56,11 @@ class mouse_click_minigame extends Phaser.Scene {
       mouse.setInteractive();
       // remove mouse if clicked on
       mouse.on('pointerdown', () => {
-        //tween.stop();
         mouse.setVisible(false);
         mice.splice(mice.indexOf(mouse), 1);
-
+        squish.play();
         if (mice.length === 0) {
-          this.playVideo();
-        } else {
-          nyes.play();
+          minigame_scene_manager.minigameWon(this.key, this.interactable);
         }
       });
 
@@ -103,26 +97,6 @@ class mouse_click_minigame extends Phaser.Scene {
     return Math.atan2(nextY - currY, nextX - currX) + Math.PI / 2;
   }
 
-  playVideo() {
-    let recorder = this.add.video(400, 300, 'recorder');
-    recorder.setVolume(0.6);
-    recorder.alpha = 0.6;
-    recorder.setDepth(2);
-    recorder.play();
-
-    this.tweens.add({
-      targets: recorder,
-      scale: 4,
-      duration: recorder.getDuration() * 1000,
-      repeat: 0,
-    });
-
-    recorder.on('complete', () => {
-      // When the audio plays, the win condition has been satisfied.
-      // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon(this.key, this.interactable);
-    });
-  }
   /**
    * ========== DEPRECATED (i think) ==========
    * Returns a random float that falls within the minigame board. This

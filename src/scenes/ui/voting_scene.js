@@ -31,10 +31,10 @@ class voting_scene extends Phaser.Scene {
     this.screenY = this.cameras.main.height;
 
     // temp voting activation, actual voting activation should call toggleVisible
-    this.keyPress = this.input.keyboard.addKey('ZERO');
-    this.keyPress.on('down', () => {
-      this.toggleVisible();
-    });
+    // this.keyPress = this.input.keyboard.addKey('ZERO');
+    // this.keyPress.on('down', () => {
+    //   this.toggleVisible();
+    // });
 
     // create semi-transparent rectangle
     let rect = new Phaser.Geom.Rectangle(0, 50, this.screenX, this.screenY - 50);
@@ -105,7 +105,6 @@ class voting_scene extends Phaser.Scene {
           this.players[i].playerName.substring(0,12), this.players[i].id, this);
         portrait.draw();
       }
-
       this.playerPortraits.push(portrait);
     }
 
@@ -115,6 +114,7 @@ class voting_scene extends Phaser.Scene {
   }
 
   vote(votedFor) {
+    this.voted = true;
     this.scene.get('gameplay_scene').vote(votedFor);
   }
 
@@ -132,10 +132,17 @@ class voting_scene extends Phaser.Scene {
     if (this.showVote) {
       this.canClick = true;
       this.scene.setVisible(true);
+      this.scene.get('gameplay_scene').player.toggleMovementDisabled(); // Disables Movement of player when meeting is called.
+      // this.scene.stop('playerUI_scene');
+      // this.scene.stop('gameplay_scene');
+      this.scene.get('gameplay_scene').player.sendToStartPos(); // is supposed to send all players to spawn.
     } else {
       this.canClick = false;
       this.scene.setVisible(false);
       this.scene.get('chat_scene').hide();
+      // this.scene.wake('playerUI_scene');
+      // this.scene.wake('gameplay_scene');
+      this.scene.get('gameplay_scene').player.toggleMovementDisabled();
 
       // reset the voting scene when closed
       this.voted = false;
