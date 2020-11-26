@@ -22,7 +22,6 @@ class gameplay_scene extends Phaser.Scene {
     console.log(this.registry.values.sceneData);
     this.sceneData = this.registry.values.sceneData;
     this.otherPlayers = this.physics.add.group();
-    this.otherPlayerTags = [];
     this.interactables = this.physics.add.group();
     this.deadbodies = [];
   }
@@ -103,6 +102,7 @@ class gameplay_scene extends Phaser.Scene {
     this.wallsLayer.setCollisionByProperty({
       collides: true,
     });
+    map.createStaticLayer('Props', tileset);
 
     this.addInteractables();
 
@@ -110,6 +110,16 @@ class gameplay_scene extends Phaser.Scene {
     //Start networking & create player once networking is connected
     this.sceneData.serverConnection.addGameplayHandlers(this.sceneData);
     this.sceneData.serverConnection.joinRoom();
+
+
+
+    this.keyPress = this.input.keyboard.addKey('NINE');
+    this.keyPress.on('down', () => {
+      console.log(this.otherPlayers.children.entries.length, this.otherPlayerTags.length);
+      for (let i = 0; i < this.otherPlayerTags.length; i++) {
+        console.log(this.otherPlayers.children.entries[i]);
+      }
+    });
   }
   // Worked on by: Gloria Ngo
   update() {
@@ -125,21 +135,6 @@ class gameplay_scene extends Phaser.Scene {
       this.scene
         .get('showPositionPlayer_scene')
         .move(this.player.x, this.player.y);
-      this.playerNameText.x = this.player.x - 32;
-      this.playerNameText.y = this.player.y - 100;
-    }
-
-    // worked on by William
-    for (let i = 0; i < this.otherPlayerTags.length; i++) {
-      try {
-        this.otherPlayerTags[i].x =
-          this.otherPlayers.children.entries[i].x - 32;
-        this.otherPlayerTags[i].y =
-          this.otherPlayers.children.entries[i].y - 100;
-      } catch (e) {
-        delete this.otherPlayerTags[i];
-        delete this.otherPlayers.children.entries[i];
-      }
     }
   }
 
@@ -203,16 +198,6 @@ class gameplay_scene extends Phaser.Scene {
 
     this.player.col = this.physics.add.collider(this.player, this.wallsLayer);
     this.cameras.main.startFollow(this.player, true, 1, 1);
-
-    this.playerNameText = this.add.text(
-      this.player.x,
-      this.player.y,
-      this.player.playerName,
-      {
-        font: '32px Ariel',
-        fill: 'yellow',
-      }
-    );
     return this.player;
   }
 
@@ -232,12 +217,6 @@ class gameplay_scene extends Phaser.Scene {
 
     this.add.existing(otherPlayer).setScale(1);
     this.otherPlayers.add(otherPlayer);
-    this.otherPlayerTags.push(
-      this.add.text(otherPlayer.x, otherPlayer.y, otherPlayer.playerName, {
-        font: '32px Ariel',
-        fill: 'yellow',
-      })
-    );
 
     return otherPlayer;
   }

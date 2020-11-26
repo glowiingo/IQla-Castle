@@ -31,10 +31,10 @@ class voting_scene extends Phaser.Scene {
     this.screenY = this.cameras.main.height;
 
     // temp voting activation, actual voting activation should call toggleVisible
-    this.keyPress = this.input.keyboard.addKey('ZERO');
-    this.keyPress.on('down', () => {
-      this.toggleVisible();
-    });
+    // this.keyPress = this.input.keyboard.addKey('ZERO');
+    // this.keyPress.on('down', () => {
+    //   this.toggleVisible();
+    // });
 
     // create semi-transparent rectangle
     let rect = new Phaser.Geom.Rectangle(0, 50, this.screenX, this.screenY - 50);
@@ -114,6 +114,7 @@ class voting_scene extends Phaser.Scene {
   }
 
   vote(votedFor) {
+    this.voted = true;
     this.scene.get('gameplay_scene').vote(votedFor);
   }
 
