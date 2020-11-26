@@ -40,13 +40,12 @@ class endGame_scene extends Phaser.Scene {
       screenY - 5,
       0,
       1,
-      'goBackImage',
+      'play_again_image',
       () => this.returnClicked()
     );
 
-    this.playAgainButton.setScale(0.45);
+    this.returnButton.setScale(0.45);
     this.add.existing(this.returnButton);
-    //this.add.existing(this.playAgainButton);
   }
 
   // click button return to mainmenu_scene

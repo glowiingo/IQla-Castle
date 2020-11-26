@@ -37,6 +37,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       right: Phaser.Input.Keyboard.KeyCodes.D,
       place_trap: Phaser.Input.Keyboard.KeyCodes.E
     });
+
+    this.nametag = this.scene.add.text(this.x - 32, this.y - 100, this.playerName, {
+      font: '32px Ariel',
+      fill: 'yellow',
+    });
   }
 
   /**
@@ -96,8 +101,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.playerWalkAnimStop();
     }
-    // print x y of player position to send to network team and update
-    // console.log(this.x, this.y);
+
+    this.updateNametagLocation();
+    
+  }
+
+  updateNametagLocation() {
+    if (this.alive) {
+      this.nametag.x = this.x - 32;
+      this.nametag.y = this.y - 100;
+    }
   }
 
   //trap placement condition checker
