@@ -61,6 +61,7 @@ class chat_scene extends Phaser.Scene {
     this.showChat = !this.showChat;
     if (this.showChat) {
       this.scene.setVisible(true);
+      this.scene.get('gameplay_scene').player.removeCaptures();
       this.textbox.style.display = 'block';
       this.chatbox.style.display = 'block';
     } else {

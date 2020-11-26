@@ -48,11 +48,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
    * Removes captures when chat scene is being used so that you are able to use the letters
    */
   removeCaptures() {
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.S);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.D);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
+    if (this.scene) {
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.S);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.D);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
+    }
   }
 
   /**
