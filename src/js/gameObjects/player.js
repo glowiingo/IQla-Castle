@@ -1,4 +1,4 @@
-//Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike
+//Worked on by Kiwon, John, Nav, Evano, Gloria, Kiwon, Mike, Alexis
 
 //const player = require('../player');
 
@@ -10,14 +10,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // this.scene.add.existing(this).setScale(1);
     // this.scene.physics.add.existing(this);
     // this.setCollideWorldBounds(true);
-
+    
     if (config.iqla) {
       this.iqla = iqla;
-    }
+    } 
+
     this.id = id;
     this.speed = speed;
     this.alive = true;
-    this.iqla = false;
+    this.hasTrap = false;
+    this.trap = null;
     this.playerName = playerName;
 
     // Worked on by: Anna, Evano
@@ -49,17 +51,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   //worked on by Kiwon and John
   playerMovement() {
-
-    if (!this.trap_placed && this.key.place_trap.isDown) {
-      console.log('placed');
-      this.trap = new Trap({
-        scene: this.scene,
-        x: this.x,
-        y: this.y
-      }, this);
-      this.trap_placed = true;
-    }
-
     if (this.key.up.isDown) {
       this.setVelocityY(-this.speed);
     } else if (this.key.down.isDown) {
@@ -94,6 +85,30 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // console.log(this.x, this.y);
   }
 
+  //trap placement condition checker
+  canPlaceTrap() {
+    if (this.hasTrap && this.iqla && this.key.place_trap.isDown) {
+      this.scene.sceneData.serverConnection.trapPlace();
+      this.playerTrap();
+      this.hasTrap = false;
+    }
+  }
+
+  // Worked on by: Kiwon, Kian, Evano
+  playerTrap() {
+    this.trap = new Trap({
+    scene: this.scene,
+    x: this.x,
+    y: this.y
+    }, this);
+  }
+
+  removePlayerTrap() {
+    if (this.trap) {
+      this.trap.displayDestroyTrap();
+    }
+  }
+
   // Worked on by: Anna
   playerWalkAnimStart() {
     if (!this.isWalking) {
@@ -121,15 +136,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.deadbodies.push(dead_image);
   }
 
-  //worked on by Mike
+  //worked on by Mike and Evano
   report() {
+    console.log("Checking for local dead bodies")
     for (let i = 0; i < this.scene.deadbodies.length; i++) {
       let c = Phaser.Math.Distance.Chebyshev(this.x, this.y, this.scene.deadbodies[i].x, this.scene.deadbodies[i].y);
+      console.log("Distance to nearest dead body", c);
       if (c < 60) {
         console.log('FOUND A DEADBODY!');
-        break;
+        return true;
       }
     }
+    return false;
   }
 
   //worked on by Mike
@@ -160,11 +178,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   */
   interact(interactables) {
     // Worked on by: Alexis
+    const DIST_FROM_OBJ = (this.iqla) ? 115 : 50;
+
     for (let i = 0; i < interactables.length; i++) {
       let pos = Phaser.Math.Distance.Chebyshev(this.x, this.y, interactables[i].x, interactables[i].y);
-      if (interactables[i].active && pos < 60) {
-        interactables[i].setActive(false); // Bugged.
-        // Above line needs to be done only after the minigame is completed.
+
+      if (interactables[i].active && interactables[i].canInteract(this.iqla) && pos < DIST_FROM_OBJ) {
         return interactables[i];
       }
     }
@@ -193,5 +212,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   sendToStartPos() {
     this.x = this.spawnX;
     this.y = this.spawnY;
+  }
+
+  // worked on by Charles 1000000000% all him let's go
+  setTrapVariable(bool) {
+    this.hasTrap = bool;
   }
 }

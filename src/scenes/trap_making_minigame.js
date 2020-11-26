@@ -1,4 +1,6 @@
-const ITEM_SCALE = 0.25;
+// Worked on by: Charles Huang, Alexis C. Mendiola
+
+const ITEM_SCALE = 1;
 const ACCURACY = 10; // how far off the placement can be in any direction in pixels
 
 class trap_making_minigame extends Phaser.Scene {
@@ -6,43 +8,57 @@ class trap_making_minigame extends Phaser.Scene {
       super('trap_making_minigame');
     }
 
+    /**
+     * Initialize and prepare data.
+     * @param {JSON} data = {
+     *   name: SCENE_NAME,
+     *   dimensions: { width: SCENE_WIDTH, height: SCENE_HEIGHT},
+     *   interactable: MAP_OBJECT
+     * }
+     */
     init(data) {
-      // initialize and prepare data
-      // constants, configurations, etc.
-      this.boardWidth = data.width;
-      this.boardHeight = data.height;
+      this.boardWidth = data.dimensions.width;
+      this.boardHeight = data.dimensions.height;
       this.correctPlacementCount = 0;
+      this.interactable = data.interactable;
+      this.key = data.name;
     }
 
     preload() {
       // load media into memory
-      this.load.image('trap_making_background', '../../assets/shrek2.jpg');
-      this.load.image('skullItem', '../../assets/DeadCharacter.png');
-      this.load.image('candleItem', '../../assets/cornTrumpItem.png');
-      this.load.image('candleSlot', '../../assets/cornTrumpSlot.png');
-      this.load.image('potionItem', '../../assets/haachamachama112.png');
+      this.load.image('trap_making_background', '../../assets/minigames/backgrounds/bgTrapMaker.png');
+      this.load.image('skullItem', '../../assets/minigames/items/skull.png');
+      this.load.image('skullSlot', '../../assets/minigames/items/skullSlot.png');
+      this.load.image('candleItem', '../../assets/minigames/items/candle.png');
+      this.load.image('candleSlot', '../../assets/minigames/items/candleSlot.png');
+      this.load.image('potionItem', '../../assets/minigames/items/bottle.png');
+      this.load.image('potionSlot', '../../assets/minigames/items/bottleSlot.png');
   
-      this.load.audio('wrong', '../../assets/wrong.mp3');
-      this.load.audio('wow', '../../assets/wow.mp3');
+      this.load.audio('wrong', '../../assets/audio/wrong.mp3');
+      this.load.audio('wow', '../../assets/audio/wow.mp3');
   
-      this.load.video('omgwow', '../../assets/omgwow.mp4');
+      this.load.video('omgwow', '../../assets/video/omgwow.mp4');
     }
 
     create() {
-      minigame_scene_manager.setBackground('trap_making_minigame', 'trap_making_background');
+      // Worked on by: Charles
+      minigame_scene_manager.setBackground(this.key, 'trap_making_background');
   
       let wrong = this.sound.add('wrong');
       let wow = this.sound.add('wow');
   
       wrong.setVolume(3);
       wow.setVolume(1.5);
+      
+      // Worked on by: Alexis, Charles
+      let yItemPosArr = minigame_scene_manager.shuffleArray([350, 350, 480]);
+      let xSlotPosArr = minigame_scene_manager.shuffleArray([500, 550, 625]);
+      let ySlotPosArr = minigame_scene_manager.shuffleArray([450, 455, 460]);
+      this.createItemSlotPair('skullItem', 'skullSlot', 175, yItemPosArr[0], xSlotPosArr[0], ySlotPosArr[0]);
+      this.createItemSlotPair('candleItem', 'candleSlot', 230, yItemPosArr[1], xSlotPosArr[1], ySlotPosArr[1]);
+      this.createItemSlotPair('potionItem', 'potionSlot', 300, yItemPosArr[2], xSlotPosArr[2], ySlotPosArr[2]);
   
-      let yItemPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
-      let ySlotPosArr = minigame_scene_manager.shuffleArray([150, 300, 450]);
-      this.createItemSlotPair('skullItem', 'skullItem', 200, yItemPosArr[0], 600, ySlotPosArr[0]);
-      this.createItemSlotPair('candleItem', 'candleSlot', 200, yItemPosArr[1], 600, ySlotPosArr[1]);
-      this.createItemSlotPair('potionItem', 'potionItem', 200, yItemPosArr[2], 600, ySlotPosArr[2]);
-  
+      // Worked on by: Charles
       // pointer param is needed for drag to work
       this.input.on('drag', (pointer, object, nextX, nextY) => {
         let outerBorderX = (game.config.width - this.boardWidth) / 2;
@@ -85,8 +101,6 @@ class trap_making_minigame extends Phaser.Scene {
       });
     }
 
-  //update() {}
-
   /**
    * Creates a draggable image and a slot for the image to move to.
    * For best results, slots should not overlap one another and they
@@ -100,6 +114,7 @@ class trap_making_minigame extends Phaser.Scene {
    * @param {*} slotY slot's y position
    */
   createItemSlotPair(item_name, slot_name, itemX, itemY, slotX, slotY) {
+    // Worked on by: Charles
     let item = this.add.image(itemX, itemY, item_name);
     item.setScale(ITEM_SCALE);
     item.setDepth(1);
@@ -112,10 +127,11 @@ class trap_making_minigame extends Phaser.Scene {
     item.targetY = slotY;
 
     let slot = this.add.image(slotX, slotY, slot_name);
-    slot.setDisplaySize(item.displayWidth + ACCURACY * 2, item.displayHeight + ACCURACY * 2);
+    slot.setDisplaySize(item.displayWidth + ACCURACY * 1.75, item.displayHeight + ACCURACY * 1.75);
   }
 
   playVideo() {
+    // Worked on by: Charles
     let omgwow = this.add.video(400, 300, 'omgwow');
     omgwow.setVolume(0.5);
     omgwow.alpha = 0.5;
@@ -132,7 +148,7 @@ class trap_making_minigame extends Phaser.Scene {
     omgwow.on('complete', () => {
       // When the audio plays, the win condition has been satisfied.
       // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon('trap_making_minigame');
+      minigame_scene_manager.minigameWon(this.key, this.interactable);
     });
   }
 }
