@@ -76,6 +76,7 @@ class gameplay_scene extends Phaser.Scene {
     };
     this.anims.create(config);
 
+    //Worked on by Brian
     this.bgmusic = this.sound.add('BGM');
     // BGM settings.
     let musicConfig = {
@@ -225,6 +226,7 @@ class gameplay_scene extends Phaser.Scene {
 
     //otherPlayer.setTint(0xff0000); Sets tint of other players to red for testing purposes
 
+   
     this.scene.get('voting_scene').players.push(otherPlayer);
     this.scene.get('voting_scene').displayPortraits();
 

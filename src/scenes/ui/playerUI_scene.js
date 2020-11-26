@@ -28,6 +28,7 @@ class playerUI_scene extends Phaser.Scene {
     });
 
     this.isStartGame = false;
+    //Worked on by Brian
     //Add two sprites in the same location in the top right of the screen.
     // instantiate a progress bar in the top right corner of game screen, similar to the kill button
     // note: add ProgressBar.increase(1) into each mini-game

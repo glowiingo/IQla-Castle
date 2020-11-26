@@ -148,8 +148,7 @@ class ServerConnection {
   }
 
   callVote(){
-    console.log("Vote is called to start")
-    this.socket.emit('bingo');
+    this.socket.emit('voteStart');
   }
 
   vote(playerId) {

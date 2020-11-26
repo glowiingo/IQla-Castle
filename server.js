@@ -128,14 +128,14 @@ io.on('connection', function (socket) {
     // when a player sends their vote
     socket.on('vote', function (votedFor) {
       // socket.broadcast.to(roomName).emit('voted', votedFor);
-      rooms[roomName].vote(votedFor);
+      rooms[roomName].vote(votedFor, socket.id);
       let complete = rooms[roomName].voteCompleted()
       if (complete) {
         console.log("vote complete: ", complete);
         io.in(roomName).emit('voted', complete);
       }
     });
-    socket.on('bingo', function () {
+    socket.on('voteStart', function () {
       console.log("Vote is called to start")
       io.in(roomName).emit('voteStarted');
     });
