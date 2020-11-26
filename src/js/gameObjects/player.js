@@ -158,7 +158,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   //worked on by Mike
   createDeadBody(x, y) {
     let dead_image = this.scene.add.image(x, y, 'deadbody');
-    dead_image.setScale(0.5);
+    dead_image.setScale(2);
     dead_image.setDepth(30);
     dead_image.setInteractive();
     this.scene.deadbodies.push(dead_image);

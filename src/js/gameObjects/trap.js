@@ -77,7 +77,7 @@ class Trap extends Phaser.GameObjects.Sprite {
     
     createDeadBody(x, y) {
         let dead_image = this.scene.add.image(x, y, 'deadbody');
-        dead_image.setScale(0.5);
+        dead_image.setScale(2);
         dead_image.setDepth(30);
     }
 }

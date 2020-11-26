@@ -65,7 +65,7 @@ class voting_scene extends Phaser.Scene {
         return;
       }
 
-      this.vote(null);
+      this.vote('skip');
       this.voted = true;
       this.votedText = this.add.text(this.screenX / 12, 50, 'You skipped vote', {
         font: '55px Ariel',

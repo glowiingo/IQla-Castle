@@ -85,6 +85,9 @@ class Room {
     if (Object.keys(this.players).length === this.voteResult.length + this.deadCount) {
       let votedPlayerID = this.findTheMajority(this.voteResult);
       console.log('majority voted for: ', votedPlayerID);
+      if (votedPlayerID == 'skip') {
+        return votedPlayerID;
+      }
       if (votedPlayerID == null) {
         return null;
       }

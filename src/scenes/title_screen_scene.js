@@ -23,7 +23,7 @@ class title_screen_scene extends Phaser.Scene {
     const screenCenterY = this.cameras.main.worldView.y + screenY / 2;
 
     this.add
-      .text(screenCenterX, screenCenterY - 150, 'IQla\'s Castle', {
+      .text(screenCenterX, screenCenterY - 150, 'IQLA Castle', {
         font: '55px Ariel',
         fill: 'yellow',
       })

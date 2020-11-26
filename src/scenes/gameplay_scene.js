@@ -44,7 +44,7 @@ class gameplay_scene extends Phaser.Scene {
       '../../assets/tilemaps/maps/protypeMap.json'
     );
     this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
-    this.load.image('deadbody', 'assets/deadCharacter.png');
+    this.load.image('deadbody', 'assets/DeadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
     this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
     this.load.image('trapMakingMinigame', '../../assets/shelfAndTable.png');
@@ -165,6 +165,9 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
     
+    if (team === "vampires") {
+      team = "IQLA";
+    }
     this.scene.start('endGame_scene', team + ' win')
   }
 

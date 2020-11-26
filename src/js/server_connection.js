@@ -50,7 +50,11 @@ class ServerConnection {
     });
     // Worked by Jayce
     this.socket.on('voted', function (voteId) {
-      if (sceneData.serverConnection.socket.id === voteId) {
+      if (voteId == 'skip') {
+        sceneData.gamePlayScene.scene.manager
+          .getScene('voting_scene')
+          .toggleVisible();
+      } else if (sceneData.serverConnection.socket.id === voteId) {
         sceneData.player.setActive(false).setVisible(false);
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
         sceneData.player.alive = false;
