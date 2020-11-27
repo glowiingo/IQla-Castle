@@ -22,6 +22,16 @@ class ServerConnection {
   //Add's the required event handlers to support gameplay
   addGameplayHandlers(sceneData) {
     this.socket.on('currentPlayers', function (players) {
+      if(players == null){
+        sceneData.gamePlayScene.scene.stop('playerUI_scene');
+        sceneData.gamePlayScene.scene.stop('mapOverlay_scene');
+        sceneData.gamePlayScene.scene.stop('showPositionPlayer_scene');
+        sceneData.gamePlayScene.scene.stop('voting_scene');
+        sceneData.gamePlayScene.scene.stop('chat_scene');
+        sceneData.gamePlayScene.scene.stop('player_death_scene');
+        sceneData.gamePlayScene.scene.start('join_game_scene');
+        alert("Sorry, that room is in progress. Please try another room");
+      }
       sceneData.addPlayer(players[sceneData.serverConnection.socket.id]);
       delete players[sceneData.serverConnection.socket.id];
       sceneData.addOtherPlayers(players);
