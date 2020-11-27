@@ -168,6 +168,10 @@ class ServerConnection {
     console.log('sent alert from client');
   }
 
+  alertGameEnd() {
+    this.socket.emit('alertGameEnd', {});
+  }
+
   //Worked on by: Jayce
   sendMessage(name, text) {
     this.socket.emit('send message', name, text);

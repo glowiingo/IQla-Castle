@@ -46,6 +46,8 @@ class endGame_scene extends Phaser.Scene {
 
     this.returnButton.setScale(0.45);
     this.add.existing(this.returnButton);
+    this.scene.stop('gameplay_scene');
+    this.scene.stop('Player');
   }
 
   // click button return to mainmenu_scene

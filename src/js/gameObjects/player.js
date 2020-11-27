@@ -150,7 +150,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   // Worked on by: Anna
   playerWalkAnimStop() {
     this.isWalking = false;
-    this.anims.stop();
+    if (this.anims) {
+      this.anims.stop();
+    } 
   }
 
   getPlayerName() {
@@ -159,6 +161,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   //worked on by Mike
   createDeadBody(x, y) {
+    if (!this.scene) {
+      return;
+    }
+    
     let dead_image = this.scene.add.image(x, y, 'deadbody');
     dead_image.setScale(2);
     dead_image.setDepth(30);

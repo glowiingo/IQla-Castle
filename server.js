@@ -39,13 +39,15 @@ io.on('connection', function (socket) {
     socket.broadcast.to(roomName).emit('newPlayer', rooms[roomName].getPlayer(socket.id));
 
     socket.on('disconnect', function () {
-      console.log('user disconnected from room: ', roomName);
-      // remove this player from our rooms object
-      rooms[roomName].removePlayer(socket.id);
-      // emit a message to all players to remove this player
-      io.to(roomName).emit('disconnect', socket.id);
-      if (!rooms[roomName].hasPlayers()) {
-        delete rooms[roomName];
+      if (rooms[roomName]) {
+        console.log('user disconnected from room: ', roomName);
+        // remove this player from our rooms object
+        rooms[roomName].removePlayer(socket.id);
+        // emit a message to all players to remove this player
+        io.to(roomName).emit('disconnect', socket.id);
+        if (!rooms[roomName].hasPlayers()) {
+          delete rooms[roomName];
+        }
       }
     });
 
@@ -66,6 +68,11 @@ io.on('connection', function (socket) {
       console.log("Roles: ", roles);
       io.in(roomName).emit('gameStart', roles);
     });
+
+    socket.on('alertGameEnd', function() {
+      console.log("Alert game end");
+      delete rooms[roomName];
+    })
 
     //Temp
     // if(Object.keys(rooms[roomName].players).length > 1){

@@ -164,6 +164,7 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
+    this.sceneData.serverConnection.alertGameEnd();
     
     if (team === "vampires") {
       team = "IQLA";
