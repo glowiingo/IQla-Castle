@@ -30,7 +30,13 @@ io.on('connection', function (socket) {
         console.log("Winners! team:", team);
       };
       rooms[roomName] = new Room(roomName, victoryHandler);
+    } else if(rooms[roomName].started){
+      socket.emit('currentPlayers', null);
+      return;
     }
+
+
+
     rooms[roomName].addPlayer(new ServerPlayer(roomName, socket, playerName));
 
     // send the rooms object to the new player
@@ -63,6 +69,7 @@ io.on('connection', function (socket) {
     socket.on('alertGameStart', function () {
       console.log("Alert game start");
       let roles = rooms[roomName].getRoleAssignments();
+      rooms[roomName].started = true;
       console.log("Roles: ", roles);
       io.in(roomName).emit('gameStart', roles);
     });
