@@ -42,6 +42,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       font: '32px Ariel',
       fill: 'yellow',
     });
+
   }
 
   /**
@@ -76,16 +77,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   playerMovement() {
     if (this.key.up.isDown && !this.movementDisabled) {
       this.setVelocityY(-this.speed);
+      if (this.y < 64) {this.y = 64}
     } else if (this.key.down.isDown && !this.movementDisabled) {
       this.setVelocityY(this.speed);
+      if (this.y > 3040) {this.y = 3040}
     } else {
       this.setVelocityY(0);
     }
     if (this.key.left.isDown && !this.movementDisabled) {
       this.setVelocityX(-this.speed);
+      if (this.x < 32) {this.x = 32}
       this.flipX = false;
     } else if (this.key.right.isDown && !this.movementDisabled) {
       this.setVelocityX(this.speed);
+      if (this.x > 5024) {this.x = 5024}
       this.flipX = true;
     } else {
       this.setVelocityX(0);

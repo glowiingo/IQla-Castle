@@ -110,16 +110,6 @@ class gameplay_scene extends Phaser.Scene {
     //Start networking & create player once networking is connected
     this.sceneData.serverConnection.addGameplayHandlers(this.sceneData);
     this.sceneData.serverConnection.joinRoom();
-
-
-
-    this.keyPress = this.input.keyboard.addKey('NINE');
-    this.keyPress.on('down', () => {
-      console.log(this.otherPlayers.children.entries.length, this.otherPlayerTags.length);
-      for (let i = 0; i < this.otherPlayerTags.length; i++) {
-        console.log(this.otherPlayers.children.entries[i]);
-      }
-    });
   }
   // Worked on by: Gloria Ngo
   update() {
