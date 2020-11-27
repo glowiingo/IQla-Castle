@@ -224,7 +224,24 @@ class playerUI_scene extends Phaser.Scene {
     this.renderDetectiveUI();
   }
 
+  disableActionWhileVoting(){
+    console.log("disabled");
+    this.killButton.visible = false;
+    this.mapButton.visible = false;
+    this.useButton.visible = false;
+    this.rptButton.visible = false;
+  }
+
+  enableActionWhileVoting(){
+    console.log("enavled");
+    this.killButton.visible = true ;
+      this.mapButton.visible = true;
+      this.useButton.visible = true;
+      this.rptButton.visible = true;
+  }
+ 
   enablePress() {
+   
     this.killButton.setTint(0xffffff);
     this.canKill = true;
   }
