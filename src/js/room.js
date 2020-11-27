@@ -11,6 +11,7 @@ class Room {
     this.voteResult = [];
     this.votedPlayers = [];
     this.deadCount = 0;
+    this.started = false;
   }
   addPlayer(player) {
     this.players[player.playerId] = player;
