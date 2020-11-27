@@ -59,13 +59,15 @@ io.on('connection', function (socket) {
 
     // when a player moves, update the player data
     socket.on('playerMovement', function (movementData) {
-      //console.log(rooms[roomName].getRoleAssignments());
-      rooms[roomName].getPlayer(socket.id).x = movementData.x;
-      rooms[roomName].getPlayer(socket.id).y = movementData.y;
-      rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
-      // console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
-      // emit a message to all players about the player that moved
-      socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
+      if (rooms[roomName]) {
+        //console.log(rooms[roomName].getRoleAssignments());
+        rooms[roomName].getPlayer(socket.id).x = movementData.x;
+        rooms[roomName].getPlayer(socket.id).y = movementData.y;
+        rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
+        // console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
+        // emit a message to all players about the player that moved
+        socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
+      }
     });
 
     socket.on('alertGameStart', function () {
