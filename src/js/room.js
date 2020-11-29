@@ -48,7 +48,7 @@ class Room {
       this.detectiveCount--;
       this.vampireCount++;
     }
-    while (players.length / Object.keys(this.players).length <= vampireRate);
+    while (Math.ceil(players.length / vampireCount) > 3);
     return roles;
   }
   playerEliminated(playerId) {
