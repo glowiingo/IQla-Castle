@@ -53,6 +53,12 @@ io.on('connection', function (socket) {
         io.to(roomName).emit('disconnect', socket.id);
         if (!rooms[roomName].hasPlayers()) {
           delete rooms[roomName];
+        } else if(rooms[roomName].started && rooms[roomName].voteResult.length != 0){ //Checks if player disconnected during a vote
+          let complete = rooms[roomName].voteCompleted()
+          if (complete) {
+            console.log("vote complete: ", complete);
+            io.in(roomName).emit('voted', complete);
+          }
         }
       }
     });
