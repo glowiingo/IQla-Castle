@@ -1,4 +1,5 @@
 // Worked on by: Evano
+
 class Room {
   constructor(roomName, victoryHandler) {
     this.name = roomName;
