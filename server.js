@@ -45,13 +45,19 @@ io.on('connection', function (socket) {
     socket.broadcast.to(roomName).emit('newPlayer', rooms[roomName].getPlayer(socket.id));
 
     socket.on('disconnect', function () {
-      console.log('user disconnected from room: ', roomName);
+      console.log('user disconnected from room: ', roomName, rooms[roomName].started , rooms[roomName].voteResult.length != 0);
       // remove this player from our rooms object
       rooms[roomName].removePlayer(socket.id);
       // emit a message to all players to remove this player
       io.to(roomName).emit('disconnect', socket.id);
       if (!rooms[roomName].hasPlayers()) {
         delete rooms[roomName];
+      } else if(rooms[roomName].started && rooms[roomName].voteResult.length != 0){ //Checks if player disconnected during a vote
+        let complete = rooms[roomName].voteCompleted()
+        if (complete) {
+          console.log("vote complete: ", complete);
+          io.in(roomName).emit('voted', complete);
+        }
       }
     });
 

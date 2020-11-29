@@ -69,12 +69,13 @@ class ServerConnection {
           .toggleVisible();
         alert('you were voted for');
       } else {
-        sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
-        sceneData.otherPlayers[voteId].alive = false;
-        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
-
-        // delete player from voting_scene player array
-        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible();
+        if(sceneData.otherPlayers[playerId] && sceneData.otherPlayers[playerId].alive){
+          sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
+          sceneData.otherPlayers[voteId].alive = false;
+          // delete player from voting_scene player array
+          sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
+        }
       }
     });
     this.socket.on('voteStarted', function(){
