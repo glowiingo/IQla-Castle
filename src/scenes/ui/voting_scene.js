@@ -133,6 +133,7 @@ class voting_scene extends Phaser.Scene {
       this.scene.get('gameplay_scene').player.toggleMovementDisabled(); // Disables Movement of player when meeting is called.
       // this.scene.stop('playerUI_scene');
       // this.scene.stop('gameplay_scene');
+      this.scene.get('playerUI_scene').disableActionWhileVoting();
       this.scene.get('gameplay_scene').player.sendToStartPos(); // is supposed to send all players to spawn.
     } else {
       this.canClick = false;
@@ -141,6 +142,7 @@ class voting_scene extends Phaser.Scene {
       // this.scene.wake('playerUI_scene');
       // this.scene.wake('gameplay_scene');
       this.scene.get('gameplay_scene').player.toggleMovementDisabled();
+      this.scene.get('playerUI_scene').enableActionWhileVoting();
 
       // reset the voting scene when closed
       this.voted = false;
