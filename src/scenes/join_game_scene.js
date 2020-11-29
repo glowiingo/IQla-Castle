@@ -85,26 +85,50 @@ class join_game_scene extends Phaser.Scene {
    * TODO: Add some type of error notification to user. For example, if user input is '', a text message pop up and says
    *       'Name (or room id) cannot be empty.'
    */
-  okClicked() {
-    if (
-      this.nameInputBox.value != '' &&
-      this.roomIdInputBox.value != '' //&&
-      ///^\d+$/.test(this.roomIdInputBox.value) // Check if roomID value is numeric
-    ) {
-      console.log(
-        'ok clicked, Hello ' +
-        this.nameInputBox.value +
-        '\nJoining Room: ' +
-        this.roomIdInputBox.value
-      );
-      this.sceneData = new SceneData(this.scene.manager.getScene('gameplay_scene'));
-      this.sceneData.serverConnection.setRoom(this.roomIdInputBox.value);
-      this.sceneData.serverConnection.setName(this.nameInputBox.value);
-      this.scene.start('gameplay_scene');
-    } else {
-      // Do nothing
+ 
+   //worked on by Nav
+  checkName(name){
+    if(name == '' || name.length >10){
+      console.log("Please enter correct credentials");
+      alert("Name should be between 1-10 ");
+      return false;
+    }else{
+      return true;
     }
+}
+
+//worked on by nav
+checkID(id){
+  if(id == '' || id.length > 10){
+    alert("Room id cannot be null");
+    return false;
+  }else{
+    return true;
   }
+}
+
+
+okClicked() {
+  if (
+    this.checkName(this.nameInputBox.value ) &&
+    this.checkID(this.roomIdInputBox.value ) //&&
+    ///^\d+$/.test(this.roomIdInputBox.value) // Check if roomID value is numeric
+  ) {
+    console.log(
+      'ok clicked, Hello ' +
+      this.nameInputBox.value +
+      '\nJoining Room: ' +
+      this.roomIdInputBox.value
+    );
+    this.sceneData = new SceneData(this.scene.manager.getScene('gameplay_scene'));
+    this.sceneData.serverConnection.setRoom(this.roomIdInputBox.value);
+    this.sceneData.serverConnection.setName(this.nameInputBox.value);
+    this.scene.start('gameplay_scene');
+  } else {
+    // Do nothing
+  }
+}
+
 
   update() {
     // loop that runs constantly
