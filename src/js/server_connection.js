@@ -58,6 +58,7 @@ class ServerConnection {
     this.socket.on('gameStart', function (roleData) {
       if(roleData[sceneData.player.playerId] == "vampire"){
         for(let playerId in Object.keys(roleData)){
+          if(!sceneData.otherPlayers[playerId]) continue;
           sceneData.otherPlayers[playerId].setTint(0xff0000);
         }
       }
@@ -90,10 +91,10 @@ class ServerConnection {
     this.socket.on('voteStarted', function(){
       sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible();
     })
-    this.socket.on('taskCompleted', function (voteId) {
+    this.socket.on('taskCompleted', function (percent) {
       sceneData.gamePlayScene.scene.manager
         .getScene('playerUI_scene')
-        .setBar(Math.floor(504 * 0.1));
+        .setBar(percent);
     });
     this.socket.on('stoppedPlayerMovement', function (playerId) {
       sceneData.otherPlayers[playerId].playerWalkAnimStop();

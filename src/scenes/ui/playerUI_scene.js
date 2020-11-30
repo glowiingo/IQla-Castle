@@ -320,7 +320,7 @@ class playerUI_scene extends Phaser.Scene {
    * @param perc An amount to add to the bars value of 0-504, can be negative to lower the bar.
    */
   setBar(perc) {
-    this.fill += perc;
+    this.fill == 504 * perc;
     this.tBar.setCrop(0, 0, this.fill, 84);
   }
 }

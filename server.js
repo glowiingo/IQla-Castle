@@ -124,7 +124,7 @@ io.on('connection', function (socket) {
 
     socket.on('taskComplete', function () {
       io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
-      rooms[roomName].taskComplete(socket.id);
+      rooms[roomName].taskComplete(rooms[roomName].taskCount / rooms[roomName].taskTarget);
     });
 
     // When a player stops moving, goes stationary
