@@ -56,7 +56,7 @@ class ServerConnection {
       sceneData.otherPlayers[playerInfo.playerId].updateNametagLocation();
     });
     this.socket.on('gameStart', function (roleData) {
-      if(roleData[sceneData.player.playerId] == "vampire"){
+      if(roleData[sceneData.serverConnection.socket.id] == "vampire"){
         for(let playerId in Object.keys(roleData)){
           if(!sceneData.otherPlayers[playerId]) continue;
           sceneData.otherPlayers[playerId].setTint(0xff0000);
