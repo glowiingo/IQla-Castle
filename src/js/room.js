@@ -66,7 +66,7 @@ class Room {
     }
     this.deadCount += 1;
     if (this.vampireCount == 0) {
-      this.victoryHandler('detectives');
+      this.victoryHandler('Detectives');
     } else if (this.vampireCount >= this.detectiveCount) {
       this.victoryHandler('IQLAs');
     }
@@ -78,7 +78,7 @@ class Room {
       this.taskCount++;
     }
     if (this.taskCount >= this.taskTarget) {
-      this.victoryHandler('detectives');
+      this.victoryHandler('Detectives');
     }
   }
 
