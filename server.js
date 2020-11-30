@@ -80,6 +80,7 @@ io.on('connection', function (socket) {
       console.log("Alert game start");
       let roles = rooms[roomName].getRoleAssignments();
       rooms[roomName].started = true;
+      rooms[roomName].taskTarget = 4 * rooms[roomName].detectiveCount;
       console.log("Roles: ", roles);
       io.in(roomName).emit('gameStart', roles);
     });

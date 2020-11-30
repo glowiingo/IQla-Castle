@@ -8,6 +8,7 @@ class Room {
     this.vampireCount = 0;
     this.victoryHandler = victoryHandler;
     this.taskCount = 0;
+    this.taskTarget = 0;
     this.voteResult = [];
     this.votedPlayers = [];
     this.deadCount = 0;
@@ -67,7 +68,7 @@ class Room {
     if (this.vampireCount == 0) {
       this.victoryHandler('detectives');
     } else if (this.vampireCount >= this.detectiveCount) {
-      this.victoryHandler('vampires');
+      this.victoryHandler('IQLAs');
     }
   }
   taskComplete(playerId) {
@@ -76,7 +77,7 @@ class Room {
     } else {
       this.taskCount++;
     }
-    if (this.taskCount > 3) {
+    if (this.taskCount >= this.taskTarget) {
       this.victoryHandler('detectives');
     }
   }
