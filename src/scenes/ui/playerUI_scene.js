@@ -224,7 +224,24 @@ class playerUI_scene extends Phaser.Scene {
     this.renderDetectiveUI();
   }
 
+  //worked upon by Bisht and Nav
+  disableActionWhileVoting(){
+    this.killButton.visible = false;
+    this.mapButton.visible = false;
+    this.useButton.visible = false;
+    this.rptButton.visible = false;
+  }
+
+  //worked upon by Bisht and Nav
+  enableActionWhileVoting(){
+    this.killButton.visible = true ;
+      this.mapButton.visible = true;
+      this.useButton.visible = true;
+      this.rptButton.visible = true;
+  }
+ 
   enablePress() {
+   
     this.killButton.setTint(0xffffff);
     this.canKill = true;
   }
@@ -303,7 +320,7 @@ class playerUI_scene extends Phaser.Scene {
    * @param perc An amount to add to the bars value of 0-504, can be negative to lower the bar.
    */
   setBar(perc) {
-    this.fill += perc;
+    this.fill == 504 * perc;
     this.tBar.setCrop(0, 0, this.fill, 84);
   }
 }

@@ -45,34 +45,50 @@ io.on('connection', function (socket) {
     socket.broadcast.to(roomName).emit('newPlayer', rooms[roomName].getPlayer(socket.id));
 
     socket.on('disconnect', function () {
-      console.log('user disconnected from room: ', roomName);
-      // remove this player from our rooms object
-      rooms[roomName].removePlayer(socket.id);
-      // emit a message to all players to remove this player
-      io.to(roomName).emit('disconnect', socket.id);
-      if (!rooms[roomName].hasPlayers()) {
-        delete rooms[roomName];
+      if (rooms[roomName]) {
+        console.log('user disconnected from room: ', roomName);
+        // remove this player from our rooms object
+        rooms[roomName].removePlayer(socket.id);
+        // emit a message to all players to remove this player
+        io.to(roomName).emit('disconnect', socket.id);
+        if (!rooms[roomName].hasPlayers()) {
+          delete rooms[roomName];
+        } else if(rooms[roomName].started && rooms[roomName].voteResult.length != 0){ //Checks if player disconnected during a vote
+          let complete = rooms[roomName].voteCompleted()
+          if (complete) {
+            console.log("vote complete: ", complete);
+            io.in(roomName).emit('voted', complete);
+          }
+        }
       }
     });
 
     // when a player moves, update the player data
     socket.on('playerMovement', function (movementData) {
-      //console.log(rooms[roomName].getRoleAssignments());
-      rooms[roomName].getPlayer(socket.id).x = movementData.x;
-      rooms[roomName].getPlayer(socket.id).y = movementData.y;
-      rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
-      // console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
-      // emit a message to all players about the player that moved
-      socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
+      if (rooms[roomName]) {
+        //console.log(rooms[roomName].getRoleAssignments());
+        rooms[roomName].getPlayer(socket.id).x = movementData.x;
+        rooms[roomName].getPlayer(socket.id).y = movementData.y;
+        rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
+        // console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
+        // emit a message to all players about the player that moved
+        socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
+      }
     });
 
     socket.on('alertGameStart', function () {
       console.log("Alert game start");
       let roles = rooms[roomName].getRoleAssignments();
       rooms[roomName].started = true;
+      rooms[roomName].taskTarget = 4 * rooms[roomName].detectiveCount;
       console.log("Roles: ", roles);
       io.in(roomName).emit('gameStart', roles);
     });
+
+    socket.on('alertGameEnd', function() {
+      console.log("Alert game end");
+      delete rooms[roomName];
+    })
 
     //Temp
     // if(Object.keys(rooms[roomName].players).length > 1){
@@ -108,7 +124,7 @@ io.on('connection', function (socket) {
 
     socket.on('taskComplete', function () {
       io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
-      rooms[roomName].taskComplete(socket.id);
+      rooms[roomName].taskComplete(rooms[roomName].taskCount / rooms[roomName].taskTarget);
     });
 
     // When a player stops moving, goes stationary
@@ -149,6 +165,6 @@ io.on('connection', function (socket) {
   })
 });
 
-server.listen(8081, function () {
+server.listen(process.env.PORT || 8081, function () {
   console.log(`Listening on ${server.address().port}`);
 });

@@ -30,12 +30,6 @@ class voting_scene extends Phaser.Scene {
     this.screenX = this.cameras.main.width;
     this.screenY = this.cameras.main.height;
 
-    // temp voting activation, actual voting activation should call toggleVisible
-    // this.keyPress = this.input.keyboard.addKey('ZERO');
-    // this.keyPress.on('down', () => {
-    //   this.toggleVisible();
-    // });
-
     // create semi-transparent rectangle
     let rect = new Phaser.Geom.Rectangle(0, 50, this.screenX, this.screenY - 50);
     let g = this.add.graphics()
@@ -48,7 +42,11 @@ class voting_scene extends Phaser.Scene {
     this.chatButton.setScale(0.25);
     this.chatButton.tintFill = false;
     this.chatButton
-      .on('pointerdown', () => this.scene.get('chat_scene').toggleVisible())
+      .on('pointerdown', () => {
+        if (this.canClick) {
+          this.scene.get('chat_scene').toggleVisible();
+        }
+      })
       .on('pointerover', () => this.chatButton.setTint(0x00FF00))
       .on('pointerout', () => this.chatButton.clearTint());
     
@@ -61,11 +59,11 @@ class voting_scene extends Phaser.Scene {
     this.skip.setInteractive();
 
     this.skip.on('pointerdown',() => {
-      if (this.voted) {
+      if (this.voted || !this.canClick) {
         return;
       }
 
-      this.vote(null);
+      this.vote('skip');
       this.voted = true;
       this.votedText = this.add.text(this.screenX / 12, 50, 'You skipped vote', {
         font: '55px Ariel',
@@ -135,6 +133,7 @@ class voting_scene extends Phaser.Scene {
       this.scene.get('gameplay_scene').player.toggleMovementDisabled(); // Disables Movement of player when meeting is called.
       // this.scene.stop('playerUI_scene');
       // this.scene.stop('gameplay_scene');
+      this.scene.get('playerUI_scene').disableActionWhileVoting();
       this.scene.get('gameplay_scene').player.sendToStartPos(); // is supposed to send all players to spawn.
     } else {
       this.canClick = false;
@@ -143,6 +142,7 @@ class voting_scene extends Phaser.Scene {
       // this.scene.wake('playerUI_scene');
       // this.scene.wake('gameplay_scene');
       this.scene.get('gameplay_scene').player.toggleMovementDisabled();
+      this.scene.get('playerUI_scene').enableActionWhileVoting();
 
       // reset the voting scene when closed
       this.voted = false;

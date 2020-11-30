@@ -42,17 +42,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       font: '32px Ariel',
       fill: 'yellow',
     });
+
   }
 
   /**
    * Removes captures when chat scene is being used so that you are able to use the letters
    */
   removeCaptures() {
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.S);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.D);
-    this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
+    if (this.scene) {
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.W);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.A);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.S);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.D);
+      this.scene.input.keyboard.removeCapture(Phaser.Input.Keyboard.KeyCodes.E);
+    }
   }
 
   /**
@@ -74,16 +77,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   playerMovement() {
     if (this.key.up.isDown && !this.movementDisabled) {
       this.setVelocityY(-this.speed);
+      if (this.y < 64) {this.y = 64}
     } else if (this.key.down.isDown && !this.movementDisabled) {
       this.setVelocityY(this.speed);
+      if (this.y > 3040) {this.y = 3040}
     } else {
       this.setVelocityY(0);
     }
     if (this.key.left.isDown && !this.movementDisabled) {
       this.setVelocityX(-this.speed);
+      if (this.x < 32) {this.x = 32}
       this.flipX = false;
     } else if (this.key.right.isDown && !this.movementDisabled) {
       this.setVelocityX(this.speed);
+      if (this.x > 5024) {this.x = 5024}
       this.flipX = true;
     } else {
       this.setVelocityX(0);
@@ -148,7 +155,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   // Worked on by: Anna
   playerWalkAnimStop() {
     this.isWalking = false;
-    this.anims.stop();
+    if (this.anims) {
+      this.anims.stop();
+    } 
   }
 
   getPlayerName() {
@@ -157,8 +166,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   //worked on by Mike
   createDeadBody(x, y) {
+    if (!this.scene) {
+      return;
+    }
+    
     let dead_image = this.scene.add.image(x, y, 'deadbody');
-    dead_image.setScale(0.5);
+    dead_image.setScale(2);
     dead_image.setDepth(30);
     dead_image.setInteractive();
     this.scene.deadbodies.push(dead_image);

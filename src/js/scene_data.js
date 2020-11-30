@@ -51,4 +51,8 @@ class SceneData {
   alertGameStart() {
     this.serverConnection.alertGameStart();
   }
+
+  alertGameEnd() {
+    this.serverConnection.alertGameEnd();
+  }
 }

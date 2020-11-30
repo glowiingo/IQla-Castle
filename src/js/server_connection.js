@@ -56,11 +56,21 @@ class ServerConnection {
       sceneData.otherPlayers[playerInfo.playerId].updateNametagLocation();
     });
     this.socket.on('gameStart', function (roleData) {
+      if(roleData[sceneData.serverConnection.socket.id] == "vampire"){
+        for(let playerId in Object.keys(roleData)){
+          if(!sceneData.otherPlayers[playerId]) continue;
+          sceneData.otherPlayers[playerId].setTint(0xff0000);
+        }
+      }
       sceneData.startGame(roleData);
     });
     // Worked by Jayce
     this.socket.on('voted', function (voteId) {
-      if (sceneData.serverConnection.socket.id === voteId) {
+      if (voteId == 'skip') {
+        sceneData.gamePlayScene.scene.manager
+          .getScene('voting_scene')
+          .toggleVisible();
+      } else if (sceneData.serverConnection.socket.id === voteId) {
         sceneData.player.setActive(false).setVisible(false);
         sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
         sceneData.player.alive = false;
@@ -69,21 +79,22 @@ class ServerConnection {
           .toggleVisible();
         alert('you were voted for');
       } else {
-        sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
-        sceneData.otherPlayers[voteId].alive = false;
-        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible(); 
-
-        // delete player from voting_scene player array
-        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
+        sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible();
+        if(sceneData.otherPlayers[playerId] && sceneData.otherPlayers[playerId].alive){
+          sceneData.otherPlayers[voteId].setActive(false).setVisible(false);
+          sceneData.otherPlayers[voteId].alive = false;
+          // delete player from voting_scene player array
+          sceneData.gamePlayScene.scene.manager.getScene('voting_scene').removePlayerById(voteId);
+        }
       }
     });
     this.socket.on('voteStarted', function(){
       sceneData.gamePlayScene.scene.manager.getScene('voting_scene').toggleVisible();
     })
-    this.socket.on('taskCompleted', function (voteId) {
+    this.socket.on('taskCompleted', function (percent) {
       sceneData.gamePlayScene.scene.manager
         .getScene('playerUI_scene')
-        .setBar(Math.floor(504 * 0.1));
+        .setBar(percent);
     });
     this.socket.on('stoppedPlayerMovement', function (playerId) {
       sceneData.otherPlayers[playerId].playerWalkAnimStop();
@@ -172,6 +183,10 @@ class ServerConnection {
   alertGameStart() {
     this.socket.emit('alertGameStart', {});
     console.log('sent alert from client');
+  }
+
+  alertGameEnd() {
+    this.socket.emit('alertGameEnd', {});
   }
 
   //Worked on by: Jayce

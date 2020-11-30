@@ -44,7 +44,7 @@ class gameplay_scene extends Phaser.Scene {
       '../../assets/tilemaps/maps/protypeMap.json'
     );
     this.load.image('tiles', '../../assets/tilemaps/tiles/updated-tiles.png');
-    this.load.image('deadbody', 'assets/deadCharacter.png');
+    this.load.image('deadbody', 'assets/DeadCharacter.png');
     this.load.audio('BGM', '../../assets/audio/BGM.mp3');
     this.load.image('bookshelfMinigame', '../../assets/bookshelf.png');
     this.load.image('trapMakingMinigame', '../../assets/shelfAndTable.png');
@@ -110,16 +110,6 @@ class gameplay_scene extends Phaser.Scene {
     //Start networking & create player once networking is connected
     this.sceneData.serverConnection.addGameplayHandlers(this.sceneData);
     this.sceneData.serverConnection.joinRoom();
-
-
-
-    this.keyPress = this.input.keyboard.addKey('NINE');
-    this.keyPress.on('down', () => {
-      console.log(this.otherPlayers.children.entries.length, this.otherPlayerTags.length);
-      for (let i = 0; i < this.otherPlayerTags.length; i++) {
-        console.log(this.otherPlayers.children.entries[i]);
-      }
-    });
   }
   // Worked on by: Gloria Ngo
   update() {
@@ -164,7 +154,11 @@ class gameplay_scene extends Phaser.Scene {
     this.scene.stop('showPositionPlayer_scene');
     this.scene.stop('voting_scene');
     this.scene.stop('chat_scene');
+    this.sceneData.serverConnection.alertGameEnd();
     
+    if (team === "vampires") {
+      team = "IQLA";
+    }
     this.scene.start('endGame_scene', team + ' win')
   }
 
