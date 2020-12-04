@@ -1,7 +1,6 @@
-// Worked on by: Charles Huang
+// Worked on by: Charles Huang, Alexis C. Mendiola
 const NUM_OF_MICE = 3;
-const MOUSE_SCALE = 0.1;
-const MIN_DUR = 200; // minimun amount of time in ms for a mouse to travel from A to B
+const MIN_DUR = 400; // minimun amount of time in ms for a mouse to travel from A to B
 const MAX_DUR = 600; // maximum amount of time in ms for a mouse to travel from A to B
 
 class mouse_click_minigame extends Phaser.Scene {
@@ -9,58 +8,65 @@ class mouse_click_minigame extends Phaser.Scene {
     super('mouse_click_minigame');
   }
 
-  init() {
-    // initialize and prepare data
-    // constants, configurations, etc.
+  /**
+   * Initialize and prepare data.
+   * @param {JSON} data = {
+   *   name: SCENE_NAME,
+   *   dimensions: { width: SCENE_WIDTH, height: SCENE_HEIGHT},
+   *   interactable: MAP_OBJECT
+   * }
+   */
+  init(data) {
+    this.key = data.name;
+    this.interactable = data.interactable;
+
+    // coordinates of the sides of a table and its size.
+    this.tableLeft = 180;
+    this.tableRight = 625;
+    this.tableTop = 130;
+    this.tableBottom = 455;
+    this.tableWidth = this.tableRight - this.tableLeft;
+    this.tableHeight = this.tableBottom - this.tableTop;
   }
 
   preload() {
     // Load media into memory.
-    this.load.image('mouse_click_background', '../../assets/shrek.jpg');
-    this.load.image('mouse', '../../assets/mouse.png');
+    this.load.image('mouse_click_background', '../../assets/minigames/backgrounds/bgTable.png');
+    this.load.image('mouse', '../../assets/minigames/items/ratCurledTail.png');
 
-    this.load.audio('nyes', '../../assets/nyes.mp3');
-
-    this.load.video('recorder', '../../assets/recorder.mp4');
+    this.load.audio('squish', '../../assets/audio/squish.mp3');
   }
 
-  create(data) {
-    // sound effect of someone saying 'n-yes'
-    let nyes = this.sound.add('nyes');
-    nyes.setVolume(0.4);
+  create() {
+    let squish = this.sound.add('squish');
+    squish.setVolume(0.75);
 
-    minigame_scene_manager.setBackground('mouse_click_minigame', 'mouse_click_background');
+    minigame_scene_manager.setBackground(this.key, 'mouse_click_background');
 
-    // setScale does not affect image width/height so separate variables are created
-    let mouseWidth = this.scene.scene.textures.get('mouse').getSourceImage().width * MOUSE_SCALE;
-    let mouseHeight = this.scene.scene.textures.get('mouse').getSourceImage().height * MOUSE_SCALE;
     let mice = [];
 
     for (let i = 0; i < NUM_OF_MICE; i++) {
-      let randX = this.getRandomX(data.width, mouseWidth);
-      let randY = this.getRandomY(data.height, mouseHeight);
-      mice.push(this.add.image(randX, randY, 'mouse').setScale(MOUSE_SCALE));
+      let randX = Math.random() * this.tableWidth + this.tableLeft;
+      let randY = Math.random() * this.tableHeight + this.tableTop;
+      mice.push(this.add.image(randX, randY, 'mouse'));
     }
 
-    // add animation and interactive functionality for each mouse
+    //add animation and interactive functionality for each mouse
     mice.forEach((mouse) => {
       mouse.setInteractive();
       // remove mouse if clicked on
       mouse.on('pointerdown', () => {
-        tween.stop();
         mouse.setVisible(false);
         mice.splice(mice.indexOf(mouse), 1);
-
+        squish.play();
         if (mice.length === 0) {
-          this.playVideo();
-        } else {
-          nyes.play();
+          minigame_scene_manager.minigameWon(this.key, this.interactable);
         }
       });
 
       // move mouse to random coordinates on the board at random speeds.
-      mouse.nextX = this.getRandomX(data.width, mouseWidth);
-      mouse.nextY = this.getRandomY(data.height, mouseHeight);
+      mouse.nextX = Math.random() * this.tableWidth + this.tableLeft;
+      mouse.nextY = Math.random() * this.tableHeight + this.tableTop;
       mouse.rotation = this.getRadians(mouse.x, mouse.y, mouse.nextX, mouse.nextY);
       let tween = this.tweens.add({
         targets: mouse,
@@ -69,8 +75,8 @@ class mouse_click_minigame extends Phaser.Scene {
         duration: MIN_DUR + Math.random() * (MAX_DUR - MIN_DUR),
         repeat: -1,
         onEnd: () => {
-          mouse.nextX = this.getRandomX(data.width, mouseWidth);
-          mouse.nextY = this.getRandomY(data.height, mouseHeight);
+          mouse.nextX = Math.random() * this.tableWidth + this.tableLeft;
+          mouse.nextY = Math.random() * this.tableHeight + this.tableTop;
           mouse.rotation = this.getRadians(mouse.x, mouse.y, mouse.nextX, mouse.nextY);
 
           tween.updateTo('x', mouse.nextX, true);
@@ -83,7 +89,16 @@ class mouse_click_minigame extends Phaser.Scene {
 
   update() {}
 
+  // atan2() takes in y param first and returns randians relative to
+  // the horizontal plane pointing right from (0, 0) hence the additional
+  // 90degrees to align it with the current grid (vertical plane pointing
+  // up from (0, 0)).
+  getRadians(currX, currY, nextX, nextY) {
+    return Math.atan2(nextY - currY, nextX - currX) + Math.PI / 2;
+  }
+
   /**
+   * ========== DEPRECATED (i think) ==========
    * Returns a random float that falls within the minigame board. This
    * assumes the board is centered on the main game canvas.
    *
@@ -98,38 +113,8 @@ class mouse_click_minigame extends Phaser.Scene {
     let min = (this.game.config.width - board_size) / 2 + object_size / 2;
     return Math.random() * (board_size - object_size) + min;
   }
-
   getRandomY(board_size, object_size) {
     let min = (this.game.config.height - board_size) / 2 + object_size / 2;
     return Math.random() * (board_size - object_size) + min;
-  }
-
-  // atan2() takes in y param first and returns randians relative to
-  // the horizontal plane pointing right from (0, 0) hence the additional
-  // 90degrees to align it with the current grid (vertical plane pointing
-  // up from (0, 0)).
-  getRadians(currX, currY, nextX, nextY) {
-    return Math.atan2(nextY - currY, nextX - currX) + Math.PI / 2;
-  }
-
-  playVideo() {
-    let recorder = this.add.video(400, 300, 'recorder');
-    recorder.setVolume(0.6);
-    recorder.alpha = 0.6;
-    recorder.setDepth(2);
-    recorder.play();
-
-    this.tweens.add({
-      targets: recorder,
-      scale: 4,
-      duration: recorder.getDuration() * 1000,
-      repeat: 0,
-    });
-
-    recorder.on('complete', () => {
-      // When the audio plays, the win condition has been satisfied.
-      // After the audio has finished playing, call the 'won' function.
-      minigame_scene_manager.minigameWon('mouse_click_minigame');
-    });
   }
 }

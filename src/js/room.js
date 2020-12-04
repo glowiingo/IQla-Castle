@@ -8,7 +8,11 @@ class Room {
     this.vampireCount = 0;
     this.victoryHandler = victoryHandler;
     this.taskCount = 0;
-    this.votedList = [];
+    this.taskTarget = 0;
+    this.voteResult = [];
+    this.votedPlayers = [];
+    this.deadCount = 0;
+    this.started = false;
   }
   addPlayer(player) {
     this.players[player.playerId] = player;
@@ -17,6 +21,9 @@ class Room {
     return this.players[id];
   }
   removePlayer(id) {
+    if(this.started && this.getPlayer(id).alive){
+      this.playerEliminated(id)
+    };
     delete this.players[id];
   }
   hasPlayers() {
@@ -44,19 +51,24 @@ class Room {
       this.detectiveCount--;
       this.vampireCount++;
     }
-    while (players.length / Object.keys(this.players).length <= vampireRate);
+    while (Math.ceil(players.length / this.vampireCount) > 3);
     return roles;
   }
   playerEliminated(playerId) {
+    if(!this.getPlayer(playerId)){
+      return;
+    }
+    this.players[playerId].alive = false;
     if (this.players[playerId].team == 'detective') {
       this.detectiveCount--;
     } else {
       this.vampireCount--;
     }
+    this.deadCount += 1;
     if (this.vampireCount == 0) {
-      this.victoryHandler('detectives');
+      this.victoryHandler('Detectives');
     } else if (this.vampireCount >= this.detectiveCount) {
-      this.victoryHandler('vampires');
+      this.victoryHandler('IQLAs');
     }
   }
   taskComplete(playerId) {
@@ -65,35 +77,48 @@ class Room {
     } else {
       this.taskCount++;
     }
-    if (this.taskCount > 3) {
-      this.victoryHandler('detectives');
+    if (this.taskCount >= this.taskTarget) {
+      this.victoryHandler('Detectives');
     }
   }
 
   // Worked on by: Jayce
-  vote(playerId) {
-    console.log('Vote for', playerId);
-    this.votedList.push(playerId);
+  vote(votedFor, votedFrom) {
+    console.log(`${votedFrom} voted for ${votedFor}`);
+    if(!this.getPlayer(votedFor)){
+      votedFor = null;
+    }
+    this.voteResult.push(votedFor);
+    this.votedPlayers.push(votedFrom);
   }
 
+  // Add timer into the if statement   e.g  && timer === 0;
   voteCompleted() {
-    if (Object.keys(this.players).length === this.votedList.length) {
-      let votedPlayerID = this.findTheMajority(this.votedList);
+    console.log("vote complete?", Object.keys(this.players).length, this.voteResult.length, this.deadCount);
+    if (Object.keys(this.players).length <= this.voteResult.length + this.deadCount) {
+      let votedPlayerID = this.findTheMajority(this.voteResult);
       console.log('majority voted for: ', votedPlayerID);
-      this.votedList = [];
+      if (votedPlayerID == 'skip') {
+        return votedPlayerID;
+      }
+      if (votedPlayerID == null) {
+        return null;
+      }
       this.playerEliminated(votedPlayerID);
+      this.voteResult = [];
+      this.votedPlayers = [];
       return votedPlayerID;
     }
     return null;
   }
 
-  findTheMajority(voteList) {
-    if (voteList.length == 0)
+  findTheMajority(voteResult) {
+    if (voteResult.length == 0)
       return null;
     let modeMap = {};
-    let majority = voteList[0], maxCount = 1;
-    for (let i = 0; i < voteList.length; i++) {
-      let el = voteList[i];
+    let majority = voteResult[0], maxCount = 1;
+    for (let i = 0; i < voteResult.length; i++) {
+      let el = voteResult[i];
       if (modeMap[el] == null)
         modeMap[el] = 1;
       else

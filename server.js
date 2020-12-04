@@ -30,7 +30,13 @@ io.on('connection', function (socket) {
         console.log("Winners! team:", team);
       };
       rooms[roomName] = new Room(roomName, victoryHandler);
+    } else if(rooms[roomName].started){
+      socket.emit('currentPlayers', null);
+      return;
     }
+
+
+
     rooms[roomName].addPlayer(new ServerPlayer(roomName, socket, playerName));
 
     // send the rooms object to the new player
@@ -39,33 +45,50 @@ io.on('connection', function (socket) {
     socket.broadcast.to(roomName).emit('newPlayer', rooms[roomName].getPlayer(socket.id));
 
     socket.on('disconnect', function () {
-      console.log('user disconnected from room: ', roomName);
-      // remove this player from our rooms object
-      rooms[roomName].removePlayer(socket.id);
-      // emit a message to all players to remove this player
-      io.to(roomName).emit('disconnect', socket.id);
-      if (!rooms[roomName].hasPlayers()) {
-        delete rooms[roomName];
+      if (rooms[roomName]) {
+        console.log('user disconnected from room: ', roomName);
+        // remove this player from our rooms object
+        rooms[roomName].removePlayer(socket.id);
+        // emit a message to all players to remove this player
+        io.to(roomName).emit('disconnect', socket.id);
+        if (!rooms[roomName].hasPlayers()) {
+          delete rooms[roomName];
+        } else if(rooms[roomName].started && rooms[roomName].voteResult.length != 0){ //Checks if player disconnected during a vote
+          let complete = rooms[roomName].voteCompleted()
+          if (complete) {
+            console.log("vote complete: ", complete);
+            io.in(roomName).emit('voted', complete);
+          }
+        }
       }
     });
 
     // when a player moves, update the player data
     socket.on('playerMovement', function (movementData) {
-      //console.log(rooms[roomName].getRoleAssignments());
-      rooms[roomName].getPlayer(socket.id).x = movementData.x;
-      rooms[roomName].getPlayer(socket.id).y = movementData.y;
-      rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
-      // console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
-      // emit a message to all players about the player that moved
-      socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
+      if (rooms[roomName]) {
+        //console.log(rooms[roomName].getRoleAssignments());
+        rooms[roomName].getPlayer(socket.id).x = movementData.x;
+        rooms[roomName].getPlayer(socket.id).y = movementData.y;
+        rooms[roomName].getPlayer(socket.id).flipX = movementData.flipX;
+        // console.log("Player moved: ", rooms[roomName].getPlayer(socket.id));
+        // emit a message to all players about the player that moved
+        socket.broadcast.to(roomName).emit('playerMoved', rooms[roomName].getPlayer(socket.id));
+      }
     });
 
     socket.on('alertGameStart', function () {
       console.log("Alert game start");
       let roles = rooms[roomName].getRoleAssignments();
+      rooms[roomName].started = true;
+      rooms[roomName].taskTarget = 4 * rooms[roomName].detectiveCount;
       console.log("Roles: ", roles);
       io.in(roomName).emit('gameStart', roles);
     });
+
+    socket.on('alertGameEnd', function() {
+      console.log("Alert game end");
+      delete rooms[roomName];
+    })
 
     //Temp
     // if(Object.keys(rooms[roomName].players).length > 1){
@@ -76,39 +99,32 @@ io.on('connection', function (socket) {
 
 
     // Worked on by: Kian Darakhshan
-    // Sockets to be added once functionality is made:
 
     // when a player kills, update the victim's player data
     socket.on('kill', function (victimID) {
       socket.broadcast.to(roomName).emit('killed', victimID);
       rooms[roomName].playerEliminated(victimID);
     });
-    // 
-    //
-    // // when a player initiates a vote event for all other players
-    // socket.on('startVote', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('startedVote', rooms[roomName].getPlayer(socket.id));
 
-    //
-    // // when a player places a trap
-    // socket.on('trapPlace', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('trapPlaced', rooms[roomName].getPlayer(socket.id));
-    // // broadcast for position of trap placed?
-    //
-    //
-    // socket.on('trapTrigger', function () {
-    //
-    // });
-    // socket.broadcast.to(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
-    //
-    //
+    // when a player places a trap
+    socket.on('trapPlace', function (playerId) {
+      socket.broadcast.to(roomName).emit('trapPlaced', playerId);
+    });
+
+    // NOT WORKING YET
+    socket.on('trapDisappear', function (playerId) {
+      socket.broadcast.emit('trapDisappeared', rooms[roomName].getPlayer(socket.id));
+    })
+
+    // NOT WORKING YET NOT WORKING YET NOT WORKING YET NOT WORKING YET
+    // when player activates a trap by walking by it
+    socket.on('trapTrigger', function () {
+      io.in(roomName).emit('trapTriggered', rooms[roomName].getPlayer(socket.id));
+    });
+
     socket.on('taskComplete', function () {
       io.in(roomName).emit('taskCompleted', rooms[roomName].getPlayer(socket.id));
-      rooms[roomName].taskComplete(socket.id);
+      rooms[roomName].taskComplete(rooms[roomName].taskCount / rooms[roomName].taskTarget);
     });
 
     // When a player stops moving, goes stationary
@@ -135,17 +151,20 @@ io.on('connection', function (socket) {
     // when a player sends their vote
     socket.on('vote', function (votedFor) {
       // socket.broadcast.to(roomName).emit('voted', votedFor);
-      rooms[roomName].vote(votedFor);
+      rooms[roomName].vote(votedFor, socket.id);
       let complete = rooms[roomName].voteCompleted()
       if (complete) {
         console.log("vote complete: ", complete);
         io.in(roomName).emit('voted', complete);
       }
     });
-
+    socket.on('voteStart', function () {
+      console.log("Vote is called to start")
+      io.in(roomName).emit('voteStarted');
+    });
   })
 });
 
-server.listen(8081, function () {
+server.listen(process.env.PORT || 8081, function () {
   console.log(`Listening on ${server.address().port}`);
 });

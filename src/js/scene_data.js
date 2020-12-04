@@ -34,6 +34,7 @@ class SceneData {
     this.player.setRole(roleData);
     this.player.sendToStartPos();
     this.serverConnection.updatePos(this.player);
+    this.gamePlayScene.gameStart = true;
     // this.serverConnection.movement(this.player);
 
     // we need to find a better way to ensure 
@@ -49,5 +50,9 @@ class SceneData {
 
   alertGameStart() {
     this.serverConnection.alertGameStart();
+  }
+
+  alertGameEnd() {
+    this.serverConnection.alertGameEnd();
   }
 }

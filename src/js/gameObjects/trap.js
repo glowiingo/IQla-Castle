@@ -1,72 +1,60 @@
-//Worked on Kiwon
+//Worked on by: Kiwon
 
 class Trap extends Phaser.GameObjects.Sprite {
-    constructor (config, playerGroup) {
+    constructor (config, player) {
         super(config.scene, config.x, config.y, 'trap');
         this.scene = config.scene;
         this.x = config.x;
         this.y = config.y;
-        this.playerGroup = playerGroup;
-        this.setTrap();
-        this.trapSet = false;
+        this.player = player;
+        this.trapPlace();
         this.trapTriggered = false;
     }
-    /**
-     * detector fo the trap
-     */
-    // in_trap_radius() {
-    //     let touching = this.trapZone.body.touching;
-        
-    //     if (touching.none) {
-    //         this.scene.player.clearTint();
-    //         this.trapZone.emit('leavezone');
-    //     }
-    //     else if (!touching.none) {
-    //         this.scene.player.setTint(0x00ffff);
-    //         this.trapZone.emit('enterzone');
-    //     }
-    //     // else if(inZone) {
-    //     //     this.scene.player1.setTint(0x00ffff);
-    //     //     this.trapZone.emit('inzone');
-    //     //     console.log('inzone');
-    //     // }
-    
-    //     this.trapZone.body.debugBodyColor = this.trapZone.body.touching.none ? 0x00ffff : 0xffff00;
-    // }
 
     //putting down the trap on the scene
-    setTrap() {
-        if (!this.trapSet) {
-            this.scene.add.existing(this).setScale(1);
+    trapPlace() {
+        this.scene.add.existing(this).setScale(2);
 
-            this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayWidth);
-            this.trapZone.setCircleDropZone(100);
-            this.scene.physics.world.enable(this.trapZone, 0); // (0) DYNAMIC (1) STATIC
-            this.trapZone.body.setAllowGravity(false);
-            this.trapZone.body.moves = false;
+        this.trapZone = this.scene.add.zone(this.x, this.y).setSize(this.displayWidth, this.displayWidth);
+        this.trapZone.setCircleDropZone(100);
+        this.scene.physics.world.enable(this.trapZone, 0); // (0) DYNAMIC (1) STATIC
+        this.trapZone.body.setAllowGravity(false);
+        this.trapZone.body.moves = false;
 
-            this.trapSet = true;
-
-            //Biggest problem in converting to server side is here as overlap doesn't work if velocity is zero
-            setTimeout(() => {
-                this.scene.physics.add.overlap(this.trapZone, this.playerGroup, this.activateTrap, null, this)
-            }, 5000); //default 5000
+        if (!this.player.iqla) {
+            this.setVisible(false);
         }
         
+        //Biggest problem in converting to server side is here as overlap doesn't work if velocity is zero
+        setTimeout(() => {
+            console.log("active");
+            console.log(this.player);
+            this.scene.physics.add.overlap(this.trapZone, this.scene.player, this.activateTrap, null, this)
+        }, 5000); //default 5 seconds
     }
+
     /**
      * activates once the trap is stepped on
      */
     activateTrap() {
         if (!this.trapTriggered) {
+            this.trapTriggered = true;
             console.log('triggered');
-            this.trapZone.destroy();
-            let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
-            this.kill(killList);
-            this.destroy();
-            
+            this.setVisible(true);
+            setTimeout(()=>{
+                let killList = this.scene.physics.overlapCirc(this.x, this.y, this.displayWidth, true);
+                this.trapZone.destroy();
+                this.kill(killList);
+            }, 500)
         }
-        
+    }
+
+    displayDestroyTrap() {
+        this.setVisible(true);
+        setTimeout(()=> {
+            this.trapZone.destroy();
+            this.destroy();
+        })
     }
 
     kill(sprites) {
@@ -81,13 +69,15 @@ class Trap extends Phaser.GameObjects.Sprite {
                 this.createDeadBody(sprite.x, sprite.y);
                 console.log(sprite.id);
                 this.scene.registry.values.sceneData.serverConnection.kill(sprite.id);
+                this.scene.registry.values.sceneData.serverConnection.trapTriggered(sprite.id);
             }
         }
+        this.destroy();
     }
     
     createDeadBody(x, y) {
         let dead_image = this.scene.add.image(x, y, 'deadbody');
-        dead_image.setScale(0.5);
+        dead_image.setScale(2);
         dead_image.setDepth(30);
     }
 }

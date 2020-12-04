@@ -11,6 +11,7 @@ class ServerPlayer {
 
     console.log('Creating Player', this.playerId);
     this.team = 'detective';
+    this.alive = true;
   }
 }
 
